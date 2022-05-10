@@ -3,14 +3,14 @@ import NavBar from '../components/NavBar'
 import Announcement from '../components/Announcement'
 import Slider from '../components/Slider'
 
-const Welcome = () => {
+const Home = () => {
   return (
     <div>
-        <Announcement></Announcement>
+        <Announcement/>
         <NavBar/>
         <Slider/>
     </div>
   )
 }
 
-export default Welcome
+export default Home
