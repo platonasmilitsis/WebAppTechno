@@ -12,3 +12,16 @@ export const slider_items=[
         desc:"Διαχειριστείτε τις δημοπρασίες ",
     }
 ]
+
+export const categories=[
+    {
+        id:1,
+        img:require("./assets/themaras_fagito.png"),
+        title:"Κατηγορία 1"
+    },
+    {
+        id:2,
+        img:require("./assets/themis_dialisi.png"),
+        title:"Κατηγορία 2"
+    },
+]
