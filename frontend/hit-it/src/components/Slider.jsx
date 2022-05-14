@@ -4,12 +4,16 @@ import styled from "styled-components"
 import { slider_items } from "../data";
 
 const Container=styled.div`
-    width:100%;
-    height:100vh;
+    ${'' /* width:100%; */}
+    height:30vh;
     display:flex;
     // background-color:coral;
     position:relative;
     overflow:hidden;
+    margin-left:170px;
+    margin-right:170px;
+    margin-top:-200px;
+    border-radius:25px;
 `;
 
 const Arrow=styled.div`
@@ -29,20 +33,22 @@ const Arrow=styled.div`
     cursor:pointer;
     opacity:0.5;
     z-index:2;
+    margin-top:140px;
 `;
 
 const Wrapper=styled.div`
-    height:100%;
     display:flex;
     transition:all 1.5s ease;
-    transform:translateX(${props=>props.slide_index* -100}vw);
+    transform:translateX(${props=>props.slide_index* -1512}px);
 `;
 
 const Slide=styled.div`
-    width:100vw;
-    height:100vh;
+    width:252px;
+    height:30vh;
     display:flex;
     align-items:center;
+    border-radius:25px;
+    background-color:${props=>props.bg};
 `;
 
 const ImgContainer=styled.div`
@@ -84,11 +90,11 @@ const Slider = () => {
     const handle_click=(direction)=>{
         if(direction==="left"){
             // Go to last slide
-            set_slide_index(slide_index>0 ? slide_index-1 : 1) 
+            set_slide_index(slide_index>0 ? slide_index-1 : 7) 
         }
         else{
             // Go to first slide
-            set_slide_index(slide_index<1 ? slide_index+1 :0) 
+            set_slide_index(slide_index<7 ? slide_index+1 :0) 
         }
     }
 
@@ -98,11 +104,9 @@ const Slider = () => {
             <ArrowLeftOutlined/>
         </Arrow>
         <Wrapper slide_index={slide_index}>
+        
             {slider_items.map(item=>
-                <Slide>
-                <ImgContainer>
-                    <Image src={item.img}/>
-                </ImgContainer>
+                <Slide bg={item.bg}>
                 <InfoContainer>
                     <Title>
                         {item.title}
@@ -117,26 +121,6 @@ const Slider = () => {
                 </Slide>
             )}
             
-
-            {slider_items.map(item=>
-                <Slide>
-                <ImgContainer>
-                    <Image src={item.img}/>
-                </ImgContainer>
-                <InfoContainer>
-                    <Title>
-                        {item.title}
-                    </Title>
-                    <Description>
-                        {item.desc}
-                    </Description>
-                    <Button>
-                        Αναζήτηση
-                    </Button>
-                </InfoContainer>
-                </Slide>
-            )}
-
         </Wrapper>
         <Arrow direction="right" onClick={()=>handle_click("right")}>
             <ArrowRightOutlined/>

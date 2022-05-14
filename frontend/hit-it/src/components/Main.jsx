@@ -21,7 +21,7 @@ const Logo=styled.h1`
 
 const SearchContainter=styled.div`
     &:hover{
-        border:2px;
+        border:1px;
         border-style:solid;
         border-color:#e67e22;
     }
@@ -41,7 +41,7 @@ const Input=styled.input`
     outline:none;    
     font-size:16px;
     ::placeholder{
-        opacity:0.5;
+        opacity:0.1;
     }
 `;
 
