@@ -41,7 +41,7 @@ const Input=styled.input`
     outline:none;    
     font-size:16px;
     ::placeholder{
-        opacity:0.1;
+        opacity:0.5;
     }
 `;
 
