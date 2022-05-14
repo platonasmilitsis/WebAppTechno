@@ -5,13 +5,13 @@ import { slider_items } from "../data";
 
 const Container=styled.div`
     ${'' /* width:100%; */}
-    height:30vh;
+    height:40vh;
     display:flex;
     // background-color:coral;
     position:relative;
     overflow:hidden;
-    margin-left:170px;
-    margin-right:170px;
+    margin-left:210px;
+    margin-right:210px;
     margin-top:-200px;
     border-radius:25px;
 `;
@@ -34,21 +34,23 @@ const Arrow=styled.div`
     opacity:0.5;
     z-index:2;
     margin-top:140px;
+    margin-bottom:140px;
 `;
 
 const Wrapper=styled.div`
     display:flex;
     transition:all 1.5s ease;
-    transform:translateX(${props=>props.slide_index* -1512}px);
+    transform:translateX(${props=>props.slide_index* -1422}px);
 `;
 
 const Slide=styled.div`
-    width:252px;
+    width:222px;
     height:30vh;
     display:flex;
     align-items:center;
     border-radius:25px;
     background-color:${props=>props.bg};
+    margin:8px;
 `;
 
 const ImgContainer=styled.div`
