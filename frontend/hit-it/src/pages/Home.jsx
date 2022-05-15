@@ -1,10 +1,9 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-// import Announcement from '../components/Announcement'
-import Slider from '../components/Slider'
-// import Categories from '../components/Categories'
+import Slider from '../components/Categories'
 import styled from 'styled-components'
 import Main from '../components/Main'
+import Announcement from '../components/Announcement'
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -13,11 +12,10 @@ const Container=styled.div`
 const Home = () => {
   return (
     <Container>
-        {/* <Announcement/> */}
         <NavBar/>
         <Main/>
+        <Announcement/>
         <Slider/>
-        {/* <Categories/> */}
     </Container>
   )
 }

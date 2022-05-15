@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ShoppingCartOutlined } from "@material-ui/icons"
-// import { Search } from '@material-ui/icons';
 import { Badge } from '@material-ui/core';
 
 const Container=styled.div`
@@ -14,38 +13,6 @@ const Wrapper=styled.div`
     align-items:center;
     justify-content:space-between;
 `;
-
-// const Left=styled.div`
-//     flex:1;
-//     display:flex;
-//     align-items:center;
-// `;
-
-// const Language=styled.span`
-//     font-size:14px;
-//     cursor:pointer;
-// `;
-
-// const SearchContainter=styled.div`
-//     border:0.5px solid lightgrey;
-//     display:flex;
-//     align-items:center;
-//     margin-left:25px;
-//     padding:5px;
-// `;
-
-// const Input=styled.input`
-//     border:none;
-// `;
-
-// const Center=styled.div`
-//     flex:1;
-//     text-align:center;
-// `;
-
-// const Logo=styled.h1`
-//     font-weight:bold;
-// `;
 
 const Right=styled.div`
     flex:1;
@@ -64,20 +31,6 @@ const NavBar = () => {
   return (
     <Container>
         <Wrapper>
-            {/* <Left>
-                <Language>
-                    EN
-                </Language>
-                <SearchContainter>
-                    <Input/>
-                    <Search style={{color:"grey",fontSize:16}}/>
-                </SearchContainter>
-            </Left>
-            <Center>
-                <Logo>
-                    hit-it
-                </Logo>
-            </Center> */}
             <Right>
                 <MenuItem>
                     Register

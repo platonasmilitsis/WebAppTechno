@@ -1,20 +1,64 @@
 import styled from "styled-components"
 
 const Container=styled.div`
-    height:30px;
-    background-color:teal;
-    color:white;
+    height:300px;
+    background-color:#e67e22;
     display:flex;
     align-items:center;
-    justify-content:center;
     font-size:15px;
     font-weight:bold;
+    margin-top:-200px;
+    margin-left:285px;
+    margin-right:285px;
+    border-radius:10px;
+    position:relative;
+`;
+
+const Title=styled.h1`
+    font-size:33px;
+    font-family: 'Arial', sans-serif;
+    margin-top:-80px;
+    margin-left:50px;
+    position:absolute;
+`;
+
+const Description=styled.p`
+    font-size:17px;
+    font-family: 'Arial', sans-serif;
+    margin-top:60px;
+    margin-left:50px;
+    position:absolute;
+    width:400px;
+
+`;
+
+const ImgContainer=styled.div`
+    height:100%;
+    flex:1;
+    object-fix:cover;
+    margin-left:900px;
+`;
+
+const Image=styled.img`
+    height:130%;
+    padding:50px;
+    border-radius:10px;
+    margin-top:-100px;
+    margin-left:-50px;
 `;
 
 const Announcement = () => {
   return (
     <Container>
-        Εγγραφείτε για να προχωρήσει η διάλυση!
+        <Title>
+          Ήρθαν τα hit-it Point
+        </Title>
+        <Description>
+          Τώρα μπορείς να παραλάβεις την παραγγελία σου, όποτε σε βολεύει!
+        </Description>
+        <ImgContainer>
+          <Image src={require("../assets/logoreact.png")}/>
+        </ImgContainer>
     </Container>
   )
 }

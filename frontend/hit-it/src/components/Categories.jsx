@@ -1,19 +1,139 @@
-import React from 'react'
-import styled from 'styled-components';
-import { categories } from "../data"
-import CategoryItem from './CategoryItem';
+import { ArrowLeftOutlined, ArrowRightOutlined} from "@material-ui/icons";
+import { useState } from "react";
+import styled from "styled-components"
+import { slider_items } from "../data";
 
 const Container=styled.div`
+    height:40vh;
     display:flex;
-    padding:20px;
-    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+    margin-left:285px;
+    margin-right:285px;
+    margin-top:100px;
+    border-radius:25px;
+`;
+
+const Arrow=styled.div`
+    width:50px;
+    height:50px;
+    background-color:#fff7f7;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    top:0;
+    left:${props=>props.direction==="left" && "10px"};
+    right:${props=>props.direction==="right" && "10px"};
+    bottom:0;
+    margin:auto;
+    cursor:pointer;
+    opacity:0.5;
+    z-index:2;
+    margin-top:110px;
+`;
+
+const Wrapper=styled.div`
+    display:flex;
+    transition:all 1.5s ease;
+    transform:translateX(${props=>props.slide_index* -422}px);
+`;
+
+const Slide=styled.div`
+    width:200px;
+    height:25vh;
+    display:flex;
+    align-items:center;
+    border-radius:10px;
+    background-color:${props=>props.bg};
+    margin:6px;
+`;
+
+const Title=styled.h1`
+    font-size:15px;
+    margin-left:10px;
+    font-family: 'Arial', sans-serif;
+    color:white;
+    cursor:pointer;
+    margin-bottom:20px;
+    &:hover{
+        text-decoration:underline;
+    }
+`;
+
+const Description=styled.p`
+    font-family: 'Arial', sans-serif;
+    margin-bottom:10px;
+    color:white;
+    cursor:pointer;
+    &:hover{
+        text-decoration:underline;
+    }
+`;
+
+const InfoContainer=styled.div`
+    flex:1;
 `;
 
 const Categories = () => {
+
+    const [slide_index,set_slide_index]=useState(0);
+
+    const handle_click=(direction)=>{
+        if(direction==="left"){
+            // Go to last slide
+            set_slide_index(slide_index>0 ? slide_index-1 : 1) 
+        }
+        else{
+            // Go to first slide
+            set_slide_index(slide_index<1 ? slide_index+1 :0) 
+        }
+    }
+
   return (
     <Container>
-        {categories.map(item=>
-            <CategoryItem item={item}/>)}
+        {(() => {
+            if(slide_index===1){
+                return(
+                <Arrow direction="left" onClick={()=>handle_click("left")}>
+                    <ArrowLeftOutlined/>
+                </Arrow>
+                )
+            }
+            return null;
+        })()}
+        <Wrapper slide_index={slide_index}>
+        
+            {slider_items.map(item=>
+                <Slide bg={item.bg}>
+                <InfoContainer>
+                    <Title>
+                        {item.title}
+                    </Title>
+                    <Description>
+                        {item.desc1}
+                    </Description>
+                    <Description>
+                        {item.desc2}
+                    </Description><Description>
+                        {item.desc3}
+                    </Description>
+                </InfoContainer>
+                </Slide>
+            )}
+            
+        </Wrapper>
+        {(() => {
+            if(slide_index===0){
+                return(
+                <Arrow direction="right" onClick={()=>handle_click("right")}>
+                    <ArrowRightOutlined/>
+                </Arrow>
+                )
+            }
+            return null;
+        })()}
     </Container>
   )
 }
