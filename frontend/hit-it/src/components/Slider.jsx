@@ -1,10 +1,9 @@
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined} from "@material-ui/icons";
 import { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../data";
 
 const Container=styled.div`
-    ${'' /* width:100%; */}
     height:40vh;
     display:flex;
     // background-color:coral;
@@ -35,12 +34,13 @@ const Arrow=styled.div`
     z-index:2;
     margin-top:140px;
     margin-bottom:140px;
+    visibility:${props=>props.visibility};
 `;
 
 const Wrapper=styled.div`
     display:flex;
     transition:all 1.5s ease;
-    transform:translateX(${props=>props.slide_index* -1422}px);
+    transform:translateX(${props=>props.slide_index* -474}px);
 `;
 
 const Slide=styled.div`
@@ -53,15 +53,15 @@ const Slide=styled.div`
     margin:8px;
 `;
 
-const ImgContainer=styled.div`
-    height:100%;
-    flex:1;
-`;
+// const ImgContainer=styled.div`
+//     height:100%;
+//     flex:1;
+// `;
 
-const Image=styled.img`
-    height:80%;
-    padding:50px;
-`;
+// const Image=styled.img`
+//     height:80%;
+//     padding:50px;
+// `;
 
 const Title=styled.h1`
     font-size:40px;
@@ -92,19 +92,26 @@ const Slider = () => {
     const handle_click=(direction)=>{
         if(direction==="left"){
             // Go to last slide
-            set_slide_index(slide_index>0 ? slide_index-1 : 7) 
+            set_slide_index(slide_index>0 ? slide_index-1 : 1) 
         }
         else{
             // Go to first slide
-            set_slide_index(slide_index<7 ? slide_index+1 :0) 
+            set_slide_index(slide_index<1 ? slide_index+1 :0) 
         }
     }
 
   return (
     <Container>
-        <Arrow direction="left" onClick={()=>handle_click("left")}>
-            <ArrowLeftOutlined/>
-        </Arrow>
+        {(() => {
+            if(slide_index===1){
+                return(
+                <Arrow direction="left" onClick={()=>handle_click("left")}>
+                    <ArrowLeftOutlined/>
+                </Arrow>
+                )
+            }
+            return null;
+        })()}
         <Wrapper slide_index={slide_index}>
         
             {slider_items.map(item=>
@@ -124,9 +131,16 @@ const Slider = () => {
             )}
             
         </Wrapper>
-        <Arrow direction="right" onClick={()=>handle_click("right")}>
-            <ArrowRightOutlined/>
-        </Arrow>
+        {(() => {
+            if(slide_index===0){
+                return(
+                <Arrow direction="right" onClick={()=>handle_click("right")}>
+                    <ArrowRightOutlined/>
+                </Arrow>
+                )
+            }
+            return null;
+        })()}
     </Container>
   )
 }
