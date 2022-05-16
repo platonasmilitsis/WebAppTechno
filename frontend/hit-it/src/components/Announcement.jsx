@@ -7,7 +7,6 @@ const Container=styled.div`
     align-items:center;
     font-size:15px;
     font-weight:bold;
-    margin-top:-200px;
     margin-left:285px;
     margin-right:285px;
     border-radius:10px;
@@ -17,7 +16,7 @@ const Container=styled.div`
 const Title=styled.h1`
     font-size:33px;
     font-family: 'Arial', sans-serif;
-    margin-top:-80px;
+    margin-bottom:80px;
     margin-left:50px;
     position:absolute;
 `;
@@ -25,26 +24,24 @@ const Title=styled.h1`
 const Description=styled.p`
     font-size:17px;
     font-family: 'Arial', sans-serif;
-    margin-top:60px;
+    margin-top:80px;
     margin-left:50px;
     position:absolute;
-    width:400px;
+    width:450px;
 
 `;
 
 const ImgContainer=styled.div`
-    height:100%;
-    flex:1;
-    object-fix:cover;
     margin-left:900px;
+    margin-bottom:50px;
+    overflow:hidden;
 `;
 
 const Image=styled.img`
-    height:130%;
-    padding:50px;
-    border-radius:10px;
-    margin-top:-100px;
-    margin-left:-50px;
+    height:100%;
+    width:100%;
+    object-fit:cover;
+    margin-top:40px;
 `;
 
 const Announcement = () => {

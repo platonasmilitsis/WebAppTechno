@@ -4,7 +4,7 @@ import { Search } from '@material-ui/icons';
 
 const Container=styled.div`
     width:100%;
-    height:50vh;
+    height:200px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -16,7 +16,7 @@ const Logo=styled.h1`
     color:#e67e22; 
     font-size:70px;
     position:absolute;
-    margin-bottom:300px;
+    margin-bottom:100px;
 `;
 
 const SearchContainter=styled.div`
@@ -32,7 +32,7 @@ const SearchContainter=styled.div`
     padding:5px;
     position:absolute;
     background-color:white;
-    margin-bottom:130px;
+    margin-top:60px;
 `;
 
 const Input=styled.input`

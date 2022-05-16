@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-import Slider from '../components/Categories'
+import Categories from '../components/Categories'
 import styled from 'styled-components'
 import Main from '../components/Main'
 import Announcement from '../components/Announcement'
@@ -16,7 +16,7 @@ const Home = () => {
         <NavBar/>
         <Main/>
         <Announcement/>
-        <Slider/>
+        <Categories/>
         <Footer/>
     </Container>
   )
