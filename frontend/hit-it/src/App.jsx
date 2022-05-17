@@ -1,13 +1,18 @@
-// import Home from "./pages/Home";
-// import Login from "./pages/Login";
-// import Register from "./pages/Register";
+import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 const App = () => {
-  // return <Home/>
-  //return <Register/>
-  // return <Login/>
-  return <Welcome/>
+
+  return(
+    <Router>
+      <Routes>
+        <Route path="/" element={<Welcome/>}/>
+        <Route path="/home" element={<Home/>}/>
+      </Routes>
+    </Router>
+  );
+  
 };
 
 export default App;

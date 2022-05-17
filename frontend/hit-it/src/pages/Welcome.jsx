@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -49,6 +50,7 @@ const Button=styled.button`
 `;
 
 const Welcome = () => {
+    let navigate=useNavigate();
   return (
     <Container>
         <Logo>
@@ -57,7 +59,7 @@ const Welcome = () => {
         <Description>
             Ότι θες θα το βρεις στο hit-it
         </Description>
-        <Button>
+        <Button onClick={()=>navigate("/home")}>
             Συνέχεια σαν επισκέπτης
         </Button>
     </Container>
