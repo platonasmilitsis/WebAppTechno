@@ -11,6 +11,7 @@ const Container=styled.div`
     margin-right:285px;
     border-radius:10px;
     position:relative;
+    max-width:1275px;
 `;
 
 const Title=styled.h1`

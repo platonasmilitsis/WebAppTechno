@@ -12,6 +12,7 @@ const Container=styled.div`
     margin-right:285px;
     margin-top:100px;
     border-radius:25px;
+    max-width:1275px;
 `;
 
 const Arrow=styled.div`
@@ -82,19 +83,17 @@ const Categories = () => {
 
     const handle_click=(direction)=>{
         if(direction==="left"){
-            // Go to last slide
-            set_slide_index(slide_index>0 ? slide_index-1 : 1) 
+            set_slide_index(slide_index-1) 
         }
         else{
-            // Go to first slide
-            set_slide_index(slide_index<1 ? slide_index+1 :0) 
+            set_slide_index(slide_index+1) 
         }
     }
 
   return (
     <Container>
         {(() => {
-            if(slide_index===1){
+            if(slide_index===1 || slide_index===2){
                 return(
                 <Arrow direction="left" onClick={()=>handle_click("left")}>
                     <ArrowLeftOutlined/>
@@ -125,14 +124,27 @@ const Categories = () => {
             
         </Wrapper>
         {(() => {
-            if(slide_index===0){
-                return(
-                <Arrow direction="right" onClick={()=>handle_click("right")}>
-                    <ArrowRightOutlined/>
-                </Arrow>
-                )
+            if(window.innerWidth<1800){
+                if(slide_index===0 || slide_index===1){
+                    return(
+                    <Arrow direction="right" onClick={()=>handle_click("right")}>
+                        <ArrowRightOutlined/>
+                    </Arrow>
+                    )
+                }
+                return null;
             }
-            return null;
+            else{
+                if(slide_index===0){
+                    return(
+                    <Arrow direction="right" onClick={()=>handle_click("right")}>
+                        <ArrowRightOutlined/>
+                    </Arrow>
+                    )
+                }
+                return null;
+            }
+            
         })()}
     </Container>
   )
