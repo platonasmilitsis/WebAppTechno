@@ -39,7 +39,7 @@ const NavBar = () => {
                     Sign In
                 </MenuItem>
                 <MenuItem>
-                    <Badge badgeContent={1} color="primary">
+                    <Badge badgeContent={1} color="primary" overlap="rectangular">
                         <ShoppingCartOutlined/>
                     </Badge>
                 </MenuItem>
