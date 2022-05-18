@@ -104,22 +104,25 @@ const Categories = () => {
         })()}
         <Wrapper slide_index={slide_index}>
         
-            {slider_items.map(item=>
-                <Slide bg={item.bg}>
-                <InfoContainer>
-                    <Title>
-                        {item.title}
-                    </Title>
-                    <Description>
-                        {item.desc1}
-                    </Description>
-                    <Description>
-                        {item.desc2}
-                    </Description><Description>
-                        {item.desc3}
-                    </Description>
-                </InfoContainer>
-                </Slide>
+            {slider_items.map((item)=>
+                {return(
+                    <Slide key={item.id} bg={item.bg}>
+                        <InfoContainer>
+                            <Title>
+                                {item.title}
+                            </Title>
+                            <Description>
+                                {item.desc1}
+                            </Description>
+                            <Description>
+                                {item.desc2}
+                            </Description>
+                            <Description>
+                                {item.desc3}
+                            </Description>
+                        </InfoContainer>
+                    </Slide>
+                )}
             )}
             
         </Wrapper>
