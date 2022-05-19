@@ -53,7 +53,7 @@ const Slide=styled.div`
 
 const Title=styled.h1`
     font-size:15px;
-    margin-left:10px;
+    margin-left:20px;
     font-family: 'Arial', sans-serif;
     color:white;
     cursor:pointer;
@@ -65,11 +65,19 @@ const Title=styled.h1`
 
 const Description=styled.p`
     font-family: 'Arial', sans-serif;
+    font-size:15px;
     margin-bottom:10px;
+    margin-left:20px;
+    margin-right:20px;
     color:white;
     cursor:pointer;
+    width: 160px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
     &:hover{
         text-decoration:underline;
+        white-space:normal;
     }
 `;
 
@@ -104,22 +112,25 @@ const Categories = () => {
         })()}
         <Wrapper slide_index={slide_index}>
         
-            {slider_items.map(item=>
-                <Slide bg={item.bg}>
-                <InfoContainer>
-                    <Title>
-                        {item.title}
-                    </Title>
-                    <Description>
-                        {item.desc1}
-                    </Description>
-                    <Description>
-                        {item.desc2}
-                    </Description><Description>
-                        {item.desc3}
-                    </Description>
-                </InfoContainer>
-                </Slide>
+            {slider_items.map((item)=>
+                {return(
+                    <Slide key={item.id} bg={item.bg}>
+                        <InfoContainer>
+                            <Title>
+                                {item.title}
+                            </Title>
+                            <Description>
+                                {item.desc1}
+                            </Description>
+                            <Description>
+                                {item.desc2}
+                            </Description>
+                            <Description>
+                                {item.desc3}
+                            </Description>
+                        </InfoContainer>
+                    </Slide>
+                )}
             )}
             
         </Wrapper>
