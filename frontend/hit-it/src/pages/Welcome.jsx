@@ -61,7 +61,7 @@ const Welcome = () => {
         <title>
             Καλωσοριστική
         </title>
-      </Helmet>
+    </Helmet>
 
         <Logo>
             hit-it

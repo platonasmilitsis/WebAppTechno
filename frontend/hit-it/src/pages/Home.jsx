@@ -1,11 +1,11 @@
 import React from 'react'
-import NavBar from '../components/NavBar'
-import Categories from '../components/Categories'
+import NavBar from '../components/Global/NavBar'
+import Categories from '../components/Home/Categories'
 import styled from 'styled-components'
-import Main from '../components/Main'
-import Announcement from '../components/Announcement'
-import Footer from '../components/Footer'
-import FloatingButtonAdd from '../components/FloatingButtonAdd'
+import Main from '../components/Home/Main'
+import Announcement from '../components/Home/Announcement'
+import Footer from '../components/Global/Footer'
+import FloatingButtonAdd from '../components/Home/FloatingButtonAdd'
 import {Helmet} from "react-helmet";
 
 

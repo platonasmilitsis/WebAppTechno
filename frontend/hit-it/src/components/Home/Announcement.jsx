@@ -55,7 +55,7 @@ const Announcement = () => {
           Τώρα μπορείς να παραλάβεις την παραγγελία σου, όποτε σε βολεύει!
         </Description>
         <ImgContainer>
-          <Image src={require("../assets/logoreact.png")}/>
+          <Image src={require("../../assets/logoreact.png")}/>
         </ImgContainer>
     </Container>
   )
