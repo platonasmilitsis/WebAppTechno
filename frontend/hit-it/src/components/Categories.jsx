@@ -2,6 +2,7 @@ import { ArrowLeftOutlined, ArrowRightOutlined} from "@material-ui/icons";
 import { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../data";
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     height:40vh;
@@ -87,6 +88,8 @@ const InfoContainer=styled.div`
 
 const Categories = () => {
 
+    let navigate=useNavigate();
+
     const [slide_index,set_slide_index]=useState(0);
 
     const handle_click=(direction)=>{
@@ -95,6 +98,12 @@ const Categories = () => {
         }
         else{
             set_slide_index(slide_index+1) 
+        }
+    }
+
+    const handle_title=(title)=>{
+        if(title==="Τεχνολογία"){
+            navigate("/home/technology");
         }
     }
 
@@ -116,7 +125,7 @@ const Categories = () => {
                 {return(
                     <Slide key={item.id} bg={item.bg}>
                         <InfoContainer>
-                            <Title>
+                            <Title onClick={()=>handle_title(item.title)}>
                                 {item.title}
                             </Title>
                             <Description>
