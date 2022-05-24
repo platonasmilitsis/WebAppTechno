@@ -78,12 +78,12 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
-const Link = styled.a`
-  margin: 5px 0px;
-  font-size: 15px;
-  text-decoration: underline;
-  cursor: pointer;
-`;
+// const Link = styled.a`
+//   margin: 5px 0px;
+//   font-size: 15px;
+//   text-decoration: underline;
+//   cursor: pointer;
+// `;
 
 
 
@@ -130,8 +130,8 @@ function FloatingButtonAdd() {
                 </Fab>
             </Dee>
 
-            {modalIsOpen && <Back onClick={backdropHandler}> <Backdrop/> </Back>};
-            {modalIsOpen && <Card> <NewItem onCal={backdropHandler}/></Card>};
+            {modalIsOpen && <Back onClick={backdropHandler}> <Backdrop/> </Back>}
+            {modalIsOpen && <Card> <NewItem onCal={backdropHandler}/></Card>}
 
 
         </Container>

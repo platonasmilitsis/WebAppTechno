@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
+import {Helmet} from "react-helmet";
+
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -53,6 +55,14 @@ const Welcome = () => {
     let navigate=useNavigate();
   return (
     <Container>
+
+    <Helmet>
+        <meta charSet="utf-8" />
+        <title>
+            Καλωσοριστική
+        </title>
+      </Helmet>
+
         <Logo>
             hit-it
         </Logo>
