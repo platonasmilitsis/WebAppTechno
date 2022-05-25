@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { ShoppingCartOutlined } from "@material-ui/icons"
 import { Badge } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     height:60px;
@@ -29,6 +30,7 @@ const Logo=styled.h1`
     font-size:50px;
     position:absolute;
     flex:1;
+    cursor:pointer;
 `;
 
 const SearchContainter=styled.div`
@@ -72,11 +74,14 @@ const MenuItem=styled.div`
 `;
 
 const NavBar = () => {
+    
+    let navigate=useNavigate();
+
   return (
     <Container>
         <Wrapper>
             <Left>
-                <Logo>
+                <Logo onClick={()=>navigate("/home")}>
                     hit-it
                 </Logo>
             </Left>
