@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { ShoppingCartOutlined } from "@material-ui/icons"
 import { Badge } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 
 const Container=styled.div`
     height:60px;
@@ -31,6 +31,32 @@ const Logo=styled.h1`
     flex:1;
 `;
 
+const SearchContainter=styled.div`
+    &:hover{
+        border:1px;
+        border-style:solid;
+        border-color:#e67e22;
+    }
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:30%;
+    border-radius:25px;
+    padding:5px;
+    background-color:white;
+`;
+
+const Input=styled.input`
+    width:100%;
+    border-width:0px;
+    outline:none;    
+    font-size:16px;
+    ::placeholder{
+        opacity:0.1;
+    }
+`;
+
 const Right=styled.div`
     flex:1;
     display:flex;
@@ -54,6 +80,10 @@ const NavBar = () => {
                     hit-it
                 </Logo>
             </Left>
+            <SearchContainter>
+                <Input placeholder="γράψε τον όρο αναζήτησης"/>
+                <Search style={{color:"#e67e22",fontSize:25}} />
+            </SearchContainter>
             <Right>
                 <MenuItem>
                     Register
