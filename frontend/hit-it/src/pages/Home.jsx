@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from '../components/Global/NavBar'
+import NavBar from '../components/Home/NavBar'
 import Categories from '../components/Home/Categories'
 import styled from 'styled-components'
 import Main from '../components/Home/Main'

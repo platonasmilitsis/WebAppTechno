@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from "styled-components"
 import { Helmet } from 'react-helmet';
-import Main from '../components/Categories/Main';
-import NavBar from '../components/Global/NavBar';
+import NavBar from '../components/Categories/NavBar';
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -23,9 +22,6 @@ const Technology = () => {
     <NavBar>
 
     </NavBar>
-    <hr></hr>
-    <Main>
-    </Main>
     <hr></hr>
 
     </Container>
