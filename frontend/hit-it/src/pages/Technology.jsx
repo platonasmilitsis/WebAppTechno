@@ -4,6 +4,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
 import CategoryName from '../components/Categories/CategoryName';
+import Grid from '../components/Categories/Grid';
 
 
 const Container=styled.div`
@@ -23,17 +24,16 @@ const Technology = () => {
           <title>
               Τεχνολογία
           </title>
-      </Helmet>
-    </HelmetProvider>
-    <NavBar>
-
-    </NavBar>
-    <hr></hr>
-    {Breadcrumb(page_names,page_links)}
-    <hr></hr>
-    {CategoryName("Τεχνολογία")}
-    <hr></hr>
-
+        </Helmet>
+      </HelmetProvider>
+      <NavBar/>
+      <hr></hr>
+      {Breadcrumb(page_names,page_links)}
+      <hr></hr>
+      {CategoryName("Τεχνολογία")}
+      <hr></hr>
+      <Grid/>
+      <hr></hr>
     </Container>
   )
 }
