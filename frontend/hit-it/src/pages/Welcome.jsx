@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import {Helmet} from "react-helmet";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 const Container=styled.div`
@@ -55,13 +55,14 @@ const Welcome = () => {
     let navigate=useNavigate();
   return (
     <Container>
-
-    <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-            Καλωσοριστική
-        </title>
-    </Helmet>
+        <HelmetProvider>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>
+                    Καλωσοριστική
+                </title>
+            </Helmet>
+        </HelmetProvider>
 
         <Logo>
             hit-it

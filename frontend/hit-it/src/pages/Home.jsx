@@ -6,7 +6,7 @@ import Main from '../components/Home/Main'
 import Announcement from '../components/Home/Announcement'
 import Footer from '../components/Global/Footer'
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd'
-import {Helmet} from "react-helmet";
+import {Helmet, HelmetProvider} from "react-helmet-async";
 
 
 const Container=styled.div`
@@ -18,23 +18,20 @@ const Home = () => {
   return (
 
     <Container>
-
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-          Σπίτι
-        </title>
-      </Helmet>
-
-        <NavBar/>
-
-        <Main/>
-
-        <Announcement/>
-        <FloatingButtonAdd/>
-
-        <Categories/>
-        <Footer/>
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>
+            Σπίτι
+          </title>
+        </Helmet>
+      </HelmetProvider>
+      <NavBar/>
+      <Main/>
+      <Announcement/>
+      <FloatingButtonAdd/>
+      <Categories/>
+      <Footer/>
     </Container>
 
 )

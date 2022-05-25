@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components"
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
 
@@ -18,14 +18,14 @@ const Technology = () => {
 
   return (
     <Container>
-
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>
-            Τεχνολογία
-        </title>
-    </Helmet>
-
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>
+              Τεχνολογία
+          </title>
+      </Helmet>
+    </HelmetProvider>
     <NavBar>
 
     </NavBar>
