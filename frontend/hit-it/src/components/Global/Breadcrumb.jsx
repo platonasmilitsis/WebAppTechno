@@ -25,9 +25,10 @@ const Breadcrumb = (page_name,page_link) => {
             links.push
                     (<Link underline="hover" 
                         color="inherit" 
-                            onClick={()=>navigate(page_link[i])}>
-                                {page_name[i]}
-                                    </Link>)
+                            onClick={()=>navigate(page_link[i])}
+                                key={i}>
+                                    {page_name[i]}
+                                        </Link>)
         }
         return links       
     }
