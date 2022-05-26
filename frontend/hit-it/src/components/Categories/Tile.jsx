@@ -6,7 +6,8 @@ const Container=styled.div`
     height:300px;
     width:200px;
     border-radius:10px;
-    margin-left:10px;
+    margin-left:20px;
+    margin-top:20px;
 `;
 
 
@@ -56,19 +57,21 @@ const Description=styled.p`
     }
 `;
 
-const Tile = () => {
+const Tile = (image,title,description) => {
   return (
-    <Container>
+    <Container key={image}>
+    {/* Problems with different paths with image*/}
+    {/* Fast fix of unique key warning where image is num,at the end all will have different image*/}
     <hr></hr>
         <ImageContainer>
-            <Image src={require("../../assets/logoreact.png")}/>
+            {/* <Image src={require("../../assets/logoreact.png")}/> */}
         </ImageContainer>
         <hr></hr>
         <Title>
-            titlos
+            {title}
         </Title>
         <Description>
-            perigrafi
+            {description}
         </Description>
     </Container>
   )

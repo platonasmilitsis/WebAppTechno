@@ -7,27 +7,26 @@ const Container=styled.div`
     font-weight:500;
     font-size:25px;
     color:black;
-    margin-top:10px;
     display:flex;
     flex-wrap:wrap;
-    margin-left:180px;
-    margin-right:100px;
+    width:80%;
+    margin-left:13%;
+    margin-right:13%;
 `;
 
-const Grid = () => {
+const Grid = (images,titles,descriptions) => {
+
+  const create_tiles=()=>{
+    var tiles=[];
+    for(let i=0;i<images.length;i++){
+      tiles.push(Tile(images[i],titles[i],descriptions[i]));
+    }
+    return tiles;
+  }
+
   return (
     <Container>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-        <Tile/>
-
-
+      {create_tiles()}
     </Container>
   )
 }
