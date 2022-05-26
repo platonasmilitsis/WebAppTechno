@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from "styled-components"
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import NavBar from '../components/Categories/NavBar';
-import Breadcrumb from '../components/Global/Breadcrumb';
-import CategoryName from '../components/Categories/CategoryName';
-import Grid from '../components/Categories/Grid';
+import NavBar from '../../components/Categories/NavBar';
+import Breadcrumb from '../../components/Global/Breadcrumb';
+import CategoryName from '../../components/Categories/CategoryName';
+import Grid from '../../components/Categories/Grid';
 
 
 const Container=styled.div`

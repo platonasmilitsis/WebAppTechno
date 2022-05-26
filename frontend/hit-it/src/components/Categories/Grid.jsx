@@ -12,6 +12,7 @@ const Container=styled.div`
     width:80%;
     margin-left:13%;
     margin-right:13%;
+    margin-bottom:20px; {/* For the Footer */}
 `;
 
 const Grid = (images,titles,descriptions) => {

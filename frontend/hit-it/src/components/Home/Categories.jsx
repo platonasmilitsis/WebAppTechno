@@ -102,8 +102,16 @@ const Categories = () => {
     }
 
     const handle_title=(title)=>{
-        if(title==="Τεχνολογία"){
-            navigate("/home/technology");
+        
+        switch(title){
+            case "Τεχνολογία":
+                navigate("/home/technology");
+                break;
+            case "Σπίτι - Κήπος":
+                navigate("/home/home-garden");
+                break;
+            default:
+                navigate("/");
         }
     }
 
