@@ -46,13 +46,17 @@ const Input=styled.input`
     }
 `;
 
-const ResultContainer=styled.div`
+const DummyDiv=styled.div`
+    position:relative;
     width:30%;
+`;
+
+const ResultContainer=styled.div`
+    width:100%;
     background-color:white;
     z-index:1;
-    ${'' /* margin-top:340px; */}
-    margin-top:140px;
-    position:fixed;
+    margin-top:50px;
+    position:absolute;
     border-radius:10px;
 `;
 
@@ -92,6 +96,7 @@ const Main = () => {
 
 
         {filtered_data.length !==0 && (
+            <DummyDiv>
             <ResultContainer>
                 {filtered_data.map((value)=>
                     {return(
@@ -100,13 +105,9 @@ const Main = () => {
                         </Result>
                     );})}
             </ResultContainer>
+            </DummyDiv>
         )}
 
-
-        {/* {(() => {
-            
-        })()} */}
-    
 
     </Container>
   )
