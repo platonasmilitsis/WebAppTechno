@@ -124,6 +124,9 @@ const Categories = () => {
             case "Auto - Moto":
                 navigate("/home/auto-moto");
                 break;
+            case "Επαγγελματικά - B2B":
+                navigate("/home/business-b2b");
+                break;
             default:
                 navigate("/");
         }
