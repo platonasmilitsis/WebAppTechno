@@ -115,6 +115,9 @@ const Categories = () => {
             case "Hobby - Αθλητισμός":
                 navigate("/home/hobby-sports");
                 break;
+            case "Υγεία - Ομορφιά":
+                navigate("/home/health-beauty");
+                break;
             default:
                 navigate("/");
         }
