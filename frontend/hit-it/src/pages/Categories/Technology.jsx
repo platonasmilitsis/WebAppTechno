@@ -6,7 +6,6 @@ import Breadcrumb from '../../components/Global/Breadcrumb';
 import CategoryName from '../../components/Categories/CategoryName';
 import Grid from '../../components/Categories/Grid';
 
-
 const Container=styled.div`
   background-color:#eaeded; 
 `;

@@ -110,6 +110,9 @@ const Categories = () => {
             case "Σπίτι - Κήπος":
                 navigate("/home/home-garden");
                 break;
+            case "Μόδα":
+                navigate("/home/fashion");
+                break;
             default:
                 navigate("/");
         }
