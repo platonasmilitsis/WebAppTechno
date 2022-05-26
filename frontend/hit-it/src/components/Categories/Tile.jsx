@@ -15,7 +15,6 @@ const ImageContainer=styled.div`
     flex:1;
     height:200px;
     width:200px;
-    background-color:red;
     border-radius:10px;
     margin-top:20px;
 `;
@@ -60,13 +59,10 @@ const Description=styled.p`
 const Tile = (image,title,description) => {
   return (
     <Container key={image}>
-    {/* Problems with different paths with image*/}
-    {/* Fast fix of unique key warning where image is num,at the end all will have different image*/}
-    <hr></hr>
+    {/* Unique key warning will be fixed when different assets will be added*/}
         <ImageContainer>
-            {/* <Image src={require("../../assets/logoreact.png")}/> */}
+            <Image src={require("../../assets/"+image)}/>
         </ImageContainer>
-        <hr></hr>
         <Title>
             {title}
         </Title>

@@ -15,7 +15,8 @@ const Technology = () => {
 
   const page_names=["Καλωσοριστική","Αρχική"];
   const page_links=["/","/home"];
-  const images=[1,2,3,4,5,6,7,8,9,10,11,12];
+  const images=["logoreact.png","logoreact.png","logoreact.png","logoreact.png","logoreact.png","logoreact.png",
+                "logoreact.png","logoreact.png","logoreact.png","logoreact.png","logoreact.png","logoreact.png"];
   const titles=["titlos","titlos","titlos","titlos","titlos","titlos",
                   "titlos","titlos","titlos","titlos","titlos","titlos"];
   const descriptions=["perigrafi","perigrafi","perigrafi","perigrafi","perigrafi","perigrafi",
@@ -32,13 +33,9 @@ const Technology = () => {
         </Helmet>
       </HelmetProvider>
       <NavBar/>
-      <hr></hr>
       {Breadcrumb(page_names,page_links)}
-      <hr></hr>
       {CategoryName("Τεχνολογία")}
-      <hr></hr>
       {Grid(images,titles,descriptions)}
-      <hr></hr>
     </Container>
   )
 }
