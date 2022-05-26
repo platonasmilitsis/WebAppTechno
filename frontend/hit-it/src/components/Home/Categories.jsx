@@ -121,6 +121,9 @@ const Categories = () => {
             case "Παιδικά - Βρεφικά":
                 navigate("/home/childrenry");
                 break;
+            case "Auto - Moto":
+                navigate("/home/auto-moto");
+                break;
             default:
                 navigate("/");
         }
