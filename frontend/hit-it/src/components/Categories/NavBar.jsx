@@ -6,7 +6,7 @@ import { Search } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
-    height:60px;
+    height:80px;
 `;
 
 const Wrapper=styled.div`
@@ -28,8 +28,8 @@ const Logo=styled.h1`
     font-weight:900;
     color:#e67e22; 
     font-size:50px;
-    position:absolute;
     flex:1;
+    margin-left:10px;
     cursor:pointer;
 `;
 
@@ -39,6 +39,7 @@ const SearchContainter=styled.div`
         border-style:solid;
         border-color:#e67e22;
     }
+    margin-top:10px;
     flex:1;
     display:flex;
     align-items:center;
