@@ -102,7 +102,6 @@ const Categories = () => {
     }
 
     const handle_title=(title)=>{
-        
         switch(title){
             case "Τεχνολογία":
                 navigate("/home/technology");
@@ -112,6 +111,9 @@ const Categories = () => {
                 break;
             case "Μόδα":
                 navigate("/home/fashion");
+                break;
+            case "Hobby - Αθλητισμός":
+                navigate("/home/hobby-sports");
                 break;
             default:
                 navigate("/");
