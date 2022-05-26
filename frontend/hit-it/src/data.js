@@ -64,3 +64,38 @@ export const slider_items=[
         desc3:"Ρούχα Γιατρών / Νοσηλευτών",
     }
 ]
+
+export const search_results=[
+    {
+        id:1,
+        title:"Τεχνολογία",
+    },
+    {
+        id:2,
+        title:"Σπίτι - Κήπος",
+    },
+    {
+        id:3,
+        title:"Μόδα",
+    },
+    {
+        id:4,
+        title:"Hobby - Αθλητισμός",
+    },
+    {
+        id:5,
+        title:"Υγεία - Ομορφιά",
+    },
+    {
+        id:6,
+        title:"Παιδικά - Βρεφικά",
+    },
+    {
+        id:7,
+        title:"Auto - Moto",
+    },
+    {
+        id:8,
+        title:"Επαγγελματικά - B2B",
+    }
+]
