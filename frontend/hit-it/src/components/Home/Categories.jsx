@@ -118,6 +118,9 @@ const Categories = () => {
             case "Υγεία - Ομορφιά":
                 navigate("/home/health-beauty");
                 break;
+            case "Παιδικά - Βρεφικά":
+                navigate("/home/childrenry");
+                break;
             default:
                 navigate("/");
         }

@@ -7,6 +7,7 @@ import HomeGarden from "./pages/Categories/HomeGarden";
 import Fashion from "./pages/Categories/Fashion";
 import HobbySports from "./pages/Categories/HobbySports";
 import HealthBeauty from "./pages/Categories/HealthBeauty";
+import Childrenry from "./pages/Categories/Childrenry";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/home/fashion" element={<Fashion/>}/>
         <Route path="/home/hobby-sports" element={<HobbySports/>}/>
         <Route path="/home/health-beauty" element={<HealthBeauty/>}/>
+        <Route path="/home/childrenry" element={<Childrenry/>}/>
       </Routes>
     </Router>
   );
