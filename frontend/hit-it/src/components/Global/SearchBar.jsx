@@ -48,13 +48,28 @@ const ResultContainer=styled.div`
     margin-top:20px;
     position:absolute;
     border-radius:10px;
+    border:1px;
+    border-style:solid;
+    border-color: #bdc3c7 ;
+    
+`;
+
+const Results=styled.div`
+    height:30px;
+    position:relative;
+    &:hover{
+        cursor:pointer;
+        background-color:#f8f9f9;
+    }
+    border-radius:10px;
 `;
 
 const Result=styled.div`
     margin-left:10px;
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top:5px;
+    margin-bottom:5px;
     font-family: 'Arial', sans-serif;
+    position:absolute;
 `;
 
 const SearchBar = () => {
@@ -85,9 +100,11 @@ const SearchBar = () => {
             <ResultContainer>
                 {filtered_data.map((value)=>
                     {return(
+                        <Results key={value.id}>
                         <Result key={value.id} target="_blank">
                             {value.title}
                         </Result>
+                        </Results>
                     );})}
             </ResultContainer>
             </Wrapper>
