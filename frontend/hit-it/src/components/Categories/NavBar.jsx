@@ -32,12 +32,14 @@ const Logo=styled.h1`
     flex:1;
     margin-left:10px;
     cursor:pointer;
+    position:absolute;
+    margin-top:30px;
 `;
 
 const SearchContainter=styled.div`
     width:100%;
     position:absolute;
-    margin-top:30px;
+    margin-top:50px;
 `;
 
 const Right=styled.div`
@@ -45,7 +47,9 @@ const Right=styled.div`
     display:flex;
     align-items:center;
     justify-content:flex-end;
-    margin-top:10px;
+    margin-top:30px;
+    position:relative;
+    margin-right:30px;
 `;
 
 const MenuItem=styled.div`

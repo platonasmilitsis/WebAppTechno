@@ -10,6 +10,14 @@ const Container=styled.div`
   background-color:#eaeded; 
 `;
 
+const BreadcrumbContainer=styled.div`
+  position:absolute;
+`;
+
+const CategoryNameContainer=styled.div`
+  margin-top:80px;
+`;
+
 const HobbySports = () => {
 
     const page_names=["Καλωσοριστική","Αρχική"];
@@ -32,8 +40,12 @@ const HobbySports = () => {
         </Helmet>
       </HelmetProvider>
       <NavBar/>
-      {Breadcrumb(page_names,page_links)}
-      {CategoryName("Hobby - Αθλητισμός")}
+      <BreadcrumbContainer>
+        {Breadcrumb(page_names,page_links)}
+      </BreadcrumbContainer>
+      <CategoryNameContainer>
+        {CategoryName("Hobby - Αθλητισμός")}
+      </CategoryNameContainer>
       {Grid(images,titles,descriptions)}
     </Container>
   )

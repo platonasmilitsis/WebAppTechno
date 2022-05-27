@@ -10,6 +10,13 @@ const Container=styled.div`
   background-color:#eaeded; 
 `;
 
+const BreadcrumbContainer=styled.div`
+  position:absolute;
+`;
+
+const CategoryNameContainer=styled.div`
+  margin-top:80px;
+`;
 
 const AutoMoto = () => {
 
@@ -33,8 +40,12 @@ const AutoMoto = () => {
         </Helmet>
       </HelmetProvider>
       <NavBar/>
-      {Breadcrumb(page_names,page_links)}
-      {CategoryName("Auto - Moto")}
+      <BreadcrumbContainer>
+        {Breadcrumb(page_names,page_links)}
+      </BreadcrumbContainer>
+      <CategoryNameContainer>
+        {CategoryName("Auto - Moto")}
+      </CategoryNameContainer>
       {Grid(images,titles,descriptions)}
     </Container>
   )

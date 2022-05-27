@@ -10,6 +10,13 @@ const Container=styled.div`
   background-color:#eaeded; 
 `;
 
+const BreadcrumbContainer=styled.div`
+  position:absolute;
+`;
+
+const CategoryNameContainer=styled.div`
+  margin-top:80px;
+`;
 
 const Business = () => {
 
@@ -33,8 +40,12 @@ const Business = () => {
         </Helmet>
       </HelmetProvider>
       <NavBar/>
-      {Breadcrumb(page_names,page_links)}
-      {CategoryName("Επαγγελματικά - B2B")}
+      <BreadcrumbContainer>
+        {Breadcrumb(page_names,page_links)}
+      </BreadcrumbContainer>
+      <CategoryNameContainer>
+        {CategoryName("Επαγγελματικά - B2B")}
+      </CategoryNameContainer>
       {Grid(images,titles,descriptions)}
     </Container>
   )
