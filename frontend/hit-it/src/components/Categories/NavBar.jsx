@@ -48,7 +48,6 @@ const Right=styled.div`
     align-items:center;
     justify-content:flex-end;
     margin-top:30px;
-    position:relative;
     margin-right:30px;
 `;
 

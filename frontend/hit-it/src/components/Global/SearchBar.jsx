@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Search } from '@material-ui/icons';
 import { search_results } from '../../data';
+import CloseIcon from '@material-ui/icons/Close';
 
 const Container=styled.div`
     width:100%;
@@ -34,6 +35,14 @@ const Input=styled.input`
     ::placeholder{
         opacity:0.1;
     }
+`;
+
+const IconDiv=styled.div`
+    color:#e67e22;
+    fontSize:25;
+    cursor:pointer;
+    margin-right:7px;
+    display:flex;
 `;
 
 const Wrapper=styled.div`
@@ -75,13 +84,15 @@ const Result=styled.div`
 const SearchBar = () => {
 
     const [filtered_data,set_filtered_data]=useState([]);
+    const [word_entered,set_word_entered]=useState([]);
 
     const handle_filter=(event)=>{
         const search_word=event.target.value;
+        set_word_entered(search_word);
         const new_filter=search_results.filter((value)=>{
             return value.title.toLowerCase().includes(search_word.toLowerCase());
         })
-        if(search_word===""){
+        if(search_word==="" || search_word===" "){
             set_filtered_data([]);
         }
         else{
@@ -89,11 +100,23 @@ const SearchBar = () => {
         }
     }
 
+    const clear_input=()=>{
+        set_filtered_data([]);
+        set_word_entered("");
+    }
+
   return (
       <Container>
         <SearchContainter>
-            <Input placeholder="γράψε τον όρο αναζήτησης" onChange={handle_filter}/>
-            <Search style={{color:"#e67e22",fontSize:25}} />
+            <Input placeholder="γράψε τον όρο αναζήτησης" onChange={handle_filter} value={word_entered}/>
+            {word_entered.length===0? 
+                <IconDiv>
+                    <Search/> 
+                </IconDiv>:
+                    <IconDiv>
+                        <CloseIcon onClick={()=>clear_input()} />
+                    </IconDiv>
+                }
         </SearchContainter>
         {filtered_data.length !==0 && (
             <Wrapper>
@@ -101,9 +124,9 @@ const SearchBar = () => {
                 {filtered_data.map((value)=>
                     {return(
                         <Results key={value.id}>
-                        <Result key={value.id} target="_blank">
-                            {value.title}
-                        </Result>
+                            <Result key={value.id} target="_blank">
+                                {value.title}
+                            </Result>
                         </Results>
                     );})}
             </ResultContainer>
