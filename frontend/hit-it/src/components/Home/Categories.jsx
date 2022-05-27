@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../../data";
 import { useNavigate } from 'react-router-dom';
+import Navigate from "../Global/Navigate";
 
 const Container=styled.div`
     height:40vh;
@@ -107,37 +108,6 @@ const Categories = () => {
         }
     }
 
-    const handle_title=(title)=>{
-        switch(title){
-            case "Τεχνολογία":
-                navigate("/home/technology");
-                break;
-            case "Σπίτι - Κήπος":
-                navigate("/home/home-garden");
-                break;
-            case "Μόδα":
-                navigate("/home/fashion");
-                break;
-            case "Hobby - Αθλητισμός":
-                navigate("/home/hobby-sports");
-                break;
-            case "Υγεία - Ομορφιά":
-                navigate("/home/health-beauty");
-                break;
-            case "Παιδικά - Βρεφικά":
-                navigate("/home/childrenry");
-                break;
-            case "Auto - Moto":
-                navigate("/home/auto-moto");
-                break;
-            case "Επαγγελματικά - B2B":
-                navigate("/home/business-b2b");
-                break;
-            default:
-                navigate("/");
-        }
-    }
-
   return (
     <Container>
         {(() => {
@@ -156,7 +126,7 @@ const Categories = () => {
                 {return(
                     <Slide key={item.id} bg={item.bg}>
                         <InfoContainer>
-                            <Title onClick={()=>handle_title(item.title)}>
+                            <Title onClick={()=>navigate(Navigate(item.title))}>
                                 {item.title}
                             </Title>
                             <Description>
