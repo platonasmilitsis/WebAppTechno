@@ -12,6 +12,12 @@ const Container=styled.div`
     align-items:center;
     justify-content:center;
     position:relative;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Logo=styled.h1`

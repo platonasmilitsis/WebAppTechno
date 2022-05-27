@@ -48,12 +48,6 @@ const Image=styled.img`
     height:100%;
     width:100%;
     object-fit:cover;
-    ${'' /* -drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none; */}
 `;
 
 const Announcement = () => {
