@@ -14,6 +14,12 @@ const Container=styled.div`
     margin-top:100px;
     border-radius:25px;
     max-width:1275px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Arrow=styled.div`

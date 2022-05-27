@@ -12,6 +12,12 @@ const Container=styled.div`
     border-radius:10px;
     position:relative;
     max-width:1275px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Title=styled.h1`
@@ -42,12 +48,12 @@ const Image=styled.img`
     height:100%;
     width:100%;
     object-fit:cover;
-    -drag: none;
+    ${'' /* -drag: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
+    -ms-user-select: none; */}
 `;
 
 const Announcement = () => {

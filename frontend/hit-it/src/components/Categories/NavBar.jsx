@@ -8,6 +8,12 @@ import SearchBar from '../Global/SearchBar';
 const Container=styled.div`
     height:80px;
     position:relative;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Wrapper=styled.div`

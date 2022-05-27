@@ -10,6 +10,12 @@ const Container=styled.div`
     margin-left:30px;
     margin-bottom:30px;
     margin-top:30px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const CategoryName = (category_name) => {

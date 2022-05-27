@@ -17,6 +17,12 @@ const Logo=styled.h1`
     font-size:70px;
     position:absolute;
     margin-bottom:100px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const SearchContainter=styled.div`
