@@ -33,16 +33,21 @@ const Description=styled.p`
 `;
 
 const ImgContainer=styled.div`
-    margin-left:900px;
-    margin-bottom:50px;
+    margin-left:70%;
     overflow:hidden;
+    position:absolute;
 `;
 
 const Image=styled.img`
     height:100%;
     width:100%;
     object-fit:cover;
-    margin-top:40px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Announcement = () => {

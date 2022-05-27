@@ -41,8 +41,9 @@ const IconDiv=styled.div`
     color:#e67e22;
     fontSize:25;
     cursor:pointer;
-    margin-right:7px;
     display:flex;
+    position:absolute;
+    margin-left:92%;
 `;
 
 const Wrapper=styled.div`
