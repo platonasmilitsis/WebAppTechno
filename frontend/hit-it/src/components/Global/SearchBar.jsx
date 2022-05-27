@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Search } from '@material-ui/icons';
 import { search_results } from '../../data';
 import CloseIcon from '@material-ui/icons/Close';
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     width:100%;
@@ -84,6 +85,8 @@ const Result=styled.div`
 
 const SearchBar = () => {
 
+    let navigate=useNavigate();
+
     const [filtered_data,set_filtered_data]=useState([]);
     const [word_entered,set_word_entered]=useState([]);
 
@@ -106,6 +109,37 @@ const SearchBar = () => {
         set_word_entered("");
     }
 
+    const handle_redirect=(title)=>{
+        switch(title){
+            case "Τεχνολογία":
+                navigate("/home/technology");
+                break;
+            case "Σπίτι - Κήπος":
+                navigate("/home/home-garden");
+                break;
+            case "Μόδα":
+                navigate("/home/fashion");
+                break;
+            case "Hobby - Αθλητισμός":
+                navigate("/home/hobby-sports");
+                break;
+            case "Υγεία - Ομορφιά":
+                navigate("/home/health-beauty");
+                break;
+            case "Παιδικά - Βρεφικά":
+                navigate("/home/childrenry");
+                break;
+            case "Auto - Moto":
+                navigate("/home/auto-moto");
+                break;
+            case "Επαγγελματικά - B2B":
+                navigate("/home/business-b2b");
+                break;
+            default:
+                navigate("/");
+        }
+    } 
+
   return (
       <Container>
         <SearchContainter>
@@ -124,7 +158,7 @@ const SearchBar = () => {
             <ResultContainer>
                 {filtered_data.map((value)=>
                     {return(
-                        <Results key={value.id}>
+                        <Results key={value.id} onClick={()=>handle_redirect(value.title)}>
                             <Result key={value.id} target="_blank">
                                 {value.title}
                             </Result>

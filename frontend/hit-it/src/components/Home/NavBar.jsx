@@ -5,6 +5,12 @@ import { Badge } from '@material-ui/core';
 
 const Container=styled.div`
     height:60px;
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const Wrapper=styled.div`
