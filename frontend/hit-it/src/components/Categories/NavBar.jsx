@@ -14,6 +14,7 @@ const Container=styled.div`
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    overflow:hidden;
 `;
 
 const Wrapper=styled.div`
@@ -44,7 +45,7 @@ const Logo=styled.h1`
 
 const SearchContainter=styled.div`
     width:100%;
-    position:fixed;
+    position:absolute;
     margin-top:50px;
 `;
 
