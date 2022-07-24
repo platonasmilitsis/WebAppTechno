@@ -6,8 +6,6 @@ import  styled from "styled-components";
 const Foot = styled.div`
     padding: 10px 10px;
     background: #f8f9fa;
-    ${'' /* position: relative; */}
-    width: 100%;
 `;
 
 const Conrainer = styled.div`
