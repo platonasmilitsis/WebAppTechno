@@ -44,7 +44,7 @@ const Logo=styled.h1`
 
 const SearchContainter=styled.div`
     width:100%;
-    position:absolute;
+    position:fixed;
     margin-top:50px;
 `;
 
