@@ -1,49 +1,38 @@
-*/
-drop table if exists user;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 
-CREATE TABLE `user`
-(
-    `id`         int NOT NULL,
-    `username`   varchar(45) NOT NULL ,
-    `password`   varchar(45) NOT NULL ,
-    `first_name` varchar(45) NOT NULL ,
-    `last_name`  varchar(45) NOT NULL ,
-    `telephone`  varchar(45) NULL ,
-    `email`      varchar(45) NOT NULL ,
-    `address`    varchar(45) NULL ,
-    `afm`        varchar(9) NOT NULL ,
-    `admin`      tinyint NOT NULL ,
-    `accepted`   tinyint NOT NULL ,
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `data` DEFAULT CHARACTER SET utf8 ;
+USE `data` ;
 
-    PRIMARY KEY (`id`) auto_increment
-);
-
-insert into user(username,password,
-                 first_name,last_name,telephone,
-                 email,address,afm,admin,accepted)
-    values('Adam647','01','ADAM',
-           'BERIOS','6975669136','adamj@test.com',
-           'Not much too say',
-           'USA,Illinois',0,1,'Adam','Jonhson',1);
+-- -------------------------------------
 
 
+-- -----------------------------------------------------
+-- Table `data`.`Users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `data`.`Users` ;
+
+CREATE TABLE IF NOT EXISTS `data`.`Users` (
+                                              `id` INT NOT NULL,
+                                              `username` VARCHAR(45) NOT NULL,
+    `password` VARCHAR(45) NOT NULL,
+    `first_name` VARCHAR(45) NOT NULL,
+    `last_name` VARCHAR(45) NOT NULL,
+    `telephone` VARCHAR(45) NULL,
+    `email` VARCHAR(45) NOT NULL,
+    `address` VARCHAR(45) NULL,
+    `TIN` VARCHAR(10) NOT NULL,
+    `admin` TINYINT NOT NULL,
+    `accepted` TINYINT NOT NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
 
 
-drop table if exists bidder;
-
-CREATE TABLE `bidder`
-(
-    `user_id`       int NOT NULL ,
-    `location` varchar(45) NOT NULL ,
-    `country`  varchar(45) NOT NULL ,
-    `rating`   int NULL ,
-
-    PRIMARY KEY (`user_id`),
-    CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
-);
-
-
-
-
-
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
