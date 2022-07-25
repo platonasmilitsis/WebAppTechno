@@ -4,7 +4,7 @@ package com.hitit.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class Users {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
@@ -23,7 +23,7 @@ public class Users {
     public Users() {
     }
 
-    public Users( String username, String password, String first_name, String last_name, String telephone, String email, String address, String TIN, Boolean admin, Boolean accepted) {
+    public Users(String username, String password, String first_name, String last_name, String telephone, String email, String address, String TIN, Boolean admin, Boolean accepted) {
         this.username = username;
         this.password = password;
         this.first_name = first_name;
