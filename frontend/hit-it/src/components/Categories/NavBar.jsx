@@ -14,6 +14,7 @@ const Container=styled.div`
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    overflow:hidden;
 `;
 
 const Wrapper=styled.div`

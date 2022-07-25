@@ -4,12 +4,10 @@ import  styled from "styled-components";
 
 
 const Foot = styled.div`
-    padding: 10px 0px;
+    padding: 10px 10px;
     background: #f8f9fa;
-    position: flex;
-    bottom: 0;
-    width: 100%; 
 `;
+
 const Conrainer = styled.div`
     display:flex;
     flex-direction: column;
@@ -40,8 +38,9 @@ const Logo = styled.h1`
 `;
 
 const Description = styled.p`
-    margin: 20px 0;
+    margin: 5px 0;
     margin-left:20px;
+    font-family: 'Arial', 'sans-serif';
 `;
 
 
@@ -63,63 +62,54 @@ const Icons = styled.div`
   margin-right: 15px;
 `;
 
-const Wrapper=styled.div`
-    flex :1;
-    display:flex;
-    flex-direction:column;
-    margin:0;
-    margin-top:-100px;
-`;
+
 
 const Footer = () => {
     return (
         <Foot>
             <Logo>hit-it</Logo>
             <Description>
-                Your favourite online shop!
+                Το αγαπημένο σου online κατάστημα!
             </Description>
             <Conrainer>
                 <Row>
                     <Column>
-                        <Wrapper>
-                            <Description>
-                                Follow us on Social Media!
-                            </Description>
-                            <SocialMedia>
-                                <Icons color="3b5998">
-                                    <Facebook/>
-                                </Icons>
-                                <Icons color="1da1f2">
-                                    <Twitter/>
-                                </Icons>
-                                <Icons color="c32aa3">
-                                    <Instagram/>
-                                </Icons>
-                            </SocialMedia>
-                        </Wrapper>
+                        <Description>
+                            Ακολουθήστε μας στα Social Media!
+                        </Description>
+                        <SocialMedia>
+                            <Icons color="3b5998">
+                                <Facebook/>
+                            </Icons>
+                            <Icons color="1da1f2">
+                                <Twitter/>
+                            </Icons>
+                            <Icons color="c32aa3">
+                                <Instagram/>
+                            </Icons>
+                        </SocialMedia>
                     </Column>
                     <Column>
-                        <Wrapper>
-                            <Description>
-                                Contact Us!
-                            </Description>
-                            <SocialMedia>
-                                <Icons color="23272a">
-                                    <Phone/>
-                                </Icons>
-                                <Icons color="bd081c">
-                                    <Email/>
-                                </Icons>
-                            </SocialMedia>
-                        </Wrapper>
+                        <Description>
+                            Επικοινωνία
+                        </Description>
+                        <SocialMedia>
+                            <Icons color="23272a">
+                                <Phone/>
+                            </Icons>
+                            <Icons color="bd081c">
+                                <Email/>
+                            </Icons>
+                        </SocialMedia>
                     </Column>
                     <Column>
-                        <Wrapper>
-                            <Description>
-                                Abouts Us!
-                            </Description>
-                            Find out more 
-                        </Wrapper>
+                        <Description>
+                            Σχετικά με εμάς!
+                        </Description>
+                        <Description>
+                            Περισσότερες πληροφορίες 
+                        </Description>
+                                
                     </Column>
                 </Row>
             </Conrainer>

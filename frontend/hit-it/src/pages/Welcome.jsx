@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Footer from '../components/Global/Footer';
 
 
 const Container=styled.div`
     background-color:#eaeded; 
     width:100%;
-    height:700px;
+    height:1000px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -28,6 +29,8 @@ const Logo=styled.h1`
     margin-bottom:350px;
     margin-right:800px;
 `;
+
+
 
 const Description=styled.p`
     font-size:25px;
@@ -57,6 +60,12 @@ const Button=styled.button`
     font-weight:700;
 `;
 
+const FooterCont=styled.div`
+    position:absolute;
+    bottom:0;
+    width:100%;
+`;
+
 const Welcome = () => {
     let navigate=useNavigate();
   return (
@@ -79,6 +88,9 @@ const Welcome = () => {
         <Button onClick={()=>navigate("/home")}>
             Συνέχεια σαν επισκέπτης
         </Button>
+        <FooterCont>
+            <Footer/>
+        </FooterCont>
     </Container>
   )
 }

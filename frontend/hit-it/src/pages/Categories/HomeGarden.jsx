@@ -5,6 +5,7 @@ import NavBar from '../../components/Categories/NavBar';
 import Breadcrumb from '../../components/Global/Breadcrumb';
 import CategoryName from '../../components/Categories/CategoryName';
 import Grid from '../../components/Categories/Grid';
+import Footer from '../../components/Global/Footer';
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -47,6 +48,7 @@ const Home_Garden = () => {
         {CategoryName("Σπίτι - Κήπος")}
       </CategoryNameContainer>
       {Grid(images,titles,descriptions)}
+      <Footer/>
     </Container>
   )
 }
