@@ -101,7 +101,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`item` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`item` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL auto_increment,
   `name` VARCHAR(45) NOT NULL,
   `first_bid` INT NULL,
   `buy_price` INT NOT NULL,
@@ -110,7 +110,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `latitude` VARCHAR(45) NOT NULL,
   `longitude` VARCHAR(45) NOT NULL,
   `users_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `users_id`),
+  `img_path` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_item_users1_idx` (`users_id` ASC) VISIBLE,
   CONSTRAINT `fk_item_users1`
     FOREIGN KEY (`users_id`)

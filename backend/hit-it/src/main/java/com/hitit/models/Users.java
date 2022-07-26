@@ -126,6 +126,8 @@ public class Users {
         this.accepted = accepted;
     }
 
+    public void setAccepted() {this.accepted = true;}
+
 
     @Override
     public String toString() {
