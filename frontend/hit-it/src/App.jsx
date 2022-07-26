@@ -10,6 +10,7 @@ import HealthBeauty from "./pages/Categories/HealthBeauty";
 import Childrenry from "./pages/Categories/Childrenry";
 import AutoMoto from "./pages/Categories/AutoMoto";
 import Business from "./pages/Categories/Business";
+import Product from "./pages/Product";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/home/childrenry" element={<Childrenry/>}/>
         <Route path="/home/auto-moto" element={<AutoMoto/>}/>
         <Route path="/home/business-b2b" element={<Business/>}/>
+        <Route path="/home/products" element={<Product/>}/>
       </Routes>
     </Router>
   );
