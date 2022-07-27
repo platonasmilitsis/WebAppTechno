@@ -27,6 +27,7 @@ const Home = () => {
         </Helmet>
       </HelmetProvider>
       <NavBar/>
+      <hr></hr>
       <Main/>
       <Announcement/>
       <FloatingButtonAdd/>

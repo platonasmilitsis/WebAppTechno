@@ -10,9 +10,9 @@ const Container=styled.div`
     flex-direction:row;
     justify-content:space-around;
     @media (max-width: 1000px) {
-    flex-wrap:wrap;
-    overflow:hidden;
-  }
+        flex-wrap:wrap;
+        overflow:hidden;
+    }
     -drag: none;
     user-select: none;
     -moz-user-select: none;
