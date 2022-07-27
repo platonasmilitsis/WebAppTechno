@@ -29,6 +29,7 @@ const Home = () => {
       <NavBar/>
       <hr></hr>
       <Main/>
+      <hr></hr>
       <Announcement/>
       <FloatingButtonAdd/>
       <Categories/>

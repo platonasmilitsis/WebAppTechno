@@ -28,6 +28,9 @@ const Logo=styled.h1`
 const SearchContainter=styled.div`
     width:100%;
     margin-top:60px;
+    @media (max-width: 1000px) {
+        width:950px;
+    }
 `;
 
 const Main = () => {

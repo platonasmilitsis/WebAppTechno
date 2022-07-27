@@ -12,6 +12,9 @@ const Container=styled.div`
     align-items:center;
     justify-content:center;
     position:relative;
+    @media (max-width: 1000px) {
+        width:950px;
+    }
 `;
 
 const SearchContainter=styled.div`
@@ -46,6 +49,9 @@ const IconDiv=styled.div`
     display:flex;
     position:absolute;
     margin-left:92%;
+    @media (max-width: 1000px) {
+        margin-left:85%;
+    }
 `;
 
 const Wrapper=styled.div`
