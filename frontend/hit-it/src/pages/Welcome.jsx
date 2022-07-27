@@ -13,6 +13,12 @@ const Container=styled.div`
     flex-wrap:wrap;
     overflow:hidden;
   }
+    -drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 `;
 
 const TextContainer=styled.div`
@@ -63,6 +69,7 @@ const Button=styled.button`
     width:50%;
     margin-left:100px;
     margin-bottom:100px;
+    cursor:pointer;
 `;
 
 const Welcome = () => {
