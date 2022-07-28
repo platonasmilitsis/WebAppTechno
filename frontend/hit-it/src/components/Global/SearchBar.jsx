@@ -7,81 +7,90 @@ import { useNavigate } from 'react-router-dom';
 import Navigate from "../Global/Navigate";
 
 const Container=styled.div`
-    width:100%;
     display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
+    flex-direction:column;
 `;
 
-const SearchContainter=styled.div`
+const SearchContainer=styled.div`
+    display:flex;
+    border-radius:25px;
+    height:48px;
+    width:640px;
+    background-color:white;
+    justify-content:flex-start;
+    align-items:center;
     &:hover{
         border:1px;
         border-style:solid;
         border-color:#e67e22;
+        box-sizing:border-box;
     }
+    flex-direction:row;
+    @media screen and (max-width: 650px) {
+        width:420px;
+        height:38px;
+    }
+`;
+
+const InputContainer=styled.div`
     display:flex;
     align-items:center;
-    width:30%;
-    border-radius:25px;
-    padding:5px;
-    position:absolute;
-    background-color:white;
+    width:600px;
+    margin-left:20px;
+    @media screen and (max-width: 650px) {
+        width:380px;
+    }
+
 `;
 
 const Input=styled.input`
-    width:100%;
     border-width:0px;
     outline:none;    
     font-size:16px;
     ::placeholder{
         opacity:0.1;
+        @media screen and (max-width: 650px) {
+            font-size:14px;
+        }
+    }
+    width:600px;
+    @media screen and (max-width: 650px) {
+        width:380px;
     }
 `;
 
-const IconDiv=styled.div`
+const IconContainer=styled.div`
     color:#e67e22;
-    fontSize:25;
     cursor:pointer;
-    display:flex;
-    position:absolute;
-    margin-left:92%;
+    margin-left:20px;
+
 `;
 
-const Wrapper=styled.div`
-    position:relative;
-    width:30%;
+const ResultsContainer=styled.div`
+    background-color:white;
+    margin-left:30px;
+    margin-right:30px;
+    border-radius:0 0 3px 3px;
+    z-index:1;
 `;
 
 const ResultContainer=styled.div`
-    width:100%;
-    background-color:white;
-    z-index:1;
-    margin-top:17px;
-    position:absolute;
-    border-radius:10px;
-    border:1px;
-    border-style:solid;
-    border-color: #bdc3c7 ;
-    
-`;
-
-const Results=styled.div`
     height:30px;
-    position:relative;
+    justify-content:center;
     &:hover{
         cursor:pointer;
         background-color:#f8f9f9;
     }
-    border-radius:10px;
 `;
 
-const Result=styled.div`
-    margin-left:10px;
-    margin-top:5px;
-    margin-bottom:5px;
+const Result=styled.h1`
     font-family: 'Arial', sans-serif;
-    position:absolute;
+    font-size:17px;
+    font-weight:300;
+    margin-left:15px;
+    @media screen and (max-width: 650px) {
+        font-size:15px;
+    }
 `;
 
 const SearchBar = () => {
@@ -111,35 +120,34 @@ const SearchBar = () => {
     }
 
   return (
-      <Container>
-        <SearchContainter>
-            <Input placeholder="γράψε τον όρο αναζήτησης" onChange={handle_filter} value={word_entered}/>
-            {word_entered.length===0? 
-                <IconDiv>
-                    <Search/> 
-                </IconDiv>:
-                    <IconDiv>
-                        <CloseIcon onClick={()=>clear_input()} />
-                    </IconDiv>
-                }
-        </SearchContainter>
+    <Container>
+        <SearchContainer>
+            <InputContainer>
+                <Input placeholder="γράψε τον όρο αναζήτησης" onChange={handle_filter} value={word_entered}/>
+                {word_entered.length===0? 
+                    <IconContainer>
+                        <Search/> 
+                    </IconContainer>:
+                        <IconContainer>
+                            <CloseIcon onClick={()=>clear_input()} />
+                        </IconContainer>
+                    }
+            </InputContainer>
+        </SearchContainer>
         {filtered_data.length !==0 && (
-            <Wrapper>
-            <ResultContainer>
+            <ResultsContainer>
                 {filtered_data.map((value)=>
                     {return(
-                        <Results key={value.id} onClick={()=>navigate(Navigate(value.title))}>
+                        <ResultContainer key={value.id} onClick={()=>navigate(Navigate(value.title))}>
                             <Result key={value.id} target="_blank">
                                 {value.title}
                             </Result>
-                        </Results>
+                        </ResultContainer>
                     );})}
-            </ResultContainer>
-            </Wrapper>
+            </ResultsContainer>
         )}
     </Container>
   )
-  
 }
 
 export default SearchBar

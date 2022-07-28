@@ -25,12 +25,19 @@ const Right=styled.div`
     display:flex;
     align-items:center;
     justify-content:flex-end;
+    margin-top:10px;
+    @media (max-width: 1000px) {
+        justify-content:center;
+    }
 `;
 
 const MenuItem=styled.div`
     font-size:14px;
     cursor:pointer;
     margin-left:25px;
+    @media (max-width: 1000px) {
+        margin:0 auto;
+    }
 `;
 
 const NavBar = () => {
