@@ -7,16 +7,13 @@ const Container=styled.div`
     height:200px;
     display:flex;
     align-items:center;
-    justify-content:center;
-    position:relative;
+    flex-direction:column;
 `;
 
 const Logo=styled.h1`
     font-weight:900;
     color:#e67e22; 
     font-size:70px;
-    position:absolute;
-    margin-bottom:100px;
     -drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -26,11 +23,7 @@ const Logo=styled.h1`
 `;
 
 const SearchContainter=styled.div`
-    width:100%;
-    margin-top:60px;
-    @media (max-width: 1000px) {
-        width:950px;
-    }
+    margin-top:30px;
 `;
 
 const Main = () => {
@@ -43,8 +36,6 @@ const Main = () => {
         <SearchContainter>
             <SearchBar/>
         </SearchContainter>
-
-
     </Container>
   )
 }
