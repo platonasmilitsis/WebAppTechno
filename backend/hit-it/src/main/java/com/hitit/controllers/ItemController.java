@@ -33,8 +33,8 @@ public class ItemController {
     @GetMapping("/items/{id}")
     public Optional<Item> getItem(@PathVariable Long id){return itemService.getItem(id);}
 
-    @PostMapping("/items")
-    public Item newItem(@RequestBody Item newItem){return itemService.addItem(newItem);}
+    @PostMapping("/users/{id}/items")
+    public Item newItem(@RequestBody Item newItem, @PathVariable Long id){return itemService.addItem(newItem,id);}
 
     @PutMapping("/items/{id}")
     public Item updateItem(@RequestBody Item updatedItem, @PathVariable Long id){

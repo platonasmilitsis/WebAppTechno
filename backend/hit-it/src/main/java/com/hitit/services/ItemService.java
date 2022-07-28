@@ -1,8 +1,11 @@
 package com.hitit.services;
 
 import com.hitit.exceptions.ItemNotFoundException;
+import com.hitit.exceptions.UserNotFoundException;
 import com.hitit.models.Item;
+import com.hitit.models.Users;
 import com.hitit.repository.ItemRepository;
+import com.hitit.repository.UsersRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,11 @@ import java.util.Optional;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final UsersRepository usersRepository;
 
-
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, UsersRepository usersRepository) {
         this.itemRepository = itemRepository;
+        this.usersRepository = usersRepository;
     }
 
 
@@ -28,7 +32,14 @@ public class ItemService {
 
     public Optional<Item> getItem(Long id) {return itemRepository.findById(id);}
 
-    public Item addItem(Item newItem) { return itemRepository.save(newItem);
+    public Item addItem(Item newItem, Long id) {
+        Optional< Users > user = usersRepository.findById(id);
+        if(user.isPresent())
+        {
+            newItem.setUser(user.get());
+            return itemRepository.save(newItem);
+        }
+        else throw new UserNotFoundException();
     }
 
     public Item updateItem(Item newItem, Long id){
