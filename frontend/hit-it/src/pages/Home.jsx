@@ -31,6 +31,7 @@ const Home = () => {
       <Main/>
       <hr></hr>
       <Announcement/>
+      <hr></hr>
       <FloatingButtonAdd/>
       <Categories/>
       <Footer/>
