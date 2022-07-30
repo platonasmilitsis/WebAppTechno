@@ -77,6 +77,7 @@ const ResultsContainer=styled.div`
 const ResultContainer=styled.div`
     height:30px;
     justify-content:center;
+    border-radius:0 0 3px 3px;
     &:hover{
         cursor:pointer;
         background-color:#f8f9f9;
