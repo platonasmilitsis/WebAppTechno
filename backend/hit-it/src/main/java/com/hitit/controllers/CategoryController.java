@@ -38,25 +38,13 @@ public class CategoryController {
         return categoryService.addCategory(name);
     }
 
-    ///!!!!!!!!!!!!!!!!!!!!
-    ///!!!!!!!!!!!!!!!!!!!!
-    ///!!!!!!!!!!!!!!!!!!!!
-    ///!!!!!!!!!!!!!!!!!!!!
-    ///!!!!!!!!!!!!!!!!!!!!
-    ///!!!!!!!!!!!!!!!!!!!!
-    //SIMANTIKO
-    //Mental Note: Na to ksanadw meta ta categories kai item ids
-    ///!!!!!!!!!!!!!!!!!!!!
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+        return categoryService.deleteCategory(id);
+    }
 
-
-    //
-//    @DeleteMapping("/categories/{id}")
-//    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
-//        return categoryService.deleteCategory(id);
-//    }
-//
-//    @DeleteMapping("/categories/{name}")
-//    public ResponseEntity<?> deleteCategory(@PathVariable String name){
-//        return categoryService.deleteCategory(name);
-//    }
+    @DeleteMapping("/categories/{name}")
+    public ResponseEntity<?> deleteCategory(@PathVariable String name){
+        return categoryService.deleteCategory(name);
+    }
 }

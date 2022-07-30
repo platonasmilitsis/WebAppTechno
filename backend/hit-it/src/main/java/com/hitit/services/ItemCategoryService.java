@@ -4,6 +4,7 @@ import com.hitit.models.Item;
 import com.hitit.models.ItemCategory;
 import com.hitit.models.ItemCategoryID;
 import com.hitit.repository.ItemCategoryRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class ItemCategoryService {
     }
 
 
-    public List<ItemCategory> addCategoriesToItem(Integer[] category_id, Long id) {
+    public List<ItemCategory> addCategoriesToItem(Integer @NotNull [] category_id, Long id) {
 
         List<ItemCategory> temp = new ArrayList<>();
 
@@ -47,7 +48,7 @@ public class ItemCategoryService {
         return temp;
     }
 
-    public List<ItemCategory> addItemsToCategory(Integer[] item_id, Long id) {
+    public List<ItemCategory> addItemsToCategory(Integer @NotNull [] item_id, Long id) {
 
         List<ItemCategory> temp = new ArrayList<>();
 
@@ -63,7 +64,7 @@ public class ItemCategoryService {
     }
 
 
-    public ResponseEntity<?> deleteCategoriesFromItem(Integer[] category_id, Long id) {
+    public ResponseEntity<?> deleteCategoriesFromItem(Integer @NotNull [] category_id, Long id) {
         for(Integer cat_id: category_id){
             ItemCategoryID ic_id = new ItemCategoryID();
             ic_id.setCategory_id(cat_id.longValue());
@@ -74,7 +75,7 @@ public class ItemCategoryService {
 
     }
 
-    public ResponseEntity<?> deleteItemsFromCategory(Integer[] item_id, Long id) {
+    public ResponseEntity<?> deleteItemsFromCategory(Integer @NotNull [] item_id, Long id) {
         for(Integer it_id: item_id){
             ItemCategoryID ic_id = new ItemCategoryID();
             ic_id.setCategory_id(id);

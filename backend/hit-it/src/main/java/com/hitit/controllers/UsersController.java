@@ -38,13 +38,13 @@ public class UsersController {
         return userService.updateUsers(newUser,id);
     }
 
-    @PutMapping("/users/accept/{id}")
-    public Users acceptUser(@PathVariable Long id){
+    @PutMapping("/users/accept")
+    public List<Users> acceptUser(@RequestParam("id") Integer[] id){
         return userService.acceptUser(id);
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+    @DeleteMapping("/users")
+    public ResponseEntity<?> deleteUser(@RequestParam("id") Integer[] id){
         return userService.deleteUser(id);
     }
 

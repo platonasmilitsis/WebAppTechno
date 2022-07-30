@@ -23,18 +23,53 @@ USE `mydb` ;
 DROP TABLE IF EXISTS `mydb`.`bid` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL auto_increment,
   `time` TIME NOT NULL,
   `amount` INT NOT NULL,
   `bids_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `bids_id`),
+  `bidder_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_bid_bids1_idx` (`bids_id` ASC) VISIBLE,
   CONSTRAINT `fk_bid_bids1`
     FOREIGN KEY (`bids_id`)
     REFERENCES `mydb`.`bids` (`id`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  INDEX `fk_bid_bidder1_idx` (`bidder_id` ASC) VISIBLE,
+  CONSTRAINT `fk_bid_bidder1`
+    FOREIGN KEY (`bidder_id`)
+    REFERENCES `mydb`.`bidder` (`id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `mydb`.`reviews` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`reviews`
+(
+    `user_id`   int not null,
+    `bidder_id` int not null,
+    `review`    text,
+    `rating`    float not null,
+    INDEX `fk_reviews_users_bidders_idx` (`user_id` ASC, `bidder_id` ASC) VISIBLE,
+    PRIMARY KEY (`user_id`, `bidder_id`),
+    CONSTRAINT `fk_reviews_users`
+        FOREIGN KEY (`user_id`)
+            REFERENCES `mydb`.`users` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_reviews_bidders`
+        FOREIGN KEY (`bidder_id`)
+            REFERENCES `mydb`.`bidder` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION
+)
+ENGINE = InnoDB;
+
+
+
+
+
 
 
 -- -----------------------------------------------------
@@ -46,20 +81,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
   `id` INT NOT NULL,
   `location` VARCHAR(45) NOT NULL,
   `country` VARCHAR(45) NOT NULL,
-  `rating` INT NULL,
-  `bid_id` INT NOT NULL,
-  `bid_bids_id` INT NOT NULL,
+  `rating` float NULL,
   INDEX `fk_bidder_users_idx` (`id` ASC) VISIBLE,
-  PRIMARY KEY (`id`, `bid_id`, `bid_bids_id`),
-  INDEX `fk_bidder_bid1_idx` (`bid_id` ASC, `bid_bids_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_bidder_users`
     FOREIGN KEY (`id`)
     REFERENCES `mydb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_bidder_bid1`
-    FOREIGN KEY (`bid_id` , `bid_bids_id`)
-    REFERENCES `mydb`.`bid` (`id` , `bids_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -72,11 +99,9 @@ DROP TABLE IF EXISTS `mydb`.`bids` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`bids` (
   `id` INT NOT NULL,
-  `item_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `item_id`),
-  INDEX `fk_bids_item1_idx` (`item_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_bids_item1`
-    FOREIGN KEY (`item_id`)
+    FOREIGN KEY (`id`)
     REFERENCES `mydb`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

@@ -3,6 +3,8 @@ package com.hitit.services;
 import com.hitit.exceptions.EmailInUseException;
 import com.hitit.exceptions.UserInUseException;
 import com.hitit.exceptions.UserNotFoundException;
+import com.hitit.repository.BidRepository;
+import com.hitit.repository.BidderRepository;
 import com.hitit.repository.UsersRepository;
 import com.hitit.models.Users;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -19,9 +21,16 @@ import java.util.Optional;
 public class UsersService {
 
     private final UsersRepository usersRepository;
-
-    public UsersService(UsersRepository usersRepository) {
+    private final ReviewsService reviewsService;
+    private final BidderRepository bidderRepository;
+    private final BidRepository bidRepository;
+    private final ItemService itemService;
+    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService, BidderRepository bidderRepository, BidRepository bidRepository, ItemService itemService) {
         this.usersRepository = usersRepository;
+        this.reviewsService = reviewsService;
+        this.bidderRepository = bidderRepository;
+        this.bidRepository = bidRepository;
+        this.itemService = itemService;
     }
 
 
@@ -120,15 +129,29 @@ public class UsersService {
         }
     }
 
-    public Users acceptUser(Long id) {
-        Optional<Users> user = usersRepository.findById(id);
-        user.ifPresent(Users::setAccepted);
-        if(user.isEmpty()) throw new UserNotFoundException();
-        return usersRepository.save(user.get());
+    public List<Users> acceptUser(Integer @NotNull [] id) {
+        List<Users> list = new ArrayList<>();
+        for (Integer i : id) {
+            Optional<Users> user = usersRepository.findById(i.longValue());
+            user.ifPresent(Users::setAccepted);
+            if (user.isEmpty()) throw new UserNotFoundException();
+            list.add(usersRepository.save(user.get()));
+        }
+        return list;
     }
 
-    public ResponseEntity<?> deleteUser(Long id) {
-        usersRepository.deleteById(id);
+    public ResponseEntity<?> deleteUser(Integer @NotNull [] id) {
+        for(Integer i: id) {
+            usersRepository.deleteById(i.longValue());
+            bidderRepository.deleteById(i.longValue());
+            if(ResponseEntity.ok("OK")!= reviewsService.deleteReviewsByUserId(i.longValue())){
+                return (ResponseEntity<?>) ResponseEntity.notFound();
+            }
+            reviewsService.deleteReviewsToBidderId(i.longValue());
+            bidRepository.deleteBidsByBidderId(i.longValue());
+            itemService.deleteItemsByUser(i.longValue());
+
+        }
         return ResponseEntity.ok("OK");
     }
 }

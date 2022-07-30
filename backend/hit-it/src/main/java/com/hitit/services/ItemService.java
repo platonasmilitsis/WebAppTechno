@@ -4,8 +4,7 @@ import com.hitit.exceptions.ItemNotFoundException;
 import com.hitit.exceptions.UserNotFoundException;
 import com.hitit.models.Item;
 import com.hitit.models.Users;
-import com.hitit.repository.ItemRepository;
-import com.hitit.repository.UsersRepository;
+import com.hitit.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +17,18 @@ import java.util.Optional;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
+    private final BidRepository bidRepository;
+
+    private final BidsRepository bidsRepository;
     private final UsersRepository usersRepository;
 
-    public ItemService(ItemRepository itemRepository, UsersRepository usersRepository) {
+
+    public ItemService(ItemRepository itemRepository, ItemCategoryRepository itemCategoryRepository, BidRepository bidRepository, BidsRepository bidsRepository, UsersRepository usersRepository) {
         this.itemRepository = itemRepository;
+        this.itemCategoryRepository = itemCategoryRepository;
+        this.bidRepository = bidRepository;
+        this.bidsRepository = bidsRepository;
         this.usersRepository = usersRepository;
     }
 
@@ -87,13 +94,33 @@ public class ItemService {
     }
 
     public ResponseEntity<?> deleteItem(Long id) {
+        bidRepository.deleteBidsByBidsId(id);
+        bidsRepository.deleteById(id);
+        itemCategoryRepository.deleteByItemId(id);
         itemRepository.deleteById(id);
         return ResponseEntity.ok("OK");
     }
     public ResponseEntity<?> deleteItems(Long id) {
+        Integer[] it =  itemRepository.findItemsIdByUserId(id);
+
+        for(Integer ints : it)
+            itemCategoryRepository.deleteByItemId(ints.longValue());
+
         itemRepository.deleteByUserId(id);
         return ResponseEntity.ok("OK");
     }
 
 
+    public void deleteItemsByUser(Long user_id) {
+
+        List<Item> list = itemRepository.findItemByUserId(user_id);
+
+        for(Item item : list){
+            bidRepository.deleteBidsByBidsId(item.getId());
+            bidsRepository.deleteById(item.getId());
+            itemCategoryRepository.deleteByItemId(item.getId());
+            itemRepository.deleteById(item.getId());
+        }
+
     }
+}
