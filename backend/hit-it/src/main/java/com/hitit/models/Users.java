@@ -15,7 +15,7 @@ public class Users {
     private String telephone;
     private String email;
     private String address;
-    private String TIN;
+    private String tin;
     private Boolean admin;
     private Boolean accepted;
 
@@ -31,7 +31,7 @@ public class Users {
         this.telephone = telephone;
         this.email = email;
         this.address = address;
-        this.TIN = TIN;
+        this.tin = TIN;
         this.admin = admin;
         this.accepted = accepted;
     }
@@ -103,11 +103,11 @@ public class Users {
     }
 
     public String getTIN() {
-        return TIN;
+        return tin;
     }
 
     public void setTIN(String TIN) {
-        this.TIN = TIN;
+        this.tin = TIN;
     }
 
     public Boolean getAdmin() {
@@ -140,7 +140,7 @@ public class Users {
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
-                ", TIN='" + TIN + '\'' +
+                ", tin='" + tin + '\'' +
                 ", admin=" + admin +
                 ", accepted=" + accepted +
                 '}';

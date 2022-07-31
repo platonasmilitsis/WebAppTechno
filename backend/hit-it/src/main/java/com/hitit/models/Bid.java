@@ -1,11 +1,12 @@
 package com.hitit.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.util.Date;
 
 @Entity
 @Table(name = "bid")
@@ -18,7 +19,10 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Time time;
+
+    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
     private Long amount;
 
     @JoinColumn(name = "bids_id",nullable = false)

@@ -103,4 +103,12 @@ public class ReviewsService {
     public void deleteReviewsToBidderId(Long bidder_id){
         reviewsRepository.deleteReviewsToBidderId(bidder_id);
     }
+
+    public void updateRatings() {
+        Long[] bidder_id = reviewsRepository.findAllBidderId();
+
+        for(Long i : bidder_id){
+            this.updateRatings(i);
+        }
+    }
 }

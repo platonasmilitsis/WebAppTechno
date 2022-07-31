@@ -21,4 +21,7 @@ public interface ReviewsRepository extends JpaRepository<Reviews, ReviewsId> {
     @Modifying
     @Query("delete from Reviews r where r.bidder_id=:bidder_id")
     void deleteReviewsToBidderId(Long bidder_id);
+
+    @Query("select distinct r.bidder_id from Reviews r")
+    Long[] findAllBidderId();
 }

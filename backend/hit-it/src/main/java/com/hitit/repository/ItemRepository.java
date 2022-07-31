@@ -12,13 +12,13 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
 
-    @Query("select i from Item i where i.user = ?1")
+    @Query("select i from Item i where i.user.id =:user_id")
     List<Item> findItemByUserId(Long user_id);
 
-    @Query("select i.id from Item i where i.user=?1")
-    Integer[] findItemsIdByUserId(Long user_id);
+    @Query("select i.id from Item i where i.user.id=:user_id")
+    Long[] findItemsIdByUserId(Long user_id);
 
     @Modifying
-    @Query("delete from Item i where i.user = ?1")
+    @Query("delete from Item i where i.user.id =:id")
     void deleteByUserId(Long id);
 }

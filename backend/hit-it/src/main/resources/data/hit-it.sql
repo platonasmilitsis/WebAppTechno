@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   CONSTRAINT `fk_item_users1`
     FOREIGN KEY (`users_id`)
     REFERENCES `mydb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -120,12 +120,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item_category` (
   CONSTRAINT `fk_item_category_category1`
     FOREIGN KEY (`category_id`)
     REFERENCES `mydb`.`category` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_item_category_item1`
     FOREIGN KEY (`item_id`)
     REFERENCES `mydb`.`item` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bids` (
   CONSTRAINT `fk_bids_item1`
     FOREIGN KEY (`id`)
     REFERENCES `mydb`.`item` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
   CONSTRAINT `fk_bidder_users`
     FOREIGN KEY (`id`)
     REFERENCES `mydb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -194,7 +194,7 @@ DROP TABLE IF EXISTS `mydb`.`bid` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
   `id` INT NOT NULL auto_increment,
-  `time` TIME NOT NULL,
+  `time` timestamp NOT NULL,
   `amount` INT NOT NULL,
   `bids_id` INT NOT NULL,
   `bidder_id` INT NOT NULL,
@@ -203,13 +203,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
   CONSTRAINT `fk_bid_bids1`
     FOREIGN KEY (`bids_id`)
     REFERENCES `mydb`.`bids` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   INDEX `fk_bid_bidder1_idx` (`bidder_id` ASC) VISIBLE,
   CONSTRAINT `fk_bid_bidder1`
     FOREIGN KEY (`bidder_id`)
     REFERENCES `mydb`.`bidder` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -227,12 +227,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`reviews`
     CONSTRAINT `fk_reviews_users`
         FOREIGN KEY (`user_id`)
             REFERENCES `mydb`.`users` (`id`)
-            ON DELETE NO ACTION
+            ON DELETE CASCADE
             ON UPDATE NO ACTION,
     CONSTRAINT `fk_reviews_bidders`
         FOREIGN KEY (`bidder_id`)
             REFERENCES `mydb`.`bidder` (`id`)
-            ON DELETE NO ACTION
+            ON DELETE CASCADE
             ON UPDATE NO ACTION
 )
 ENGINE = InnoDB;

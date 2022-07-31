@@ -16,11 +16,9 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final ItemCategoryRepository itemCategoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, ItemCategoryRepository itemCategoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.itemCategoryRepository = itemCategoryRepository;
     }
 
     public List<Category> getCategories() {
@@ -42,17 +40,11 @@ public class CategoryService {
     }
 
     public ResponseEntity<?> deleteCategory(Long id) {
-        itemCategoryRepository.deleteByCategoryId(id);
         categoryRepository.deleteById(id);
         return ResponseEntity.ok("OK");
     }
 
     public ResponseEntity<?> deleteCategory(String name) {
-        Optional<Category> cat = categoryRepository.findByCategory(name);
-        if(cat.isPresent()){
-            Long id = cat.get().getId();
-            itemCategoryRepository.deleteByCategoryId(id);
-        }
         categoryRepository.deleteByName(name);
         return ResponseEntity.ok("OK");
     }

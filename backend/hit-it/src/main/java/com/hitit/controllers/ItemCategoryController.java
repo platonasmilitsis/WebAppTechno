@@ -35,7 +35,7 @@ public class ItemCategoryController {
         return itemCategoryService.addCategoriesToItem(category_id,id);
     }
 
-    @PostMapping("/categories/{id}")
+    @PostMapping("/categories/{id}/q")
     public List<ItemCategory> addItemsToCategory(@RequestParam("item_id") Integer[] item_id, @PathVariable Long id) {
         return itemCategoryService.addItemsToCategory(item_id, id);
     }

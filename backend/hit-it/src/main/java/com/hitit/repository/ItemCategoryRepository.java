@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemCategoryRepository extends JpaRepository<ItemCategory, ItemCategoryID> {
 
@@ -19,8 +20,10 @@ public interface ItemCategoryRepository extends JpaRepository<ItemCategory, Item
     void deleteByCategoryId(Long id);
 
     @Modifying
-    @Query("delete from ItemCategory ic where ic.item_id=?1")
+    @Query("delete from ItemCategory ic where ic.item_id=:id")
     void deleteByItemId(Long id);
 
 
+    @Query("select ic from ItemCategory ic where ic.item_id=?1")
+    List<ItemCategory> findByItemId(Long id);
 }

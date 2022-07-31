@@ -3,8 +3,6 @@ package com.hitit.services;
 import com.hitit.exceptions.EmailInUseException;
 import com.hitit.exceptions.UserInUseException;
 import com.hitit.exceptions.UserNotFoundException;
-import com.hitit.repository.BidRepository;
-import com.hitit.repository.BidderRepository;
 import com.hitit.repository.UsersRepository;
 import com.hitit.models.Users;
 import org.jetbrains.annotations.NotNull;
@@ -22,15 +20,10 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
     private final ReviewsService reviewsService;
-    private final BidderRepository bidderRepository;
-    private final BidRepository bidRepository;
-    private final ItemService itemService;
-    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService, BidderRepository bidderRepository, BidRepository bidRepository, ItemService itemService) {
+
+    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService) {
         this.usersRepository = usersRepository;
         this.reviewsService = reviewsService;
-        this.bidderRepository = bidderRepository;
-        this.bidRepository = bidRepository;
-        this.itemService = itemService;
     }
 
 
@@ -141,17 +134,10 @@ public class UsersService {
     }
 
     public ResponseEntity<?> deleteUser(Integer @NotNull [] id) {
-        for(Integer i: id) {
+        for(Integer i: id)
             usersRepository.deleteById(i.longValue());
-            bidderRepository.deleteById(i.longValue());
-            if(ResponseEntity.ok("OK")!= reviewsService.deleteReviewsByUserId(i.longValue())){
-                return (ResponseEntity<?>) ResponseEntity.notFound();
-            }
-            reviewsService.deleteReviewsToBidderId(i.longValue());
-            bidRepository.deleteBidsByBidderId(i.longValue());
-            itemService.deleteItemsByUser(i.longValue());
 
-        }
+        reviewsService.updateRatings();
         return ResponseEntity.ok("OK");
     }
 }
