@@ -18,104 +18,22 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`bid`
+-- Table `mydb`.`users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`bid` ;
+DROP TABLE IF EXISTS `mydb`.`users` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
+CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `id` INT NOT NULL auto_increment,
-  `time` TIME NOT NULL,
-  `amount` INT NOT NULL,
-  `bids_id` INT NOT NULL,
-  `bidder_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_bid_bids1_idx` (`bids_id` ASC) VISIBLE,
-  CONSTRAINT `fk_bid_bids1`
-    FOREIGN KEY (`bids_id`)
-    REFERENCES `mydb`.`bids` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  INDEX `fk_bid_bidder1_idx` (`bidder_id` ASC) VISIBLE,
-  CONSTRAINT `fk_bid_bidder1`
-    FOREIGN KEY (`bidder_id`)
-    REFERENCES `mydb`.`bidder` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-DROP TABLE IF EXISTS `mydb`.`reviews` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`reviews`
-(
-    `user_id`   int not null,
-    `bidder_id` int not null,
-    `review`    text,
-    `rating`    float not null,
-    INDEX `fk_reviews_users_bidders_idx` (`user_id` ASC, `bidder_id` ASC) VISIBLE,
-    PRIMARY KEY (`user_id`, `bidder_id`),
-    CONSTRAINT `fk_reviews_users`
-        FOREIGN KEY (`user_id`)
-            REFERENCES `mydb`.`users` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
-    CONSTRAINT `fk_reviews_bidders`
-        FOREIGN KEY (`bidder_id`)
-            REFERENCES `mydb`.`bidder` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-)
-ENGINE = InnoDB;
-
-
-
-
-
-
-
--- -----------------------------------------------------
--- Table `mydb`.`bidder`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`bidder` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
-  `id` INT NOT NULL,
-  `location` VARCHAR(45) NOT NULL,
-  `country` VARCHAR(45) NOT NULL,
-  `rating` float NULL,
-  INDEX `fk_bidder_users_idx` (`id` ASC) VISIBLE,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_bidder_users`
-    FOREIGN KEY (`id`)
-    REFERENCES `mydb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`bids`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`bids` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`bids` (
-  `id` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_bids_item1`
-    FOREIGN KEY (`id`)
-    REFERENCES `mydb`.`item` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`category`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`category` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`category` (
-  `id` INT NOT NULL auto_increment,
-  `category` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `telephone` VARCHAR(45) NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `address` VARCHAR(45) NULL,
+  `tin` VARCHAR(10) NOT NULL,
+  `admin` TINYINT NOT NULL,
+  `accepted` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -147,6 +65,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `mydb`.`category`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`category` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`category` (
+  `id` INT NOT NULL auto_increment,
+  `category` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `mydb`.`item_category`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `mydb`.`item_category` ;
@@ -170,23 +100,87 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users`
+-- Table `mydb`.`bids`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`users` ;
+DROP TABLE IF EXISTS `mydb`.`bids` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`users` (
+CREATE TABLE IF NOT EXISTS `mydb`.`bids` (
+  `id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_bids_item1`
+    FOREIGN KEY (`id`)
+    REFERENCES `mydb`.`item` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`bidder`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`bidder` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
+  `id` INT NOT NULL,
+  `location` VARCHAR(45) NOT NULL,
+  `country` VARCHAR(45) NOT NULL,
+  `rating` float NULL,
+  INDEX `fk_bidder_users_idx` (`id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_bidder_users`
+    FOREIGN KEY (`id`)
+    REFERENCES `mydb`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`bid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`bid` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
   `id` INT NOT NULL auto_increment,
-  `username` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `first_name` VARCHAR(45) NOT NULL,
-  `last_name` VARCHAR(45) NOT NULL,
-  `telephone` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `address` VARCHAR(45) NULL,
-  `tin` VARCHAR(10) NOT NULL,
-  `admin` TINYINT NOT NULL,
-  `accepted` TINYINT NOT NULL,
-  PRIMARY KEY (`id`))
+  `time` TIME NOT NULL,
+  `amount` INT NOT NULL,
+  `bids_id` INT NOT NULL,
+  `bidder_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_bid_bids1_idx` (`bids_id` ASC) VISIBLE,
+  CONSTRAINT `fk_bid_bids1`
+    FOREIGN KEY (`bids_id`)
+    REFERENCES `mydb`.`bids` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  INDEX `fk_bid_bidder1_idx` (`bidder_id` ASC) VISIBLE,
+  CONSTRAINT `fk_bid_bidder1`
+    FOREIGN KEY (`bidder_id`)
+    REFERENCES `mydb`.`bidder` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+DROP TABLE IF EXISTS `mydb`.`reviews` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`reviews`
+(
+    `user_id`   int not null,
+    `bidder_id` int not null,
+    `review`    text,
+    `rating`    float not null,
+    INDEX `fk_reviews_users_bidders_idx` (`user_id` ASC, `bidder_id` ASC) VISIBLE,
+    PRIMARY KEY (`user_id`, `bidder_id`),
+    CONSTRAINT `fk_reviews_users`
+        FOREIGN KEY (`user_id`)
+            REFERENCES `mydb`.`users` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_reviews_bidders`
+        FOREIGN KEY (`bidder_id`)
+            REFERENCES `mydb`.`bidder` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 
