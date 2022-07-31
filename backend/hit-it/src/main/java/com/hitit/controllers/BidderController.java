@@ -27,7 +27,7 @@ public class BidderController {
         return bidderService.getBidder(id);
     }
 
-    @GetMapping("/bidders")
+    @GetMapping("/bidders/q")
     public List<Bidder> getBidder(@RequestParam("id") Integer[] id){
         return bidderService.getBidders(id);
     }

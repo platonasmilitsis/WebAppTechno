@@ -45,7 +45,7 @@ public class ReviewsController {
         return reviewsService.addNewReview(user_id, bidder_id, reviews);
     }
 
-    @DeleteMapping("/reviews/{user_id}")
+    @DeleteMapping("/reviews/{user_id}/q")
     public ResponseEntity<?> deleteReviewsbyUserId(@PathVariable("user_id") Long user_id, @RequestParam("bidder_id") Integer[] bidder_id) {
         return reviewsService.deleteReviewsByUserId(user_id, bidder_id);
     }

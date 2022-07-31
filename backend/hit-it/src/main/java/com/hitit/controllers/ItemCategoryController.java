@@ -40,12 +40,12 @@ public class ItemCategoryController {
         return itemCategoryService.addItemsToCategory(item_id, id);
     }
 
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/items/{id}/q")
     public ResponseEntity<?> deleteCategoriesFromItem(@RequestParam("category_id") Integer[] category_id, @PathVariable Long id){
         return itemCategoryService.deleteCategoriesFromItem(category_id,id);
     }
 
-    @PostMapping("/categories/{id}")
+    @DeleteMapping("/categories/{id}/q")
     public ResponseEntity<?> deleteItemsFromCategory(@RequestParam("item_id") Integer[] item_id, @PathVariable Long id) {
         return itemCategoryService.deleteItemsFromCategory(item_id, id);
     }

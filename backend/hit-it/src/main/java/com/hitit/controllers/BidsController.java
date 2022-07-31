@@ -22,7 +22,7 @@ public class BidsController {
         return bidsService.getBids();
     }
 
-    @GetMapping("/bids")
+    @GetMapping("/bids/q")
     public List<BidsBidList> getBids(@RequestParam("id") Integer[] ids){
         return bidsService.getBids(ids);
     }
