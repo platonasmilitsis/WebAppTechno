@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import styled from 'styled-components'
 
 const Container=styled.div`
@@ -57,26 +57,72 @@ const Description=styled.h2`
   width:65%;
   margin-top:5%;
   opacity:0.6;
-
 `;
 
+
 const Main = (id,image,title,description) => {
-  return (
-    <Container>
-        <ImageContainer>
-            <Image src={require("../../assets/"+image)}/>
-        </ImageContainer>
-        <TextContainer>
+
+  const [error,set_error] = useState(null);
+  const [is_loaded,set_is_loaded] = useState(false);
+  const [items,set_items] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/items")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          set_is_loaded(true);
+          set_items(result);
+          console.log(result)
+          
+        },
+        (error) => {
+          set_is_loaded(true);
+          set_error(error);
+        }
+      )
+  },[])
+
+  if(error){
+    return(
+      <div>
+        Error:{error.message}
+      </div>
+    )
+  }
+  else if(!is_loaded){
+    return(
+      <div>
+        Loading...
+      </div>
+    )
+  } 
+  else {
+    return (
+      <Container>
+          <ImageContainer>
+              <Image src={require("../../assets/"+image)}/>
+          </ImageContainer>
+          <TextContainer>
+            <Title>
+              {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"}
+            </Title>
+            <Description>
+              {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
+              "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."}
+            </Description>
+          </TextContainer>
           <Title>
-            {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"}
+            {items.map((item=>
+              {return(
+                <div key={item.id}>
+                  {item.name+"\t"}
+                  {item.user.username}
+                </div>
+              )}))}
           </Title>
-          <Description>
-            {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
-             "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."}
-          </Description>
-        </TextContainer>
-    </Container>
-  )
+      </Container>
+  )}
 }
 
 export default Main
