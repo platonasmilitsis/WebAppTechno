@@ -1,5 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import styled from 'styled-components'
+import { useParams } from "react-router-dom";
+
 
 const Container=styled.div`
   background-color:white;
@@ -60,7 +62,7 @@ const Description=styled.h2`
 `;
 
 
-const Main = (id,image,title,description) => {
+const Main = (id) => {
 
   const [error,set_error] = useState(null);
   const [is_loaded,set_is_loaded] = useState(false);
@@ -98,28 +100,26 @@ const Main = (id,image,title,description) => {
     )
   } 
   else {
+
+
     return (
       <Container>
           <ImageContainer>
-              <Image src={require("../../assets/"+image)}/>
+              <Image src={require("../../assets/logoreact.png")}/>
           </ImageContainer>
           <TextContainer>
             <Title>
-              {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"}
+              {/* {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"} */}
+              {items[id-1].name}
             </Title>
             <Description>
-              {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
-              "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."}
+              {/* {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
+              "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."} */}
+              {/* {description} */}
+              {items[id-1].first_bid}
             </Description>
           </TextContainer>
           <Title>
-            {items.map((item=>
-              {return(
-                <div key={item.id}>
-                  {item.name+"\t"}
-                  {item.user.username}
-                </div>
-              )}))}
           </Title>
       </Container>
   )}
