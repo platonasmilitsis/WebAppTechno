@@ -68,6 +68,40 @@ const Main = (id) => {
   const [is_loaded,set_is_loaded] = useState(false);
   const [items,set_items] = useState([]);
 
+  const product_exists=()=>{
+    try{
+      return(
+        <>
+        <ImageContainer>
+              <Image src={require("../../assets/logoreact.png")}/>
+          </ImageContainer>
+          <TextContainer>
+            <Title>
+              {/* {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"} */}
+              {items[id-1].name}
+              {/* {product_exists()} */}
+            </Title>
+            <Description>
+              {/* {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
+              "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."} */}
+              {/* {description} */}
+              {items[id-1].first_bid}
+            </Description>
+          </TextContainer>
+          </>
+      )
+    }
+    catch(error){
+      return(
+        <TextContainer>
+        <Title>
+          ΑΥΤΟ ΔΕΝ ΥΠΑΡΧΕΙ ΚΑΝ ΕΤΣΙ;
+        </Title>
+        </TextContainer>
+      )
+    }
+  }
+
   useEffect(() => {
     fetch("http://localhost:8080/items")
       .then(res => res.json())
@@ -100,27 +134,9 @@ const Main = (id) => {
     )
   } 
   else {
-
-
     return (
       <Container>
-          <ImageContainer>
-              <Image src={require("../../assets/logoreact.png")}/>
-          </ImageContainer>
-          <TextContainer>
-            <Title>
-              {/* {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"} */}
-              {items[id-1].name}
-            </Title>
-            <Description>
-              {/* {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
-              "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."} */}
-              {/* {description} */}
-              {items[id-1].first_bid}
-            </Description>
-          </TextContainer>
-          <Title>
-          </Title>
+          {product_exists()}
       </Container>
   )}
 }
