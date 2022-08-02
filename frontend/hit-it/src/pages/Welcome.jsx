@@ -72,7 +72,7 @@ const Button=styled.button`
 `;
 
 const FootCont=styled.div`
-    bottom:0;
+    margin-top:60px;
     width:100%;
 `;
 
