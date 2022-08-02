@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Footer from '../components/Global/Footer';
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -9,10 +10,8 @@ const Container=styled.div`
     display:flex;
     flex-direction:row;
     justify-content:space-around;
-    @media (max-width: 1000px) {
-        flex-wrap:wrap;
-        overflow:hidden;
-    }
+    flex-wrap:wrap;
+    overflow:hidden;
     -drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -72,6 +71,11 @@ const Button=styled.button`
     cursor:pointer;
 `;
 
+const FootCont=styled.div`
+    bottom:0;
+    width:100%;
+`;
+
 const Welcome = () => {
 
     let navigate=useNavigate();
@@ -102,6 +106,9 @@ const Welcome = () => {
                 Συνέχεια σαν επισκέπτης
             </Button>
         </LoginContainer>
+        <FootCont>
+            <Footer/>
+        </FootCont>
     </Container>
   )
 }
