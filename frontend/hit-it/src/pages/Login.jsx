@@ -1,28 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-
-
-const Logo=styled.h1`
-    font-weight:900;
-    font-size:70px;
-    color:#e67e22;
-    margin:20px; 
-`;
+import {Link} from "react-router-dom";
 
 const Container = styled.div`
-    background-color:#eaeded;
+    background-color:;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items:center;
+    margin-top:50px;
 `; 
 
-const Wrapper = styled.div`
-  width: 25%;
-  padding: 20px;
-  border-radius:10px;
-  background-color: white;
-`;
+
 
 const Title = styled.h1`
   font-size: 24px;
@@ -51,7 +40,7 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
-const Link = styled.a`
+const LinkCont = styled.a`
   margin: 5px 0px;
   font-size: 15px;
   text-decoration: underline;
@@ -62,19 +51,19 @@ const Link = styled.a`
 const Login = () => {
   return (
     <Container>
-        <Logo>
-            hit-it
-        </Logo>
-        <Wrapper>
             <Title>Log In to hit-it</Title>
             <Form>
             <Input placeholder="username" />
             <Input placeholder="password" />
-            <Button>Login</Button>
-            <Link>Forgot your Password?</Link>
-            <Link>Create an account</Link>
+            <Link to={"./home"}>
+                <Button>Login</Button>
+            </Link>
+            <LinkCont>Forgot your Password?</LinkCont>
+            <Link to={"./register"}  style={{color: "black"}}>
+                Create an account!
+            </Link>
             </Form>
-        </Wrapper>
+        
     </Container>
   );
 };

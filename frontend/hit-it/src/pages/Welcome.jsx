@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Global/Footer';
+import Login from '../pages/Login';
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -44,7 +45,7 @@ const LoginContainer=styled.div`
     flex-direction:column;
 `;
 
-const Login=styled.button`
+const LoginBox=styled.div`
     background-color:white;
     height:380px;
     width:380px;
@@ -52,6 +53,7 @@ const Login=styled.button`
     margin-bottom:50px;
     border-radius:10px;
 `;
+
 
 const Button=styled.button`
     font-family: 'Arial', sans-serif;
@@ -99,9 +101,9 @@ const Welcome = () => {
             </Description>
         </TextContainer>
         <LoginContainer>
-            <Login>
-                LOGIN COMPONENT
-            </Login>
+        <LoginBox>
+            <Login/>
+        </LoginBox>
             <Button onClick={()=>navigate("/home")}>
                 Συνέχεια σαν επισκέπτης
             </Button>
