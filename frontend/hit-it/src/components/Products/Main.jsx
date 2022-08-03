@@ -66,7 +66,7 @@ const Main = (id) => {
   const [is_loaded,set_is_loaded] = useState(false);
   const [items,set_items] = useState([]);
 
-  const find_name=()=>{
+  const find_info=()=>{
     for(let i=0;i<items.length;i++){
       if(items[i].id===parseInt(id)){
         let name=items[i].name;
@@ -87,13 +87,12 @@ const Main = (id) => {
           <TextContainer>
             <Title>
               {/* {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"} */}
-              {find_name().name}
+              {find_info().name}
             </Title>
             <Description>
               {/* {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
               "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."} */}
-              {/* {find_description()} */}
-              {find_name().description}
+              {find_info().description}
             </Description>
           </TextContainer>
           </>
