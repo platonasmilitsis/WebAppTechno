@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `longitude` VARCHAR(45),
   `users_id` INT NOT NULL,
   `img_path` VARCHAR(45),
+  `description` TEXT,
   PRIMARY KEY (`id`),
   INDEX `fk_item_users1_idx` (`users_id` ASC) VISIBLE,
   CONSTRAINT `fk_item_users1`
@@ -77,12 +78,12 @@ ENGINE = InnoDB;
 
 INSERT INTO item
 values
-    (1,'Item 1',400,4000,'Athens','Greece',null,null,'2',null),
-    (2,'Item 2',400,4000,'Athens','Greece',null,null,'2',null),
-    (3,'Item 3',400,4000,'Athens','Greece',null,null,'2',null),
-    (4,'Item 4',400,4000,'Athens','Greece',null,null,'2',null),
-    (5,'Item 5',400,4000,'Athens','Greece',null,null,'3',null),
-    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null);
+    (1,'Item 1',400,4000,'Athens','Greece',null,null,'2',null,"Description 1"),
+    (2,'Item 2',400,4000,'Athens','Greece',null,null,'2',null,"Description 2"),
+    (3,'Item 3',400,4000,'Athens','Greece',null,null,'2',null,"Description 3"),
+    (4,'Item 4',400,4000,'Athens','Greece',null,null,'2',null,"Description 4"),
+    (5,'Item 5',400,4000,'Athens','Greece',null,null,'3',null,"Description 5"),
+    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,"Description 6");
 
 
 -- -----------------------------------------------------

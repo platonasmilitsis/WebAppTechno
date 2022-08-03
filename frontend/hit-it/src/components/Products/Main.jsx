@@ -70,7 +70,7 @@ const Main = (id) => {
     for(let i=0;i<items.length;i++){
       if(items[i].id===parseInt(id)){
         let name=items[i].name;
-        let description=items[i].name; // No description column yet in Backend
+        let description=items[i].description;
         return {name,description};
       }
     }
