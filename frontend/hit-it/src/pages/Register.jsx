@@ -67,7 +67,7 @@ const Register = () => {
             <Input placeholder="Email" />
             <Input placeholder="Password" />
             <Input placeholder="Confirm password" />
-            <Link to={"/home"}>
+            <Link to={"./Approval"}>
                 <Button>Sign Up</Button>
             </Link>
             <Link to={"/"}  style={{color: "black"}}>

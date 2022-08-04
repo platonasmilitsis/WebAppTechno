@@ -12,6 +12,7 @@ import AutoMoto from "./pages/Categories/AutoMoto";
 import Business from "./pages/Categories/Business";
 import Product from "./pages/Product";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import Approval from "./pages/Approval";
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/home/auto-moto" element={<AutoMoto/>}/>
         <Route path="/home/business-b2b" element={<Business/>}/>
         <Route path="/home/products/product_id=:id" element={<Product/>}/>
+        <Route path="/register/Approval" element={<Approval/>}/>
       </Routes>
     </Router>
   );
