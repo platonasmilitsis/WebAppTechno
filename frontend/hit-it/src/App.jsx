@@ -11,6 +11,7 @@ import Childrenry from "./pages/Categories/Childrenry";
 import AutoMoto from "./pages/Categories/AutoMoto";
 import Business from "./pages/Categories/Business";
 import Product from "./pages/Product";
+import Admin from "./pages/Admin";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Welcome/>}/>
         <Route path="/home" element={<Home/>}/>
+        <Route path="/admin" element={<Admin/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/home/technology" element={<Technology/>}/>
