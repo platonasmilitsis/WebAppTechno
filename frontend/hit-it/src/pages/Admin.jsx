@@ -6,6 +6,8 @@ import { Box, Container } from '@mui/system';
 import { Button,AppBar, Toolbar, Typography } from '@mui/material';
 import {useState} from 'react';
 import adminStyles from "./Admin.css";
+import { useEffect } from 'react';
+import { siLK } from '@mui/material/locale';
 
 
 const drawerWidth = 240
@@ -52,29 +54,17 @@ const columns : GridColDef[] = [
 
 ]
 
-/*
-async NonAcceptedUsers = () =>{
 
-    const response = await fetch('https://localhost:8080/users');
-    const data = await response.json();
-    return data;
-
-}
-*/
-/*
-
-const NonAcceptedDatagrid = () =>{
+const MyDatagrid = (props) =>{
     
     return (
-        <DataGrid autoHeight checkboxSelection hideFooter
+        
+        <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter
         columns={columns}
-        rows = {fetch('https://localhost:8080/users')
-            .then(response => response.json)
-        }
+        rows = {props.users}
         />
     )
 }
-*/
 
 
 
@@ -82,14 +72,46 @@ const NonAcceptedDatagrid = () =>{
 
 const Admin = () =>{
     
+ 
+    const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
+    const  [AcceptedUsersData, setAcceptedUser] = useState([]);
+
+    const  [AllUsers, setAllUsers] = useState([]);
+
+
+
+    const [update, setUpdate] = useState(true);
+
+
+    async function fetchUsers(){
+        setUpdate(false);
+        fetch("http://localhost:8080/users")
+        .then((data) => data.json())
+        .then((data) => {
+            
+            const Data = (data => data);
+            setAllUsers(Data); 
+            const filterData = data.filter(data => data.accepted==true && data.admin==false);
+            setAcceptedUser(filterData);
+            const filterNonAcceptedData = data.filter(data=> data.accepted==false);
+            setNonAcceptedUser(filterNonAcceptedData);
+            
+        }
+        )
+    }
     
+    
+
+    {update && fetchUsers()}
+
+
     const [showNonAccepted, setShowNonAccepted] = useState(true);
     const [showAccepted, setShowAccepted] = useState(false);
 
 
 
-
     const handleClickAccepted = event => {
+        setUpdate(true);
         setShowAccepted(true);
         setShowNonAccepted(false);
 
@@ -98,6 +120,7 @@ const Admin = () =>{
 
 
     const handleClickNonAccepted = event => {
+        setUpdate(true);
         setShowNonAccepted(true);
         setShowAccepted(false);
     }
@@ -105,29 +128,39 @@ const Admin = () =>{
 
     const classes = useStyles()
 
+
+    async function foundUsername(){
+        return AllUsers.find(obj => {
+        return obj.admin == true;
+    })
+    }
+
     return (
+        
+    
         <Container>
-            
             <AppBar>
                 <Toolbar sx={{justifyContent:"flex-start"}}>
+
                     <Typography 
-                    sx={styles.text}>
-                        Welcome Themistoklisss Rambossaaa
-                        </Typography>
+                        sx={styles.text}>
+                        Welcome {foundUsername.username}
+                    </Typography>
+
                     <Button variant="outlined" sx={styles.button}
                     onClick = {handleClickNonAccepted}
                     >Non-Accepted-Users</Button>
                 
-
                     <Button variant="outlined" sx={styles.button}
                     onClick = {handleClickAccepted}
                     >Accepted-Users</Button>
 
                  </Toolbar>
             </AppBar>
+
             <Box className='main-container'>
-                {showNonAccepted && <NonAcceptedDatagrid/>}
-                {showAccepted &&  <NonAcceptedDatagrid/>}    
+                {showNonAccepted && <MyDatagrid users={NonAcceptedUsersData}/>}
+                {showAccepted &&  <MyDatagrid users={AcceptedUsersData}/>}    
             </Box>
             <Box className='buttons-container'>
             {
@@ -145,6 +178,7 @@ const Admin = () =>{
                 </div>
             }          
             </Box>
+
 
         </Container>
         
