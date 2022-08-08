@@ -1,7 +1,5 @@
 import React,{useEffect,useState} from 'react'
 import styled from 'styled-components'
-import { useParams } from "react-router-dom";
-
 
 const Container=styled.div`
   background-color:white;
@@ -68,6 +66,17 @@ const Main = (id) => {
   const [is_loaded,set_is_loaded] = useState(false);
   const [items,set_items] = useState([]);
 
+  const find_info=()=>{
+    for(let i=0;i<items.length;i++){
+      if(items[i].id===parseInt(id)){
+        let name=items[i].name;
+        let description=items[i].description;
+        return {name,description};
+      }
+    }
+    throw new Error("404");
+  }
+
   const product_exists=()=>{
     try{
       return(
@@ -78,20 +87,18 @@ const Main = (id) => {
           <TextContainer>
             <Title>
               {/* {"Ulefone Power Armor 14 Dual SIM (4GB/64GB) Ανθεκτικό Smartphone Black"} */}
-              {items[id-1].name}
-              {/* {product_exists()} */}
+              {find_info().name}
             </Title>
             <Description>
               {/* {"Αδιάβροχο κι ανθεκτικό σε σκληρή χρήση και χτυπήματα. Ασύρματη φόρτιση 15W "+
               "κι ενσύρματη 18W. FM ραδιόφωνο που λειτουργεί χωρίς τη χρήση ακουστικών."} */}
-              {/* {description} */}
-              {items[id-1].first_bid}
+              {find_info().description}
             </Description>
           </TextContainer>
           </>
       )
     }
-    catch(error){
+    catch(exception){
       return(
         <TextContainer>
         <Title>
@@ -109,8 +116,7 @@ const Main = (id) => {
         (result) => {
           set_is_loaded(true);
           set_items(result);
-          console.log(result)
-          
+          console.log(result)          
         },
         (error) => {
           set_is_loaded(true);

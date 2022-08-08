@@ -61,13 +61,13 @@ const Register = () => {
         <Wrapper>
             <Title>Join hit-it</Title>
             <Form>
-            <Input placeholder="First Name" />
-            <Input placeholder="Last Name" />
-            <Input placeholder="Username" />
-            <Input placeholder="Email" />
-            <Input placeholder="Password" />
-            <Input placeholder="Confirm password" />
-            <Link to={"/home"}>
+            <Input type="text" placeholder="First Name" />
+            <Input type="text" placeholder="Last Name" />
+            <Input type="text" placeholder="Username" />
+            <Input type="text" placeholder="Email" />
+            <Input type="password" placeholder="Password" />
+            <Input type="password" placeholder="Confirm password" />
+            <Link type='submit' to={"./Approval"}>
                 <Button>Sign Up</Button>
             </Link>
             <Link to={"/"}  style={{color: "black"}}>

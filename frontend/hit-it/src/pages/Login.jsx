@@ -53,13 +53,13 @@ const Login = () => {
     <Container>
             <Title>Log In to hit-it</Title>
             <Form>
-            <Input placeholder="username" />
-            <Input placeholder="password" />
+            <Input type = "text" placeholder="username" />
+            <Input type = "password" placeholder="password" />
             <Link to={"./home"}>
                 <Button>Login</Button>
             </Link>
             <LinkCont>Forgot your Password?</LinkCont>
-            <Link to={"./register"}  style={{color: "black"}}>
+            <Link type='submit' to={"./register"}  style={{color: "black"}}>
                 Create an account!
             </Link>
             </Form>
