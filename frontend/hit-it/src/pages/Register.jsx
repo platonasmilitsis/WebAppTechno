@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
+import Axios from 'axios'
 import styled from 'styled-components'
-import {Link} from "react-router-dom";
+import { useNavigate,Link } from 'react-router-dom';
 
 
 const Logo=styled.h1`
@@ -53,6 +54,52 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+
+  let navigate=useNavigate();
+
+  // const [id,set_id]=useState('');
+  const [first_name,set_first_name]=useState('');
+  const [last_name,set_last_name]=useState('');
+  const [username,set_username]=useState('');
+  const [email,set_email]=useState('');
+  const [tin,set_tin]=useState('');
+  const [password,set_password]=useState('');
+  const [telephone,set_telephone]=useState('');
+  const [address,set_address]=useState('');
+  // const [admin,set_admin]=useState(false);
+  // const [accepted,set_accepted]=useState(false);
+
+
+  const register=()=>{
+    const data ={
+                username:username, 
+                first_name:first_name,
+                last_name:last_name,
+                email:email,
+                tin:tin,
+                password:password,
+                telephone:telephone,
+                address:address
+                };
+
+                
+    fetch('http://localhost:8080/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    navigate("/register/Approval");
+  }
+
   return (
     <Container>
         <Logo>
@@ -61,15 +108,20 @@ const Register = () => {
         <Wrapper>
             <Title>Join hit-it</Title>
             <Form>
-            <Input type="text" placeholder="First Name" />
-            <Input type="text" placeholder="Last Name" />
-            <Input type="text" placeholder="Username" />
-            <Input type="text" placeholder="Email" />
-            <Input type="password" placeholder="Password" />
-            <Input type="password" placeholder="Confirm password" />
-            <Link type='submit' to={"./Approval"}>
-                <Button>Sign Up</Button>
-            </Link>
+            <Input type="text" placeholder="First Name *" onChange={(e)=>{set_first_name(e.target.value)}}/>
+            <Input type="text" placeholder="Last Name *" onChange={(e)=>{set_last_name(e.target.value)}}/>
+            <Input type="text" placeholder="Username *" onChange={(e)=>{set_username(e.target.value)}}/>
+            <Input type="text" placeholder="Email *" onChange={(e)=>{set_email(e.target.value)}}/>
+            <Input type="text" placeholder="TIN *" onChange={(e)=>{set_tin(e.target.value)}}/>
+            <Input type="password" placeholder="Password *" />
+            <Input type="password" placeholder="Confirm password *" onChange={(e)=>{set_password(e.target.value)}}/>
+            <Input type="text" placeholder="Telephone" onChange={(e)=>{set_telephone(e.target.value)}}/>
+            <Input type="text" placeholder="Address" onChange={(e)=>{set_address(e.target.value)}}/>
+            {/* <Link type='submit' to={"./Approval"}> */}
+            <Button onClick={register}>
+              Sign Up
+            </Button>
+            {/* </Link> */}
             <Link to={"/"}  style={{color: "black"}}>
                 Log In
             </Link>
