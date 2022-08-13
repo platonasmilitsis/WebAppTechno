@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Global/Footer';
 import Login from '../pages/Login';
+import CookieConsent from "react-cookie-consent";
+
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -109,6 +111,13 @@ const Welcome = () => {
             </Button>
         </LoginContainer>
         <FootCont>
+            <CookieConsent debug={true} style={{background:'#eaeded', color:"black", fontFamily:'Arial'}} buttonStyle={{background:"#e67e22"}} buttonText="Συμφωνώ" expires={365}>
+                    <p>
+                        Η ιστοσελίδα χρησιμοποιεί 
+                        <span style={{fontSize:'1.1rem' , fontWeight:'bold'}}> cookies</span>
+                        .
+                    </p>
+            </CookieConsent>
             <Footer/>
         </FootCont>
     </Container>
