@@ -57,17 +57,15 @@ const Register = () => {
 
   let navigate=useNavigate();
 
-  // const [id,set_id]=useState('');
-  const [first_name,set_first_name]=useState('');
-  const [last_name,set_last_name]=useState('');
-  const [username,set_username]=useState('');
-  const [email,set_email]=useState('');
-  const [tin,set_tin]=useState('');
-  const [password,set_password]=useState('');
-  const [telephone,set_telephone]=useState('');
-  const [address,set_address]=useState('');
-  // const [admin,set_admin]=useState(false);
-  // const [accepted,set_accepted]=useState(false);
+  const [first_name,set_first_name]=useState(null);
+  const [last_name,set_last_name]=useState(null);
+  const [username,set_username]=useState(null);
+  const [email,set_email]=useState(null);
+  const [tin,set_tin]=useState(null);
+  const [password,set_password]=useState(null);
+  const [telephone,set_telephone]=useState(null);
+  const [address,set_address]=useState(null);
+
 
 
   const register=()=>{
@@ -79,10 +77,11 @@ const Register = () => {
                 tin:tin,
                 password:password,
                 telephone:telephone,
-                address:address
+                address:address,
+                admin:false,
+                accepted:false
                 };
-
-                
+    
     fetch('http://localhost:8080/users', {
       method: 'POST',
       headers: {
@@ -90,15 +89,25 @@ const Register = () => {
       },
       body: JSON.stringify(data),
     })
-    .then((response) => response.json())
+    .then((response) =>{
+      if(!response.ok){
+        throw new Error("ALREADY IN USE");
+      }
+      return response.json();
+    })
     .then((data) => {
       console.log('Success:', data);
     })
     .catch((error) => {
       console.error('Error:', error);
-    });
+      throw new Error("HTTP ERROR");
+    })
+    .then()
+    .catch(()=>navigate("/home/technology"))
     navigate("/register/Approval");
+
   }
+
 
   return (
     <Container>
