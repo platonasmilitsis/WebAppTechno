@@ -1,5 +1,4 @@
-import React, {useState,useEffect} from 'react'
-import Axios from 'axios'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate,Link } from 'react-router-dom';
 
@@ -63,12 +62,37 @@ const Register = () => {
   const [email,set_email]=useState(null);
   const [tin,set_tin]=useState(null);
   const [password,set_password]=useState(null);
+  const [confirm_password,set_confirm_password]=useState(null);
   const [telephone,set_telephone]=useState(null);
   const [address,set_address]=useState(null);
 
-
+  const check_fields=()=>{
+    if(first_name===null || last_name===null || username===null
+        || email===null || tin===null || password===null || confirm_password===null){
+          throw new Error("Essential field");
+    }
+    if(password!==confirm_password){
+      throw new Error("Passwords must match");
+    }
+    if(isNaN(tin)){
+      throw new Error("Tin must be a number");
+    }
+    /* eslint-disable no-useless-escape */
+    let mail_format=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(!email.match(mail_format)){
+      throw new Error("Invalid email");
+    }
+  }
 
   const register=()=>{
+    try{
+      check_fields();
+    }
+    catch(error){
+      console.error('Error',error);
+      return(navigate("/home/technology"));
+    }
+
     const data ={
                 username:username, 
                 first_name:first_name,
@@ -105,7 +129,6 @@ const Register = () => {
     .then()
     .catch(()=>navigate("/home/technology"))
     navigate("/register/Approval");
-
   }
 
 
@@ -122,8 +145,8 @@ const Register = () => {
             <Input type="text" placeholder="Username *" onChange={(e)=>{set_username(e.target.value)}}/>
             <Input type="text" placeholder="Email *" onChange={(e)=>{set_email(e.target.value)}}/>
             <Input type="text" placeholder="TIN *" onChange={(e)=>{set_tin(e.target.value)}}/>
-            <Input type="password" placeholder="Password *" />
-            <Input type="password" placeholder="Confirm password *" onChange={(e)=>{set_password(e.target.value)}}/>
+            <Input type="password" placeholder="Password *" onChange={(e)=>{set_password(e.target.value)}}/>
+            <Input type="password" placeholder="Confirm password *" onChange={(e)=>{set_confirm_password(e.target.value)}}/>
             <Input type="text" placeholder="Telephone" onChange={(e)=>{set_telephone(e.target.value)}}/>
             <Input type="text" placeholder="Address" onChange={(e)=>{set_address(e.target.value)}}/>
             {/* <Link type='submit' to={"./Approval"}> */}
