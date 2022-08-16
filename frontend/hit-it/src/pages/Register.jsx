@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate,Link} from 'react-router-dom';
 
 
 const Logo=styled.h1`
@@ -52,6 +52,11 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
+const ErrorMessage=styled.p`
+  color:red;
+  font-size:12px;
+`;
+
 const Register = () => {
 
   let navigate=useNavigate();
@@ -66,33 +71,55 @@ const Register = () => {
   const [telephone,set_telephone]=useState(null);
   const [address,set_address]=useState(null);
 
-  const check_fields=()=>{
-    if(first_name===null || last_name===null || username===null
-        || email===null || tin===null || password===null || confirm_password===null){
-          throw new Error("Essential field");
+  const [errors,set_errors]=useState({});
+  const [used_email,set_used_email]=useState(null);
+  const [used_username,set_used_username]=useState(null);
+
+  const handle_submit=(e)=>{
+    e.preventDefault();
+    set_used_email(null);
+    set_used_username(null);
+    set_errors(validate());
+  }
+
+  const validate=()=>{
+    const errors={}
+    if(!first_name){
+      errors.first_name="Username is required";
     }
-    if(password!==confirm_password){
-      throw new Error("Passwords must match");
+    if(!last_name){
+      errors.last_name="Last Name is required";
+    }
+    if(!username){
+      errors.username="Username is required";
+    }
+    if(!email){
+      errors.email="Email is required";
+    }
+    if(!tin){
+      errors.tin="Tin is required";
+    }
+    if(!password){
+      errors.password="Password is required";
+    }
+    if(!confirm_password){
+      errors.confirm_password="Confirm password is required";
+    }
+    if(confirm_password && password!==confirm_password){
+      errors.confirm_password="Passwords must match";
     }
     if(isNaN(tin)){
-      throw new Error("Tin must be a number");
+      errors.tin="Tin must be a number";
     }
     /* eslint-disable no-useless-escape */
     let mail_format=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if(!email.match(mail_format)){
-      throw new Error("Invalid email");
+    if(email && !email.match(mail_format)){
+      errors.email="Email must have correct format";
     }
+    return errors;
   }
 
   const register=()=>{
-    try{
-      check_fields();
-    }
-    catch(error){
-      console.error('Error',error);
-      return(navigate("/home/technology"));
-    }
-
     const data ={
                 username:username, 
                 first_name:first_name,
@@ -105,7 +132,10 @@ const Register = () => {
                 admin:false,
                 accepted:false
                 };
-    
+    if(email===null){
+      // Some Uncaught Error from BackEnd, only for email
+      set_email("");
+    }
     fetch('http://localhost:8080/users', {
       method: 'POST',
       headers: {
@@ -113,14 +143,26 @@ const Register = () => {
       },
       body: JSON.stringify(data),
     })
-    .then((response) =>{
-      if(!response.ok){
-        throw new Error("ALREADY IN USE");
-      }
-      return response.json();
-    })
+
+    .then((response)=>response.json())
     .then((data) => {
-      console.log('Success:', data);
+      console.log(data);
+      try{
+        console.log(data.message);
+        if(data.message[0]==="E"){
+          set_used_email(data.message);
+        }
+        else if(data.message[0]==="U"){
+          set_used_username(data.message);
+        }
+      }
+      catch(error){
+        // Won't redirect if everything is not solved
+        // Will catch NULL data.message[0] of used email / username
+        // So everything has been solved and can redirect
+        console.log("Continue");
+        navigate("/register/Approval");
+      }
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -128,9 +170,8 @@ const Register = () => {
     })
     .then()
     .catch(()=>navigate("/home/technology"))
-    navigate("/register/Approval");
-  }
 
+  }
 
   return (
     <Container>
@@ -139,14 +180,23 @@ const Register = () => {
         </Logo>
         <Wrapper>
             <Title>Join hit-it</Title>
-            <Form>
+            <Form onSubmit={handle_submit}>
             <Input type="text" placeholder="First Name *" onChange={(e)=>{set_first_name(e.target.value)}}/>
+            <ErrorMessage>{errors.first_name}</ErrorMessage>
             <Input type="text" placeholder="Last Name *" onChange={(e)=>{set_last_name(e.target.value)}}/>
+            <ErrorMessage>{errors.last_name}</ErrorMessage>
             <Input type="text" placeholder="Username *" onChange={(e)=>{set_username(e.target.value)}}/>
+            <ErrorMessage>{errors.username}</ErrorMessage>
+            <ErrorMessage>{used_username}</ErrorMessage>
             <Input type="text" placeholder="Email *" onChange={(e)=>{set_email(e.target.value)}}/>
+            {<ErrorMessage>{errors.email}</ErrorMessage>}
+            <ErrorMessage>{used_email}</ErrorMessage>
             <Input type="text" placeholder="TIN *" onChange={(e)=>{set_tin(e.target.value)}}/>
+            <ErrorMessage>{errors.tin}</ErrorMessage>
             <Input type="password" placeholder="Password *" onChange={(e)=>{set_password(e.target.value)}}/>
+            <ErrorMessage>{errors.password}</ErrorMessage>
             <Input type="password" placeholder="Confirm password *" onChange={(e)=>{set_confirm_password(e.target.value)}}/>
+            <ErrorMessage>{errors.confirm_password}</ErrorMessage>
             <Input type="text" placeholder="Telephone" onChange={(e)=>{set_telephone(e.target.value)}}/>
             <Input type="text" placeholder="Address" onChange={(e)=>{set_address(e.target.value)}}/>
             {/* <Link type='submit' to={"./Approval"}> */}
