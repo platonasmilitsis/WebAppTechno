@@ -1,5 +1,6 @@
 package com.hitit.services;
 
+import com.hitit.exceptions.EmailAndUserInUseException;
 import com.hitit.exceptions.EmailInUseException;
 import com.hitit.exceptions.UserInUseException;
 import com.hitit.exceptions.UserNotFoundException;
@@ -54,10 +55,15 @@ public class UsersService {
 
 
         Optional<Users> userByEmail = usersRepository.findUserByEmail(newUser.getEmail());
+        Optional<Users> userByUsername = usersRepository.findByUsername(newUser.getUsername());
+
+        if (userByEmail.isPresent() && userByUsername.isPresent())
+            throw new EmailAndUserInUseException(newUser.getEmail(), newUser.getUsername());
+
+
         if (userByEmail.isPresent())
             throw new EmailInUseException(newUser.getEmail());
 
-        Optional<Users> userByUsername = usersRepository.findByUsername(newUser.getUsername());
         if (userByUsername.isPresent())
             throw new UserInUseException(newUser.getUsername());
 
