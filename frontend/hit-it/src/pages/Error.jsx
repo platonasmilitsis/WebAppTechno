@@ -4,7 +4,6 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Global/Footer';
 import { useNavigate } from 'react-router-dom';
 
-
 const Container=styled.div`
     background-color:#eaeded; 
     width:100%;
@@ -13,6 +12,8 @@ const Container=styled.div`
     justify-content:space-around;
     flex-wrap:wrap;
     overflow:hidden;
+    ${'' /* height:776px; */}
+    ${'' /* height:1080px; */}
     -drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -32,14 +33,17 @@ const Logo=styled.h1`
     font-weight:900;
     font-size:70px;
     margin-top:200px;
-
+    margin-bottom:50px;
 `;
 
 const Description=styled.p`
     font-family: 'Arial', sans-serif;
     font-size:25px;
     font-weight:500;
-    margin-top:30px;
+    @media (max-width: 1000px) {
+        width:50%;
+        margin-left:50px;
+    }
 `;
 
 const Button=styled.button`
@@ -54,18 +58,18 @@ const Button=styled.button`
     border-radius:10px;
     border:none;
     font-weight:700;
-    width:50%;
+    width:30%;
     margin-top:50px;
     cursor:pointer;
 `;
 
 const FootCont=styled.div`
     width:100%;
-    margin-top:300px;
+    margin-top:240px;
 `;
 
-const Approval = () => {
-    
+const Error = () => {
+
     let navigate=useNavigate();
 
   return (
@@ -74,7 +78,7 @@ const Approval = () => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>
-                    Αναμονή έγκρισης
+                    Σελίδα λάθους
                 </title>
             </Helmet>
         </HelmetProvider>
@@ -83,10 +87,16 @@ const Approval = () => {
                 hit-it
             </Logo>
             <Description>
-                Αναμένεται έγκριση από τον διαχειριστή!
+                Φαίνεται ότι κάτι πήγε στραβά!
             </Description>
-            <Button onClick={()=>navigate("/home")}>
-                Συνέχεια σαν επισκέπτης
+            <Description>
+                Αυτό ίσως οφείλεται σε πρόβλημα που προσπαθούμε να επιλύσουμε
+            </Description>
+            <Description>
+                Δοκιμάστε ξανά αργότερα
+            </Description>
+            <Button onClick={()=>navigate("/")}>
+                Συνέχεια
             </Button>
         </TextContainer>
         <FootCont>
@@ -96,4 +106,4 @@ const Approval = () => {
   )
 }
 
-export default Approval
+export default Error

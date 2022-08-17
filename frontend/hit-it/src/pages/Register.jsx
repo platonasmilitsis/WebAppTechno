@@ -10,12 +10,10 @@ const Logo=styled.h1`
     font-weight:900;
     font-size:70px;
     color:#e67e22;
-    ${'' /* margin:8px;  */}
 `;
 
 const Container = styled.div`
     background-color:#eaeded;
-    ${'' /* height: 100vh; */}
     display: flex;
     flex-direction: column;
     align-items:center;
@@ -35,11 +33,6 @@ const Wrapper = styled.div`
   border-radius:10px;
   background-color: white;
   min-width:400px;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
 `;
 
 const Form = styled.form`
@@ -145,6 +138,9 @@ const Register = () => {
     if(isNaN(tin)){
       errors.tin="Το ΑΦΜ πρέπει να είναι αριθμός";
     }
+    if(telephone && isNaN(telephone)){
+      errors.telephone="Το τηλέφωνο πρέπει να είναι αριθμός";
+    }
     /* eslint-disable no-useless-escape */
     let mail_format=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(email && !email.match(mail_format)){
@@ -166,10 +162,7 @@ const Register = () => {
                 admin:false,
                 accepted:false
                 };
-    if(email===null){
-      // Some Uncaught Error from BackEnd, only for email
-      set_email("");
-    }
+
     fetch('http://localhost:8080/users', {
       method: 'POST',
       headers: {
@@ -182,12 +175,16 @@ const Register = () => {
     .then((data) => {
       console.log(data);
       try{
-        if(data.message[0]==="E"){
-          set_used_email(data.message);
+        if(data.message[0]==="$"){
+          set_used_email("Το Email "+email+" χρησιμοποιείται ήδη");
+          set_used_username("Το Όνομα Χρήστη "+username+" χρησιμοποιείται ήδη");
+        }
+        else if(data.message[0]==="E"){
+          set_used_email("Το Email "+email+" χρησιμοποιείται ήδη");
           console.log(email);
         }
         else if(data.message[0]==="U"){
-          set_used_username(data.message);
+          set_used_username("Το Όνομα Χρήστη "+username+" χρησιμοποιείται ήδη");
           console.log(username);
         }
         console.log(data.message);
@@ -205,7 +202,7 @@ const Register = () => {
       throw new Error("HTTP ERROR");
     })
     .then()
-    .catch(()=>navigate("/home/technology"))
+    .catch(()=>navigate("/error"))
 
   }
 
@@ -219,8 +216,6 @@ const Register = () => {
           Δημιουργία Λογαριασμού
         </RegisterText>
         <Wrapper>
-            {/* <Title>Δημιουργία Λογαριασμού</Title> */}
-            {/* <RegisterText>Δημιουργία Λογαριασμού</RegisterText> */}
             <Form onSubmit={handle_submit}>
                 <Field>
                   Όνομα*
@@ -263,6 +258,7 @@ const Register = () => {
                   Τηλέφωνο
                 </Field>
               <Input type="text" placeholder="Εισάγετε το Τηλέφωνό σας" onChange={(e)=>{set_telephone(e.target.value)}}/>
+              <ErrorMessage>{errors.telephone}</ErrorMessage>
                 <Field>
                   Διεύθυνηση
                 </Field>

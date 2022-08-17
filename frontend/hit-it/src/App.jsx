@@ -15,6 +15,7 @@ import Admin from "./pages/Admin";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Approval from "./pages/Approval";
 import Map from "./pages/Map";
+import Error from "./pages/Error";
 
 const App = () => {
 
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/home/business-b2b" element={<Business/>}/>
         <Route path="/home/products/product_id=:id" element={<Product/>}/>
         <Route path="/register/Approval" element={<Approval/>}/>
+        <Route path="/error" element={<Error/>}/>
         <Route path="/Map" element={<Map/>}/>
       </Routes>
     </Router>
