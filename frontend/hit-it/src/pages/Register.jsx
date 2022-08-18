@@ -156,7 +156,7 @@ const Register = () => {
                 last_name:last_name,
                 email:email,
                 tin:tin,
-                password:password,
+                password:password===confirm_password?password:null,
                 telephone:telephone,
                 address:address,
                 admin:false,
