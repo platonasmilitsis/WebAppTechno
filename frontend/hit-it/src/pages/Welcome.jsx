@@ -45,16 +45,13 @@ const Description=styled.p`
 `;
 
 const LoginContainer=styled.div`
-    display:flex;
-    flex-direction:column;
-`;
-
-const LoginBox=styled.div`
-    margin-top:100px;
+    margin-top:140px;
     margin-bottom:50px;
+    border:2px;
+    border-style:solid;
+    border-color:#e67e22;
     border-radius:10px;
 `;
-
 
 const Button=styled.button`
     font-family: 'Arial', sans-serif;
@@ -107,9 +104,7 @@ const Welcome = () => {
             </Button>
         </TextContainer>
         <LoginContainer>
-        <LoginBox>
             <Login/>
-        </LoginBox>
         </LoginContainer>
         <FootCont>
             <CookieConsent debug={true} style={{background:'#eaeded', color:"black", fontFamily:'Arial'}} buttonStyle={{background:"#e67e22"}} buttonText="Συμφωνώ" expires={365}>

@@ -1,16 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate} from 'react-router-dom';
 
 const Container = styled.div`
-    height:400px;
+    height:420px;
     width:380px;
     background-color:white;
     display: flex;
     flex-direction: column;
     border-radius:10px;
     align-items:center;
-    margin-top:50px;
     -drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -81,16 +80,16 @@ const Button = styled.button`
   color: white;
   cursor: pointer;
   margin-bottom: 10px;
-  margin-top:20px;
+  margin-top:25px;
   border-radius:10px;
   width:100%;
   height:50px;
   font-weight:1000;
   &:hover{
-        border:2px;
-        border-style:solid;
-        border-color:grey;
-        box-sizing:border-box;
+    border:2px;
+    border-style:solid;
+    border-color:grey;
+    box-sizing:border-box;
     }
 `;
 
@@ -111,7 +110,7 @@ const LineContainer=styled.div`
   position:relative;
   display:flex;
   justify-content:center;
-  margin-top:10px;
+  margin-top:20px;
 `;
 
 const Line=styled.hr`
@@ -120,10 +119,47 @@ const Line=styled.hr`
   position:absolute;
 `;
 
+const ErrorMessage=styled.p`
+  color:red;
+  font-size:12px;
+  margin-bottom:5px;
+  margin-left:5px;
+  position:absolute;
+`;
 
 const Login = () => {
 
   let navigate=useNavigate();
+
+  const [username,set_username]=useState(null);
+  const [password,set_password]=useState(null);
+  const [error,set_error]=useState(null);
+
+  const handle_submit=(e)=>{
+    e.preventDefault();
+    set_error(null);
+  }
+
+  const login=()=>{
+
+    fetch("http://localhost:8080/users")
+    .then((response)=>response.json())
+    .then((data) => {
+      const user=data.find(data=>data.username===username);
+      if(user && password){
+        if(password!==user.password){
+          set_error("Λάθος όνομα χρήστη ή κωδικός");
+        }
+        else if(password===user.password && user.accepted===false){
+          set_error("Αναμένεται έγκριση από τον διαχειριστή");
+        }
+        else if(password===user.password && user.accepted===true){
+          console.log("Continue");
+        }
+      }
+    })
+    .catch(()=>navigate("/error"))
+  }
 
   return (
     <Container>
@@ -132,19 +168,20 @@ const Login = () => {
           Συνέχεια με τον λογαριασμό σου
         </Title>
       </TitleContainer>
-      <Form>
+      <Form onSubmit={handle_submit}>
       <TextContainer>
       <LoginText>
         Όνομα Χρήστη
       </LoginText>
-      <Input type = "text" placeholder="Εισάγετε το Όνομα Χρήστη" />
+      <Input type = "text" placeholder="Εισάγετε το Όνομα Χρήστη" onChange={(e)=>{set_username(e.target.value)}}/>
       <LoginText>
         Κωδικός Πρόσβασης
       </LoginText>
-      <Input type = "password" placeholder="Εισάγετε τον Κωδικό Πρόσβασης" />
+      <Input type = "password" placeholder="Εισάγετε τον Κωδικό Πρόσβασης" onChange={(e)=>{set_password(e.target.value)}}/>
+      <ErrorMessage>{error}</ErrorMessage>
       </TextContainer>
       <ButtonDiv>
-        <Button>
+        <Button onClick={login}>
           Σύνδεση
         </Button>
       </ButtonDiv>
@@ -152,7 +189,7 @@ const Login = () => {
         <Line/>
       </LineContainer>
       <RegisterContainer>
-      <RegisterText>
+      <RegisterText onClick={()=>navigate("/register")}>
         Δημιουργία νέου λογαρισμού
       </RegisterText>
       </RegisterContainer>

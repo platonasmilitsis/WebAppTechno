@@ -52,13 +52,16 @@ const Button=styled.button`
         border:2px;
         border-style:solid;
         border-color:grey;
+        box-sizing:border-box;
     }
-    height:50px;
     border-radius:10px;
     border:none;
-    font-weight:700;
     width:30%;
-    margin-top:50px;
+    height:50px;
+    color:white;
+    font-weight:1000;
+    font-size:14px;
+    margin-top:40px;
     cursor:pointer;
 `;
 
