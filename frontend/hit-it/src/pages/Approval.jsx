@@ -11,6 +11,7 @@ const Container=styled.div`
     display:flex;
     flex-direction:row;
     justify-content:space-around;
+    position:absolute;
     flex-wrap:wrap;
     overflow:hidden;
     -drag: none;
@@ -61,7 +62,7 @@ const Button=styled.button`
 
 const FootCont=styled.div`
     width:100%;
-    margin-top:300px;
+    margin-top:311px;
 `;
 
 const Approval = () => {

@@ -15,6 +15,7 @@ const Container=styled.div`
     justify-content:space-around;
     flex-wrap:wrap;
     overflow:hidden;
+    position:absolute;
     -drag: none;
     user-select: none;
     -moz-user-select: none;

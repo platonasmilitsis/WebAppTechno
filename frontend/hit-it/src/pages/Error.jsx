@@ -12,8 +12,7 @@ const Container=styled.div`
     justify-content:space-around;
     flex-wrap:wrap;
     overflow:hidden;
-    ${'' /* height:776px; */}
-    ${'' /* height:1080px; */}
+    position:absolute;
     -drag: none;
     user-select: none;
     -moz-user-select: none;

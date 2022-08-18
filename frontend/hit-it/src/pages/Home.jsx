@@ -11,6 +11,8 @@ import {Helmet, HelmetProvider} from "react-helmet-async";
 
 const Container=styled.div`
   background-color:#eaeded; 
+  position:absolute;
+  width:100%;
 `;
 
 
