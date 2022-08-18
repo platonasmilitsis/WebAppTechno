@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Global/Footer';
-import Login from '../pages/Login';
+import Login from '../components/Global/Login';
 import CookieConsent from "react-cookie-consent";
 
 
@@ -34,6 +34,7 @@ const Logo=styled.h1`
     font-weight:900;
     font-size:70px;
     margin-top:200px;
+    margin-left:65px;
 
 `;
 
@@ -49,10 +50,7 @@ const LoginContainer=styled.div`
 `;
 
 const LoginBox=styled.div`
-    background-color:white;
-    height:380px;
-    width:380px;
-    margin-top:120px;
+    margin-top:100px;
     margin-bottom:50px;
     border-radius:10px;
 `;
@@ -65,19 +63,21 @@ const Button=styled.button`
         border:2px;
         border-style:solid;
         border-color:grey;
+        box-sizing:border-box;
     }
-    height:50px;
     border-radius:10px;
     border:none;
-    font-weight:700;
-    width:50%;
-    margin-left:100px;
-    margin-bottom:100px;
+    width:100%;
+    height:50px;
+    color:white;
+    font-weight:1000;
+    font-size:14px;
+    margin-top:40px;
     cursor:pointer;
 `;
 
 const FootCont=styled.div`
-    margin-top:60px;
+    margin-top:160px;
     width:100%;
 `;
 
@@ -102,14 +102,14 @@ const Welcome = () => {
             <Description>
             Ότι θες θα το βρεις στο hit-it
             </Description>
+            <Button onClick={()=>navigate("/home")}>
+                Συνέχεια σαν επισκέπτης
+            </Button>
         </TextContainer>
         <LoginContainer>
         <LoginBox>
             <Login/>
         </LoginBox>
-            <Button onClick={()=>navigate("/home")}>
-                Συνέχεια σαν επισκέπτης
-            </Button>
         </LoginContainer>
         <FootCont>
             <CookieConsent debug={true} style={{background:'#eaeded', color:"black", fontFamily:'Arial'}} buttonStyle={{background:"#e67e22"}} buttonText="Συμφωνώ" expires={365}>
