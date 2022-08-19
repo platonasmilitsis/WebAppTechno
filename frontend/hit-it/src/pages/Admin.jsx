@@ -8,7 +8,7 @@ import {useState} from 'react';
 import adminStyles from "./Admin.css";
 import { useEffect } from 'react';
 import { siLK } from '@mui/material/locale';
-
+import axios from 'axios';
 
 const drawerWidth = 240
 
@@ -41,7 +41,6 @@ const styles = {
 }
 
 
-
 const columns : GridColDef[] = [
     {field:"id",hide:true},
     {field:"username",headerName:"Username",width:150},
@@ -59,7 +58,7 @@ const MyDatagrid = (props) =>{
     
     return (
         
-        <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter
+        <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
         columns={columns}
         rows = {props.users}
         />
@@ -70,8 +69,15 @@ const MyDatagrid = (props) =>{
 
 
 
+
+
+
+
 const Admin = () =>{
     
+
+  
+      
  
     const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
     const  [AcceptedUsersData, setAcceptedUser] = useState([]);
@@ -82,25 +88,26 @@ const Admin = () =>{
 
     const [update, setUpdate] = useState(true);
 
+    const [Admin, setAdmin] =   useState([]);
 
-    async function fetchUsers(){
+
+    async function fetchUsers() { 
         setUpdate(false);
-        fetch("http://localhost:8080/users")
-        .then((data) => data.json())
-        .then((data) => {
-            
-            const Data = (data => data);
-            setAllUsers(Data); 
-            const filterData = data.filter(data => data.accepted==true && data.admin==false);
-            setAcceptedUser(filterData);
-            const filterNonAcceptedData = data.filter(data=> data.accepted==false);
-            setNonAcceptedUser(filterNonAcceptedData);
-            
-        }
-        )
+        axios.get("http://localhost:8080/users")
+        .then(res => 
+            {
+                const users = res.data;
+                const filterData = users.filter(users => users.accepted==true && users.admin ==false);
+                setAcceptedUser(filterData);
+                const filterNonAcceptedData = users.filter(data=> data.accepted==false);
+                setNonAcceptedUser(filterNonAcceptedData);
+                const filterAdmin  = users.filter(data => data.admin==true);
+                setAdmin(filterAdmin);
+            })
     }
-    
-    
+
+  
+
 
     {update && fetchUsers()}
 
@@ -126,26 +133,22 @@ const Admin = () =>{
     }
 
 
+    
+
     const classes = useStyles()
 
 
-    async function foundUsername(){
-        return AllUsers.find(obj => {
-        return obj.admin == true;
-    })
-    }
 
     return (
-        
-    
+  
         <Container>
             <AppBar>
                 <Toolbar sx={{justifyContent:"flex-start"}}>
 
                     <Typography 
                         sx={styles.text}>
-                        Welcome {foundUsername.username}
-                    </Typography>
+                        Welcome {Admin[0]?.first_name}
+                        </Typography>
 
                     <Button variant="outlined" sx={styles.button}
                     onClick = {handleClickNonAccepted}
