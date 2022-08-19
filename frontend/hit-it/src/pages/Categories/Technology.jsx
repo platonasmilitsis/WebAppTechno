@@ -9,6 +9,7 @@ import Footer from '../../components/Global/Footer';
 
 const Container=styled.div`
   background-color:#eaeded; 
+  position:absolute;
 `;
 
 const BreadcrumbContainer=styled.div`

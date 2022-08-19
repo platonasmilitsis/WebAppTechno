@@ -4,16 +4,15 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Global/Footer';
 import { useNavigate } from 'react-router-dom';
 
-
 const Container=styled.div`
     background-color:#eaeded; 
     width:100%;
     display:flex;
     flex-direction:row;
     justify-content:space-around;
-    position:absolute;
     flex-wrap:wrap;
     overflow:hidden;
+    position:absolute;
     -drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -33,14 +32,17 @@ const Logo=styled.h1`
     font-weight:900;
     font-size:70px;
     margin-top:200px;
-
+    margin-bottom:50px;
 `;
 
 const Description=styled.p`
     font-family: 'Arial', sans-serif;
     font-size:25px;
     font-weight:500;
-    margin-top:30px;
+    @media (max-width: 1000px) {
+        width:50%;
+        margin-left:50px;
+    }
 `;
 
 const Button=styled.button`
@@ -54,7 +56,7 @@ const Button=styled.button`
     }
     border-radius:10px;
     border:none;
-    width:50%;
+    width:30%;
     height:50px;
     color:white;
     font-weight:1000;
@@ -65,11 +67,11 @@ const Button=styled.button`
 
 const FootCont=styled.div`
     width:100%;
-    margin-top:320px;
+    margin-top:240px;
 `;
 
-const Approval = () => {
-    
+const Error = () => {
+
     let navigate=useNavigate();
 
   return (
@@ -78,7 +80,7 @@ const Approval = () => {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>
-                    Αναμονή έγκρισης
+                    Σελίδα λάθους
                 </title>
             </Helmet>
         </HelmetProvider>
@@ -87,7 +89,13 @@ const Approval = () => {
                 hit-it
             </Logo>
             <Description>
-                Αναμένεται έγκριση από τον διαχειριστή!
+                Φαίνεται ότι κάτι πήγε στραβά!
+            </Description>
+            <Description>
+                Αυτό ίσως οφείλεται σε πρόβλημα που προσπαθούμε να επιλύσουμε
+            </Description>
+            <Description>
+                Δοκιμάστε ξανά αργότερα
             </Description>
             <Button onClick={()=>navigate("/")}>
                 Συνέχεια
@@ -100,4 +108,4 @@ const Approval = () => {
   )
 }
 
-export default Approval
+export default Error
