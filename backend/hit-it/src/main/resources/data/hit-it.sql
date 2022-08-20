@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `mydb`.`users` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `id` INT NOT NULL auto_increment,
   `username` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
+  `password` TINYTEXT NOT NULL,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `telephone` VARCHAR(45) NULL,
@@ -40,12 +40,12 @@ ENGINE = InnoDB;
 
 INSERT INTO users
 values
-    (1,'admin','1234','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Tositsas 18','010101',1,1),
-    (2,'Lst','1234','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Theodosiou 18','0010101',0,1),
-    (3,'Dberos97','1234','Dimitrios','Beros','2106262613','dberos97@gmail.com','Nea Smirni 18','000045',0,1),
-    (4,'Ourt','1234','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Valvi 27','431000',0,1),
-    (5,'PlasPlas','1234','Konstantinos','Plas','2105555555','kost++@gmail.com','Loutsa 27','431120',0,1),
-    (6,'Felarxos','1234','Haris','Korovesis','231000000','fel@gmail.com','Fellas 27','44442',0,1);
+    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Tositsas 18','010101',1,1),
+    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Theodosiou 18','0010101',0,1),
+    (3,'Dberos97','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitrios','Beros','2106262613','dberos97@gmail.com','Nea Smirni 18','000045',0,1),
+    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Valvi 27','431000',0,1),
+    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Loutsa 27','431120',0,1),
+    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Fellas 27','44442',0,1);
 
 
 
@@ -78,12 +78,12 @@ ENGINE = InnoDB;
 
 INSERT INTO item
 values
-    (1,'Item 1',400,4000,'Athens','Greece',null,null,'2',null,"Description 1"),
-    (2,'Item 2',400,4000,'Athens','Greece',null,null,'2',null,"Description 2"),
-    (3,'Item 3',400,4000,'Athens','Greece',null,null,'2',null,"Description 3"),
-    (4,'Item 4',400,4000,'Athens','Greece',null,null,'2',null,"Description 4"),
-    (5,'Item 5',400,4000,'Athens','Greece',null,null,'3',null,"Description 5"),
-    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,"Description 6");
+    (1,'Item 1',400,4000,'Athens','Greece',null,null,'2',null,'Description 1'),
+    (2,'Item 2',400,4000,'Athens','Greece',null,null,'2',null,'Description 2'),
+    (3,'Item 3',400,4000,'Athens','Greece',null,null,'2',null,'Description 3'),
+    (4,'Item 4',400,4000,'Athens','Greece',null,null,'2',null,'Description 4'),
+    (5,'Item 5',400,4000,'Athens','Greece',null,null,'3',null,'Description 5'),
+    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6');
 
 
 -- -----------------------------------------------------

@@ -17,6 +17,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.jetbrains:annotations:20.1.0'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
 	testCompileOnly 'org.projectlombok:lombok:1.18.24'

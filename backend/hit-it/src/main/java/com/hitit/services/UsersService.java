@@ -6,25 +6,63 @@ import com.hitit.exceptions.UserInUseException;
 import com.hitit.exceptions.UserNotFoundException;
 import com.hitit.repository.UsersRepository;
 import com.hitit.models.Users;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class UsersService {
+@Slf4j
+public class UsersService implements UserDetailsService {
 
     private final UsersRepository usersRepository;
     private final ReviewsService reviewsService;
 
-    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService) {
+
+    private final PasswordEncoder passwordEncoder;
+
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Mpika edw oxi?");
+
+        Optional<Users> users = usersRepository.findByUsername(username);
+        if(users.isEmpty())
+           throw new UsernameNotFoundException("User not found in database");
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if(users.get().getAdmin())
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        if(users.get().getAccepted())
+            authorities.add(new SimpleGrantedAuthority("ACCEPTED"));
+        if(!users.get().getAccepted())
+            authorities.add(new SimpleGrantedAuthority("USER"));
+
+        User user = new User(users.get().getUsername(),users.get().getPassword(),authorities);
+        log.info(user.toString());
+
+        return user;
+    }
+
+
+    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.reviewsService = reviewsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -67,6 +105,7 @@ public class UsersService {
         if (userByUsername.isPresent())
             throw new UserInUseException(newUser.getUsername());
 
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return usersRepository.save(newUser);
     }
 
