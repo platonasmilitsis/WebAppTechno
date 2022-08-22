@@ -142,23 +142,43 @@ const Login = () => {
 
   const login=()=>{
 
-    fetch("http://localhost:8080/users")
-    .then((response)=>response.json())
-    .then((data) => {
-      const user=data.find(data=>data.username===username);
-      if(user && password){
-        if(password!==user.password){
-          set_error("Λάθος όνομα χρήστη ή κωδικός");
-        }
-        else if(password===user.password && user.accepted===false){
-          set_error("Αναμένεται έγκριση από τον διαχειριστή");
-        }
-        else if(password===user.password && user.accepted===true){
-          console.log("Continue");
-        }
-      }
+    // fetch("http://localhost:8080/users")
+    // .then((response)=>response.json())
+    // .then((data) => {
+    //   const user=data.find(data=>data.username===username);
+    //   if(user && password){
+    //     if(password!==user.password){
+    //       set_error("Λάθος όνομα χρήστη ή κωδικός");
+    //     }
+    //     else if(password===user.password && user.accepted===false){
+    //       set_error("Αναμένεται έγκριση από τον διαχειριστή");
+    //     }
+    //     else if(password===user.password && user.accepted===true){
+    //       console.log("Continue");
+    //     }
+    //   }
+    // })
+    // .catch(()=>navigate("/error"))
+
+    const credentials={
+      username:username,
+      password:password
+    }
+
+    fetch('http://localhost:8080/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
     })
-    .catch(()=>navigate("/error"))
+    .then((response)=>response.json())
+    .then((data)=>{
+      console.log(data);
+    })
+    .catch((error)=>{
+      console.error(error);
+    })
   }
 
   return (

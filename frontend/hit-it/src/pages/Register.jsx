@@ -302,6 +302,10 @@ const Register = () => {
     if(str.length===0){
       notifications.password=false;
       errors.password="Ο Κωδικός Πρόσβασης είναι υποχρεωτικός";
+      if(confirm_password){
+        notifications.confirm_password=false;
+        errors.confirm_password="Οι Κωδικοί Πρόσβασης πρέπει να ταιριάζουν";
+      }
     }
     else{
       notifications.password=true;
@@ -316,6 +320,7 @@ const Register = () => {
           errors.confirm_password="Οι Κωδικοί Πρόσβασης πρέπει να ταιριάζουν";
         }
       }
+      
     }
   }
 
