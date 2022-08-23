@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ShoppingCartOutlined } from "@material-ui/icons"
-import { Badge } from '@material-ui/core';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const Container=styled.div`
     height:60px;
@@ -27,35 +26,123 @@ const Right=styled.div`
     justify-content:flex-end;
     margin-top:10px;
     @media (max-width: 1000px) {
-        justify-content:center;
+        justify-content:flex-end;
     }
 `;
 
 const MenuItem=styled.div`
-    font-size:14px;
     cursor:pointer;
     margin-left:25px;
     @media (max-width: 1000px) {
         margin:0 auto;
     }
+    font-size:16px;
+    font-weight:normal;
+`;
+
+const AccountContainer=styled.div`
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    height:130px;
+    width:150px;
+    @media (max-width: 1000px) {
+        width:100px;
+    }
+`;
+
+const UserName=styled.h1`
+    font-family: 'Arial', sans-serif;
+    font-size:18px;
+    font-weight:normal;
+    top:40px;
+    position:absolute;
+    @media (max-width: 1000px) {
+        font-size:16px;
+        top:35px;
+    }
+`;
+
+const IconContainer=styled.div`
+    position:absolute;
+    top:0;
+    cursor:pointer;
+    transform:scale(1.3);
+    @media (max-width: 1000px) {
+        transform:scale(1);
+    }
+`;
+
+const UserInfoContainer=styled.div`
+    display:flex;
+    flex-direction:column;
+    border-radius:5px;
+    height:70px;
+    width:120px;
+    position:absolute;
+    text-align:center;
+    position:relative;
+    margin-top:8px;
+    background-color:#7f8c8d;
+    @media (max-width: 1000px) {
+        width:100px;
+        margin-top:2px;
+    }
+`;
+
+const UserInfo=styled.p`
+    font-family: 'Arial', sans-serif;
+    font-size:16px;
+    margin-top:10px;
+    @media (max-width: 1000px) {
+        font-size:14px;
+        margin-bottom:8px;
+    }
 `;
 
 const NavBar = () => {
+
+    const [user_clicked,set_user_clicked]=useState(false);
+
+    const display_user=()=>{
+        set_user_clicked(true);
+        if(user_clicked){
+            // Close it on second click
+            set_user_clicked(false);
+        }
+    }
+
   return (
     <Container>
         <Wrapper>
             <Right>
-                <MenuItem>
+                {/* <MenuItem>
                     Register
                 </MenuItem>
                 <MenuItem>
                     Sign In
-                </MenuItem>
-                <MenuItem>
-                    <Badge badgeContent={1} color="primary" overlap="rectangular">
-                        <ShoppingCartOutlined/>
-                    </Badge>
-                </MenuItem>
+                </MenuItem> */}
+
+                <AccountContainer>
+                    <IconContainer>
+                    <AccountBoxIcon fontSize='large' onClick={display_user}/>
+                    </IconContainer>
+                    {!user_clicked &&
+                        <UserName>
+                            dberos
+                        </UserName>}
+                    {user_clicked &&
+                        <UserInfoContainer>
+                            <UserInfo>
+                                Προφίλ
+                            </UserInfo>
+                            <UserInfo>
+                                Αποσύνδεση
+                            </UserInfo>
+                        </UserInfoContainer>}
+                </AccountContainer>
             </Right>
         </Wrapper>
     </Container>

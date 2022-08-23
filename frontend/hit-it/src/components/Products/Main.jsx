@@ -67,12 +67,11 @@ const Main = (id) => {
   const [items,set_items] = useState([]);
 
   const find_info=()=>{
-    for(let i=0;i<items.length;i++){
-      if(items[i].id===parseInt(id)){
-        let name=items[i].name;
-        let description=items[i].description;
-        return {name,description};
-      }
+    const item=items.find(items=>items.id===parseInt(id));
+    if(item){
+      let name=item.name;
+      let description=item.description;
+      return {name,description};
     }
     throw new Error("404");
   }

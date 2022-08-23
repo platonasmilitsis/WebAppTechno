@@ -14,12 +14,18 @@ const Container=styled.div`
 
 const BreadcrumbContainer=styled.div`
   position:absolute;
+  margin-top:40px;
+  @media (max-width: 1077px){
+    margin-top:0px;
+  }
 `;
 
 const CategoryNameContainer=styled.div`
-  margin-top:80px;
+  margin-top:140px;
+  @media (max-width: 1077px){
+    margin-top:80px;
+  }
 `;
-
 const Home_Garden = () => {
 
     const page_names=["Καλωσοριστική","Αρχική"];

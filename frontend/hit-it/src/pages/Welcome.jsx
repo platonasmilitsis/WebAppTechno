@@ -74,7 +74,7 @@ const Button=styled.button`
 `;
 
 const FootCont=styled.div`
-    margin-top:160px;
+    margin-top:150px;
     width:100%;
 `;
 
