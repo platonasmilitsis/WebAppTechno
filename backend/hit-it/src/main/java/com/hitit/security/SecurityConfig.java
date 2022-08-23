@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -27,10 +30,18 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig
 {
 
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.cors();
+        http.cors().configurationSource(request-> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(List.of("*"));
+            configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
+            configuration.setAllowedHeaders(List.of("*"));
+            return configuration;
+        });
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/refresh","/login").permitAll();
         http.authorizeRequests().antMatchers(GET).permitAll();
