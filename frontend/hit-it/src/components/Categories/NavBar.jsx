@@ -22,8 +22,11 @@ const Container=styled.div`
 
 const LogoContainer=styled.div`
     margin-left:30px;
-    margin-top:10px;
+    margin-top:30px;
     margin-right:60px;
+    @media (max-width: 1000px) {
+        margin-top:10px;
+    }
 `;
 
 const Logo=styled.h1`
