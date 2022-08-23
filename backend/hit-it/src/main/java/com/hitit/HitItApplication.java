@@ -25,4 +25,6 @@ public class HitItApplication {
 		return new BCryptPasswordEncoder();
 	}
 
+
+
 }

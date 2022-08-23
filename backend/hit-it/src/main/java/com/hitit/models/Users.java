@@ -1,6 +1,8 @@
 package com.hitit.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,8 @@ public class Users {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String username;
+
+    @JsonIgnore
     private String password;
     private String first_name;
     private String last_name;

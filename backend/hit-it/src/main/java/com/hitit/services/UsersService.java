@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 @Transactional
 @Slf4j
@@ -44,20 +45,25 @@ public class UsersService implements UserDetailsService {
         if(users.isEmpty())
            throw new UsernameNotFoundException("User not found in database");
 
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if(users.get().getAdmin())
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        if(users.get().getAccepted())
-            authorities.add(new SimpleGrantedAuthority("ACCEPTED"));
-        if(!users.get().getAccepted())
-            authorities.add(new SimpleGrantedAuthority("USER"));
 
+        Collection<SimpleGrantedAuthority> authorities = this.getAuthorities(users.get());
         User user = new User(users.get().getUsername(),users.get().getPassword(),authorities);
         log.info(user.toString());
 
         return user;
     }
 
+    public Collection<SimpleGrantedAuthority> getAuthorities(Users user){
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if(user.getAdmin())
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        if(user.getAccepted())
+            authorities.add(new SimpleGrantedAuthority("ACCEPTED"));
+        if(!user.getAccepted())
+            authorities.add(new SimpleGrantedAuthority("USER"));
+        return authorities;
+    }
 
     public UsersService(UsersRepository usersRepository, ReviewsService reviewsService, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
@@ -65,7 +71,13 @@ public class UsersService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    public Users getUser(String username) {
+        Optional<Users> user = usersRepository.findByUsername(username);
+        if(user.isPresent())
+            return user.get();
+        else
+            throw new RuntimeException("Something went wrong!!!");
+    }
     public List<Users> getUsers(){
         return usersRepository.findAll();
     }
@@ -73,6 +85,8 @@ public class UsersService implements UserDetailsService {
     public Optional<Users> getUser(Long id) {
         return usersRepository.findById(id);
     }
+
+
 
     public Users addUsers(@NotNull Users newUser) {
         if(!(newUser.getUsername()!=null
@@ -185,4 +199,5 @@ public class UsersService implements UserDetailsService {
         reviewsService.updateRatings();
         return ResponseEntity.ok("OK");
     }
+
 }
