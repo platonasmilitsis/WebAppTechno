@@ -2,6 +2,7 @@ package com.hitit.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ public class Users {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String username;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String first_name;
     private String last_name;
@@ -58,6 +59,7 @@ public class Users {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

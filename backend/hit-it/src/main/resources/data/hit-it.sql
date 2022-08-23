@@ -45,7 +45,9 @@ values
     (3,'Dberos97','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitrios','Beros','2106262613','dberos97@gmail.com','Nea Smirni 18','000045',0,1),
     (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Valvi 27','431000',0,1),
     (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Loutsa 27','431120',0,1),
-    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Fellas 27','44442',0,1);
+    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Fellas 27','44442',0,1),
+    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Kolokotronis 27','443',0,0),
+    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Mpoumpoulinas 27','442',0,0);
 
 
 
@@ -100,7 +102,7 @@ ENGINE = InnoDB;
 Insert Into category
 values
     (1,'Texnologia'),
-    (2,'Kommounismos'),
+    (2,'Ypologistes'),
     (3,'Spiti'),
     (4,'Kipos'),
     (5,'Fagito'),
@@ -181,12 +183,12 @@ ENGINE = InnoDB;
 
 INSERT INTO bidder
 values
-    (1,'Cholargos','Greece',3),
-    (2,'Chalandri','Greece',null),
-    (3,'Nea Smirni','Greece',null),
-    (4,'Karditsa','Karditsa',null),
-    (5,'Loutsa','Karditsa',null),
-    (6,'Agia Fel Paraskevi','Greece',null);
+    (1,'Cholargos','Greece',200),
+    (2,'Chalandri','Greece',220),
+    (3,'Nea Smirni','Greece',180),
+    (4,'Karditsa','Greece',100),
+    (5,'Loutsa','Greece',1000),
+    (6,'Agia Paraskevi','Greece',250);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`bid`
@@ -215,30 +217,91 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
 ENGINE = InnoDB;
 
 
-DROP TABLE IF EXISTS `mydb`.`reviews` ;
+INSERT INTO bid
+values
+    (1,'2022-8-23 19:35',401,1,2),
+    (2,'2022-8-23 19:40',420,1,3),
+    (3,'2022-8-23 19:45',425,1,4),
+    (4,'2022-8-23 19:50',450,1,5),
+    (5,'2022-8-23 19:55',500,1,6),
+    (6,'2022-8-23 20:00',700,1,7),
+    (7,'2022-8-23 20:20',900,1,8),
+    (8,'2022-8-23 19:40',401,2,2),
+    (9,'2022-8-23 19:45',420,2,3),
+    (10,'2022-8-23 19:50',425,2,4),
+    (11,'2022-8-23 19:40',425,3,4),
+    (12,'2022-8-23 19:40',425,4,4),
+    (13,'2022-8-23 19:40',425,5,4);
 
-CREATE TABLE IF NOT EXISTS `mydb`.`reviews`
-(
-    `user_id`   int not null,
-    `bidder_id` int not null,
-    `review`    text,
-    `rating`    float not null,
-    INDEX `fk_reviews_users_bidders_idx` (`user_id` ASC, `bidder_id` ASC) VISIBLE,
-    PRIMARY KEY (`user_id`, `bidder_id`),
-    CONSTRAINT `fk_reviews_users`
-        FOREIGN KEY (`user_id`)
+
+-- -----------------------------------------------------
+-- Table `mydb`.`messages`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`messages` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`messages` (
+    `id` INT NOT NULL auto_increment,
+    `seller_id` INT NOT NULL,
+    `buyer_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_messages_seller_idx` (`seller_id` ASC) VISIBLE,
+    CONSTRAINT `fk_messages_seller1`
+        FOREIGN KEY (`seller_id`)
             REFERENCES `mydb`.`users` (`id`)
             ON DELETE CASCADE
             ON UPDATE NO ACTION,
-    CONSTRAINT `fk_reviews_bidders`
-        FOREIGN KEY (`bidder_id`)
-            REFERENCES `mydb`.`bidder` (`id`)
+    INDEX `fk_messages_buyer_idx` (`buyer_id` ASC) VISIBLE,
+    CONSTRAINT `fk_messages_buyer`
+        FOREIGN KEY (`buyer_id`)
+            REFERENCES `mydb`.`users` (`id`)
             ON DELETE CASCADE
-            ON UPDATE NO ACTION
-)
-ENGINE = InnoDB;
+            ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
+INSERT INTO messages
+values (1,2,3);
+
+
+DROP TABLE IF EXISTS `mydb`.`message_node` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`message_node` (
+    `id` INT NOT NULL auto_increment,
+    `time` timestamp NOT NULL,
+    `message` MEDIUMTEXT NOT NULL,
+    `sender_id` INT NOT NULL,
+    `messages_list_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_messages_sendeer_idx` (`sender_id` ASC) VISIBLE,
+    CONSTRAINT `fk_messages_sender1`
+        FOREIGN KEY (`sender_id`)
+            REFERENCES `mydb`.`users` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    INDEX `fk_messages_messageslist_idx` (`messages_list_id` ASC) VISIBLE,
+    CONSTRAINT `fk_messages_messageslist`
+        FOREIGN KEY (`messages_list_id`)
+            REFERENCES `mydb`.`messages` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+INSERT INTO message_node
+values
+    (1,'2022-8-24 19:35','Hello',2,1),
+    (2,'2022-8-24 19:40','Hello',3,1),
+    (3,'2022-8-24 19:50','How are you?',2,1),
+    (4,'2022-8-24 19:55','Fine thanks!',3,1),
+    (5,'2022-8-24 19:56','How are you?',3,1),
+    (6,'2022-8-24 19:57','I am OK',2,1),
+    (7,'2022-8-24 19:58','Will you send me my stuff?',2,1),
+    (8,'2022-8-24 19:59','They are on their way!!',3,1);
+
+
+
+
+
+
+    SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

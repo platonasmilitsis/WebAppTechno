@@ -30,7 +30,6 @@ import java.util.Optional;
 public class UsersService implements UserDetailsService {
 
     private final UsersRepository usersRepository;
-    private final ReviewsService reviewsService;
 
 
     private final PasswordEncoder passwordEncoder;
@@ -65,9 +64,8 @@ public class UsersService implements UserDetailsService {
         return authorities;
     }
 
-    public UsersService(UsersRepository usersRepository, ReviewsService reviewsService, PasswordEncoder passwordEncoder) {
+    public UsersService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
-        this.reviewsService = reviewsService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -196,7 +194,6 @@ public class UsersService implements UserDetailsService {
         for(Integer i: id)
             usersRepository.deleteById(i.longValue());
 
-        reviewsService.updateRatings();
         return ResponseEntity.ok("OK");
     }
 
