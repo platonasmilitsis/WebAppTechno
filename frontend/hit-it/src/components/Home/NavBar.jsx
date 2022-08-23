@@ -31,7 +31,6 @@ const Right=styled.div`
 `;
 
 const MenuItem=styled.div`
-    font-size:14px;
     cursor:pointer;
     margin-left:25px;
     @media (max-width: 1000px) {
