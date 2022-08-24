@@ -5,7 +5,7 @@ const get_local_refresh_token=()=>{
 
 const get_local_access_token=()=>{
     const user=JSON.parse(sessionStorage.getItem("user"));
-    return user?.get_local_access_token;
+    return user?.access_token;
 };
 
 const update_local_access_token=(token)=>{

@@ -111,21 +111,29 @@ const NavBar = () => {
 
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const display_user=()=>{
-        set_user_clicked(true);
-        if(user_clicked){
-            // Close it on second click
-            set_user_clicked(false);
-        }
+    const logout=()=>{
+        TokenService.remove_user();
+        navigate("/");
     }
 
-    const logout=()=>{
-        console.log("before logout");
+    const profile=()=>{
         console.log("USER: ",TokenService.get_user());
-        TokenService.remove_user();
-        console.log("after logout");
-        console.log("USER: ",TokenService.get_user());
-        navigate("/");
+        console.log("ACCESS TOKEN: ",TokenService.get_local_access_token());
+
+        fetch("http://localhost:8080/users",{
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${TokenService.get_local_access_token()}`,
+            },
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            console.log(data);
+        })
+        .catch((error)=>{
+            // If Access Token has expired, handle here
+            console.error(error);
+        })
     }
 
     const display=()=>{
@@ -133,15 +141,14 @@ const NavBar = () => {
             return(
                 <AccountContainer>
                     <IconContainer>
-                    <AccountBoxIcon fontSize='large' onClick={display_user}/>
+                    <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                     </IconContainer>
-                    {!user_clicked &&
+                    {!user_clicked?
                         <UserName>
                             {TokenService.get_user().username}
-                        </UserName>}
-                    {user_clicked &&
+                        </UserName>:
                         <UserInfoContainer>
-                            <UserInfo>
+                            <UserInfo onClick={profile}>
                                 Προφίλ
                             </UserInfo>
                             <UserInfo onClick={logout}>
