@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TokenService from '../../services/token_service';
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     height:60px;
@@ -100,17 +102,73 @@ const UserInfo=styled.p`
         font-size:14px;
         margin-bottom:8px;
     }
+    cursor:pointer;
 `;
 
 const NavBar = () => {
 
+    let navigate=useNavigate();
+
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const display_user=()=>{
-        set_user_clicked(true);
-        if(user_clicked){
-            // Close it on second click
-            set_user_clicked(false);
+    const logout=()=>{
+        TokenService.remove_user();
+        navigate("/");
+    }
+
+    const profile=()=>{
+        console.log("USER: ",TokenService.get_user());
+        console.log("ACCESS TOKEN: ",TokenService.get_local_access_token());
+
+        fetch("http://localhost:8080/users",{
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${TokenService.get_local_access_token()}`,
+            },
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            console.log(data);
+        })
+        .catch((error)=>{
+            // If Access Token has expired, handle here
+            console.error(error);
+        })
+    }
+
+    const display=()=>{
+        try{
+            return(
+                <AccountContainer>
+                    <IconContainer>
+                    <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
+                    </IconContainer>
+                    {!user_clicked?
+                        <UserName>
+                            {TokenService.get_user().username}
+                        </UserName>:
+                        <UserInfoContainer>
+                            <UserInfo onClick={profile}>
+                                Προφίλ
+                            </UserInfo>
+                            <UserInfo onClick={logout}>
+                                Αποσύνδεση
+                            </UserInfo>
+                        </UserInfoContainer>}
+                </AccountContainer>
+            )
+        }
+        catch(error){
+            return(
+                <>
+                    <MenuItem onClick={()=>navigate("/register")}>
+                        Register
+                    </MenuItem>
+                    <MenuItem onClick={()=>navigate("/")}>
+                        Sign In
+                    </MenuItem>
+                </>
+            )
         }
     }
 
@@ -118,31 +176,7 @@ const NavBar = () => {
     <Container>
         <Wrapper>
             <Right>
-                {/* <MenuItem>
-                    Register
-                </MenuItem>
-                <MenuItem>
-                    Sign In
-                </MenuItem> */}
-
-                <AccountContainer>
-                    <IconContainer>
-                    <AccountBoxIcon fontSize='large' onClick={display_user}/>
-                    </IconContainer>
-                    {!user_clicked &&
-                        <UserName>
-                            dberos
-                        </UserName>}
-                    {user_clicked &&
-                        <UserInfoContainer>
-                            <UserInfo>
-                                Προφίλ
-                            </UserInfo>
-                            <UserInfo>
-                                Αποσύνδεση
-                            </UserInfo>
-                        </UserInfoContainer>}
-                </AccountContainer>
+                {display()}
             </Right>
         </Wrapper>
     </Container>

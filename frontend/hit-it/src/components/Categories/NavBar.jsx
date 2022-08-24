@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TokenService from '../../services/token_service';
 
 const Container=styled.div`
     display:flex;
@@ -22,8 +23,11 @@ const Container=styled.div`
 
 const LogoContainer=styled.div`
     margin-left:30px;
-    margin-top:10px;
+    margin-top:30px;
     margin-right:60px;
+    @media (max-width: 1000px) {
+        margin-top:10px;
+    }
 `;
 
 const Logo=styled.h1`
@@ -166,21 +170,75 @@ const UserInfo=styled.p`
         font-size:14px;
         margin-bottom:8px;
     }
+    cursor:pointer;
 `;
 
 const NavBar = () => {
 
+    let navigate=useNavigate();
+
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const display_user=()=>{
-        set_user_clicked(true);
-        if(user_clicked){
-            // Close it on second click
-            set_user_clicked(false);
-        }
+    const logout=()=>{
+        TokenService.remove_user();
+        navigate("/");
     }
 
-    let navigate=useNavigate();
+    const profile=()=>{
+        console.log("USER: ",TokenService.get_user());
+        console.log("ACCESS TOKEN: ",TokenService.get_local_access_token());
+
+        fetch("http://localhost:8080/users",{
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${TokenService.get_local_access_token()}`,
+            },
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            console.log(data);
+        })
+        .catch((error)=>{
+            // If Access Token has expired, handle here
+            console.error(error);
+        })
+    }
+
+    const display=()=>{
+        try{
+            return(
+                <AccountContainer>
+                    <IconContainer>
+                    <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
+                    </IconContainer>
+                    {!user_clicked?
+                        <UserName>
+                            {TokenService.get_user().username}
+                        </UserName>:
+                        <UserInfoContainer>
+                            <UserInfo onClick={profile}>
+                                Προφίλ
+                            </UserInfo>
+                            <UserInfo onClick={logout}>
+                                Αποσύνδεση
+                            </UserInfo>
+                        </UserInfoContainer>}
+                </AccountContainer>
+            )
+        }
+        catch(error){
+            return(
+                <ItemContainer>
+                    <Item onClick={()=>navigate("/register")}>
+                        Register
+                    </Item>
+                    <Item onClick={()=>navigate("/")}>
+                        Sign In
+                    </Item>
+                </ItemContainer>
+            )
+        }
+    }
 
   return (
     <Container>
@@ -193,33 +251,7 @@ const NavBar = () => {
             <SearchBar/>
         </SearchContainter>
         <RightContainer>
-            {/* <ItemContainer>
-            <Item>
-                Register
-            </Item>
-            <Item>
-                Sign In
-            </Item>
-            </ItemContainer> */}
-
-            <AccountContainer>
-                <IconContainer>
-                <AccountBoxIcon fontSize='large' onClick={display_user}/>
-                </IconContainer>
-                {!user_clicked &&
-                    <UserName>
-                        dberos
-                    </UserName>}
-                {user_clicked &&
-                    <UserInfoContainer>
-                        <UserInfo>
-                            Προφίλ
-                        </UserInfo>
-                        <UserInfo>
-                            Αποσύνδεση
-                        </UserInfo>
-                    </UserInfoContainer>}
-            </AccountContainer>
+            {display()}
         </RightContainer>
     </Container>
   )
