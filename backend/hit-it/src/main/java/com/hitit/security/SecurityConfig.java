@@ -44,10 +44,10 @@ public class SecurityConfig
         });
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/refresh","/login").permitAll();
+        http.authorizeRequests().antMatchers(GET).permitAll();
         http.authorizeRequests().antMatchers(POST,"/users").permitAll();
         http.authorizeRequests().antMatchers(PUT,"/users/accept").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(POST).hasAnyAuthority("ADMIN","ACCEPTED");
-        http.authorizeRequests().antMatchers(GET).hasAnyAuthority("ADMIN","ACCEPTED");
         http.authorizeRequests().antMatchers(PUT).hasAnyAuthority("ADMIN","ACCEPTED");
         http.authorizeRequests().antMatchers(DELETE).hasAnyAuthority("ADMIN","ACCEPTED");
         http.addFilter(new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))));

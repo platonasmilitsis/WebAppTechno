@@ -120,16 +120,8 @@ public class Users {
         return admin;
     }
 
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
-    }
-
     public Boolean getAccepted() {
         return accepted;
-    }
-
-    public void setAccepted(Boolean accepted) {
-        this.accepted = accepted;
     }
 
     public void setAccepted() {this.accepted = true;}

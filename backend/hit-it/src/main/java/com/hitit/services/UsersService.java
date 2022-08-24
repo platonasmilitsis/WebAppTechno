@@ -38,8 +38,6 @@ public class UsersService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Mpika edw oxi?");
-
         Optional<Users> users = usersRepository.findByUsername(username);
         if(users.isEmpty())
            throw new UsernameNotFoundException("User not found in database");

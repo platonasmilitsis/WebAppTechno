@@ -4,7 +4,6 @@ package com.hitit.controllers;
 import com.hitit.models.MessageNode;
 import com.hitit.models.Messages;
 import com.hitit.services.MessagesService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,11 +34,16 @@ public class MessagesController {
         return messagesService.getById(id);
     }
 
-//
-//    @PostMapping("messagesList/{id}")
-//    public List<MessageNode> sendNewMessageInChat(@PathVariable Long id){
-//        return messagesService.sendNewMessageInChat(id);
-//    }
+
+    @PutMapping("messagesList/user_id={user_id}/read")
+    public List<Messages> allMessagesRead(@PathVariable Long user_id){
+        return messagesService.allMessagesRead(user_id);
+    }
+
+    @PostMapping("messagesList/{id}")
+    public List<MessageNode> sendNewMessageInChat(@PathVariable Long id, @RequestBody MessageNode messageNode){
+        return messagesService.sendNewMessageInChat(id,messageNode);
+    }
 
 
     @PostMapping("/messagesList")
@@ -47,9 +51,18 @@ public class MessagesController {
         return messagesService.addMessages(newMessages);
     }
 
-    @DeleteMapping("/messagesList/{id}")
-    public ResponseEntity<?> deleteMessages(@PathVariable Long id){
-        return messagesService.deleteMessages(id);
+    @DeleteMapping("/messagesList/{id}/message/{id2}")
+    public List<MessageNode> deleteMessage(@PathVariable Long id,@PathVariable Long id2){
+        return messagesService.deleteMessage(id,id2);
     }
 
 }
+
+
+/*
+
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIkFETUlOIiwiQUNDRVBURUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlZnJlc2giLCJleHAiOjE2NjEzNDY1Nzd9.ud2XqRzwGEjahcwBI449FTQ7UAo5bgvIQYJieF9fp68",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY2MzkzNzQ5OH0.vZSxE6c8FDOE8SFSmF-4z_NDR4OmnQ67BKwha70yhRc",
+  "username": "admin"
+}
+ */

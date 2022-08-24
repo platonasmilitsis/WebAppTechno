@@ -14,22 +14,26 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @Table(name = "message_node")
- public class MessageNode {
+public class MessageNode {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
+   @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
+   @Temporal(TemporalType.TIMESTAMP)
+   private Date time;
 
-    private String message;
+   private String message;
 
-    @JoinColumn(name = "sender_id",nullable = false)
-    private Long sender_id;
+   private Boolean is_read;
 
-    @JoinColumn(name = "messages_list_id",nullable = false)
-    private Long messages_list_id;
+   @JoinColumn(name = "sender_id",nullable = false)
+   private Long sender_id;
+
+   @JoinColumn(name = "messages_list_id",nullable = false)
+   private Long messages_list_id;
+
+
 
 }

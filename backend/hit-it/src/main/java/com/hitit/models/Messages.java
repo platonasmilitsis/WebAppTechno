@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Messages {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn(name = "seller_id",nullable = false)
@@ -23,4 +23,6 @@ public class Messages {
 
     @JoinColumn(name = "buyer_id",nullable = false)
     private Long buyer_id;
+
+
 }

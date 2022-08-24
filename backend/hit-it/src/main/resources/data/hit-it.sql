@@ -269,6 +269,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`message_node` (
     `id` INT NOT NULL auto_increment,
     `time` timestamp NOT NULL,
     `message` MEDIUMTEXT NOT NULL,
+    `is_read` TINYINT not null,
     `sender_id` INT NOT NULL,
     `messages_list_id` INT NOT NULL,
     PRIMARY KEY (`id`),
@@ -288,14 +289,14 @@ CREATE TABLE IF NOT EXISTS `mydb`.`message_node` (
 
 INSERT INTO message_node
 values
-    (1,'2022-8-24 19:35','Hello',2,1),
-    (2,'2022-8-24 19:40','Hello',3,1),
-    (3,'2022-8-24 19:50','How are you?',2,1),
-    (4,'2022-8-24 19:55','Fine thanks!',3,1),
-    (5,'2022-8-24 19:56','How are you?',3,1),
-    (6,'2022-8-24 19:57','I am OK',2,1),
-    (7,'2022-8-24 19:58','Will you send me my stuff?',2,1),
-    (8,'2022-8-24 19:59','They are on their way!!',3,1);
+    (1,'2022-8-24 19:35','Hello',1,2,1),
+    (2,'2022-8-24 19:40','Hello',1,3,1),
+    (3,'2022-8-24 19:50','How are you?',0,2,1),
+    (4,'2022-8-24 19:55','Fine thanks!',1,3,1),
+    (5,'2022-8-24 19:56','How are you?',1,3,1),
+    (6,'2022-8-24 19:57','I am OK',0,2,1),
+    (7,'2022-8-24 19:58','Will you send me my stuff?',0,2,1),
+    (8,'2022-8-24 19:59','They are on their way!!',0,3,1);
 
 
 
