@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TokenService from '../../services/token_service';
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
     height:60px;
@@ -100,9 +102,12 @@ const UserInfo=styled.p`
         font-size:14px;
         margin-bottom:8px;
     }
+    cursor:pointer;
 `;
 
 const NavBar = () => {
+
+    let navigate=useNavigate();
 
     const [user_clicked,set_user_clicked]=useState(false);
 
@@ -114,35 +119,57 @@ const NavBar = () => {
         }
     }
 
-  return (
-    <Container>
-        <Wrapper>
-            <Right>
-                {/* <MenuItem>
-                    Register
-                </MenuItem>
-                <MenuItem>
-                    Sign In
-                </MenuItem> */}
+    const logout=()=>{
+        console.log("before logout");
+        console.log("USER: ",TokenService.get_user());
+        TokenService.remove_user();
+        console.log("after logout");
+        console.log("USER: ",TokenService.get_user());
+        navigate("/");
+    }
 
+    const display=()=>{
+        try{
+            return(
                 <AccountContainer>
                     <IconContainer>
                     <AccountBoxIcon fontSize='large' onClick={display_user}/>
                     </IconContainer>
                     {!user_clicked &&
                         <UserName>
-                            dberos
+                            {TokenService.get_user().username}
                         </UserName>}
                     {user_clicked &&
                         <UserInfoContainer>
                             <UserInfo>
                                 Προφίλ
                             </UserInfo>
-                            <UserInfo>
+                            <UserInfo onClick={logout}>
                                 Αποσύνδεση
                             </UserInfo>
                         </UserInfoContainer>}
                 </AccountContainer>
+            )
+        }
+        catch(error){
+            return(
+                <>
+                    <MenuItem onClick={()=>navigate("/register")}>
+                        Register
+                    </MenuItem>
+                    <MenuItem onClick={()=>navigate("/")}>
+                        Sign In
+                    </MenuItem>
+                </>
+            )
+        }
+    }
+
+  return (
+    <Container>
+        <Wrapper>
+            <Right>
+                {display()}
             </Right>
         </Wrapper>
     </Container>

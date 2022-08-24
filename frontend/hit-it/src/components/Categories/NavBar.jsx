@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TokenService from '../../services/token_service';
 
 const Container=styled.div`
     display:flex;
@@ -169,9 +170,13 @@ const UserInfo=styled.p`
         font-size:14px;
         margin-bottom:8px;
     }
+    cursor:pointer;
 `;
 
 const NavBar = () => {
+
+    let navigate=useNavigate();
+
 
     const [user_clicked,set_user_clicked]=useState(false);
 
@@ -183,7 +188,51 @@ const NavBar = () => {
         }
     }
 
-    let navigate=useNavigate();
+    const logout=()=>{
+        console.log("before logout");
+        console.log("USER: ",TokenService.get_user());
+        TokenService.remove_user();
+        console.log("after logout");
+        console.log("USER: ",TokenService.get_user());
+        navigate("/");
+    }
+
+    const display=()=>{
+        try{
+            return(
+                <AccountContainer>
+                    <IconContainer>
+                    <AccountBoxIcon fontSize='large' onClick={display_user}/>
+                    </IconContainer>
+                    {!user_clicked &&
+                        <UserName>
+                            {TokenService.get_user().username}
+                        </UserName>}
+                    {user_clicked &&
+                        <UserInfoContainer>
+                            <UserInfo>
+                                Προφίλ
+                            </UserInfo>
+                            <UserInfo onClick={logout}>
+                                Αποσύνδεση
+                            </UserInfo>
+                        </UserInfoContainer>}
+                </AccountContainer>
+            )
+        }
+        catch(error){
+            return(
+                <ItemContainer>
+                    <Item onClick={()=>navigate("/register")}>
+                        Register
+                    </Item>
+                    <Item onClick={()=>navigate("/")}>
+                        Sign In
+                    </Item>
+                </ItemContainer>
+            )
+        }
+    }
 
   return (
     <Container>
@@ -196,33 +245,7 @@ const NavBar = () => {
             <SearchBar/>
         </SearchContainter>
         <RightContainer>
-            {/* <ItemContainer>
-            <Item>
-                Register
-            </Item>
-            <Item>
-                Sign In
-            </Item>
-            </ItemContainer> */}
-
-            <AccountContainer>
-                <IconContainer>
-                <AccountBoxIcon fontSize='large' onClick={display_user}/>
-                </IconContainer>
-                {!user_clicked &&
-                    <UserName>
-                        dberos
-                    </UserName>}
-                {user_clicked &&
-                    <UserInfoContainer>
-                        <UserInfo>
-                            Προφίλ
-                        </UserInfo>
-                        <UserInfo>
-                            Αποσύνδεση
-                        </UserInfo>
-                    </UserInfoContainer>}
-            </AccountContainer>
+            {display()}
         </RightContainer>
     </Container>
   )
