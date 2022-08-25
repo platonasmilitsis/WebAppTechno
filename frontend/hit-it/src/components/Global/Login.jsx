@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate} from 'react-router-dom';
 import TokenService from '../../services/token_service';
+import UserService from '../../services/user_service';
 
 const Container = styled.div`
     height:420px;
@@ -176,10 +177,17 @@ const Login = () => {
     .then((response)=>response.json())
     .then((data)=>{
       // console.log(data);
+
       TokenService.set_user(data);
       const user=TokenService.get_user();
+
+
+      UserService.set_myUser(user?.username);
+      const myUser = UserService?.get_myUser();
       console.log(user);
-      navigate("/home");
+
+      if(myUser.admin==true) navigate("/admin");
+      else navigate("/home");
       
     })
     .catch((error)=>{

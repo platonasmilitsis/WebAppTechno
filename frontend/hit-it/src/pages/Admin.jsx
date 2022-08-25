@@ -3,12 +3,15 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { makeStyles } from '@material-ui/core'
 import styled from 'styled-components';
 import { Box, Container } from '@mui/system';
-import { Button,AppBar, Toolbar, Typography } from '@mui/material';
+import { Button,AppBar, Toolbar, Typography, selectClasses } from '@mui/material';
 import {useState} from 'react';
 import adminStyles from "./Admin.css";
 import { useEffect } from 'react';
 import { siLK } from '@mui/material/locale';
 import axios from 'axios';
+import UserService from '../services/user_service';
+import { useNavigate} from 'react-router-dom';
+import TokenService from '../services/token_service';
 
 const drawerWidth = 240
 
@@ -54,17 +57,6 @@ const columns : GridColDef[] = [
 ]
 
 
-const MyDatagrid = (props) =>{
-    
-    return (
-        
-        <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
-        columns={columns}
-        rows = {props.users}
-        />
-    )
-}
-
 
 
 
@@ -75,20 +67,51 @@ const MyDatagrid = (props) =>{
 
 const Admin = () =>{
     
+    let navigate = useNavigate();
+    
 
-  
-      
+    const [sendAccept, setSendAccept] = useState(false);
+
+    const myUser = UserService.get_myUser();
+    const access_token = TokenService.get_local_access_token();
+    const refresh_token = TokenService.get_local_access_token();
+
+    if(myUser.admin==false) navigate("/home");
  
     const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
     const  [AcceptedUsersData, setAcceptedUser] = useState([]);
 
-    const  [AllUsers, setAllUsers] = useState([]);
+
 
 
 
     const [update, setUpdate] = useState(true);
 
-    const [Admin, setAdmin] =   useState([]);
+    const [selectedRows,setSelectedRows] = useState([]);
+
+    const MyDatagrid = (props) =>{
+
+        const data = props.users;
+        
+        return (
+            
+            <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
+            columns={columns}
+            rows = {data}
+            onSelectionModelChange = {(some) => {
+                console.log(some);
+                // setSelectedRows(some);
+                // const ids = new Set(newSelectionModel);
+                // const selectedRows = newSelectionModel.rows.filter((row) => ids.has(row.id),);
+                // setSelectedRows(selectedRows);
+            }}
+           
+            />
+        )
+    }
+    
+
+
 
 
     async function fetchUsers() { 
@@ -101,12 +124,15 @@ const Admin = () =>{
                 setAcceptedUser(filterData);
                 const filterNonAcceptedData = users.filter(data=> data.accepted==false);
                 setNonAcceptedUser(filterNonAcceptedData);
-                const filterAdmin  = users.filter(data => data.admin==true);
-                setAdmin(filterAdmin);
             })
     }
 
   
+
+    async function acceptUsers(props) {
+        setSendAccept(false);
+        // axios.post()
+    }
 
 
     {update && fetchUsers()}
@@ -147,7 +173,7 @@ const Admin = () =>{
 
                     <Typography 
                         sx={styles.text}>
-                        Welcome {Admin[0]?.first_name}
+                        Welcome {myUser.first_name}
                         </Typography>
 
                     <Button variant="outlined" sx={styles.button}
@@ -180,6 +206,13 @@ const Admin = () =>{
                 style={{backgroundColor:"#8b0000"}}>Delete</Button>
                 </div>
             }          
+            </Box>
+
+            <Box sx={{height:"200px"}}>
+            <div>
+                {selectedRows}
+            </div>
+            
             </Box>
 
 

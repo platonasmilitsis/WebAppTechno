@@ -74,6 +74,7 @@ public class UsersService implements UserDetailsService {
         else
             throw new RuntimeException("Something went wrong!!!");
     }
+    
     public List<Users> getUsers(){
         return usersRepository.findAll();
     }
