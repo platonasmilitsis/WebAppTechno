@@ -83,6 +83,12 @@ const Admin = () =>{
 
 
 
+    const onRowsSelectionHandler = (ids,rows) => {
+        const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
+        console.log(selectedRowsData);
+    };
+
+      
 
 
     const [update, setUpdate] = useState(true);
@@ -98,13 +104,12 @@ const Admin = () =>{
             <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
             columns={columns}
             rows = {data}
-            onSelectionModelChange = {(some) => {
-                console.log(some);
-                // setSelectedRows(some);
+            onSelectionModelChange = {(some) => onRowsSelectionHandler(some,data)
+                            // setSelectedRows(some);
                 // const ids = new Set(newSelectionModel);
                 // const selectedRows = newSelectionModel.rows.filter((row) => ids.has(row.id),);
                 // setSelectedRows(selectedRows);
-            }}
+            }
            
             />
         )

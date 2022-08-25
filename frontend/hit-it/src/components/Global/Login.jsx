@@ -181,13 +181,17 @@ const Login = () => {
       TokenService.set_user(data);
       const user=TokenService.get_user();
 
+      UserService.clear_myUser().expect(sessionStorage.getItem("myUser").toBe(null));
 
-      UserService.set_myUser(user?.username);
+      UserService.set_myUser(user.username);
+
       const myUser = UserService?.get_myUser();
-      console.log(user);
-
-      if(myUser.admin==true) navigate("/admin");
+      if(myUser.admin===true) navigate("/admin");
+      else if(myUser.accepted===false) throw Error("MALAKIA"); 
       else navigate("/home");
+
+
+      
       
     })
     .catch((error)=>{

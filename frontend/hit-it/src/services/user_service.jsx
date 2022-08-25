@@ -11,7 +11,8 @@ const set_myUser=(username) =>{
     axios.get(fetchUserByUsername(username))
     .then(res => 
     {
-        sessionStorage.removeItem("myUser");
+
+       
         const users = res.data;
         sessionStorage.setItem("myUser",JSON.stringify(users));
         
@@ -20,6 +21,14 @@ const set_myUser=(username) =>{
 
 
 };
+
+
+
+const clear_myUser= ()=>{
+
+    if(!sessionStorage.getItem("myUser")===null)
+        sessionStorage.removeItem("myUser");
+}
 
 const get_myUser=() =>{
     return JSON.parse(sessionStorage.getItem("myUser"));
