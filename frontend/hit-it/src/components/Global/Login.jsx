@@ -144,24 +144,6 @@ const Login = () => {
 
   const login=()=>{
 
-    // fetch("http://localhost:8080/users")
-    // .then((response)=>response.json())
-    // .then((data) => {
-    //   const user=data.find(data=>data.username===username);
-    //   if(user && password){
-    //     if(password!==user.password){
-    //       set_error("Λάθος όνομα χρήστη ή κωδικός");
-    //     }
-    //     else if(password===user.password && user.accepted===false){
-    //       set_error("Αναμένεται έγκριση από τον διαχειριστή");
-    //     }
-    //     else if(password===user.password && user.accepted===true){
-    //       console.log("Continue");
-    //     }
-    //   }
-    // })
-    // .catch(()=>navigate("/error"))
-
     const credentials={
       username:username,
       password:password
@@ -176,19 +158,50 @@ const Login = () => {
     })
     .then((response)=>response.json())
     .then((data)=>{
-      // console.log(data);
-
       TokenService.set_user(data);
       const user=TokenService.get_user();
-
-
-      UserService.set_myUser(user?.username);
-      const myUser = UserService?.get_myUser();
       console.log(user);
-
-      if(myUser.admin==true) navigate("/admin");
-      else navigate("/home");
-      
+    })
+    .catch((error)=>{
+      console.error(error);
+      if(error instanceof SyntaxError){
+        throw new Error("Wrong Credentials")
+      }
+      else{
+        throw new Error("HTTP Error");
+      }
+    })
+    .then()
+    .catch((error)=>{
+      if(`${error.message[0]}`==="W"){
+        set_error("Λάθος όνομα χρήστη ή κωδικός")
+        return Promise.reject("Wrong Credentials")
+      }
+      else{
+        navigate("/error");
+      }
+    })
+    .then(()=>{
+      fetch(`http://localhost:8080/users/username=${username}`)
+      .then((response)=>response.json())
+      .then((data)=>{
+        console.log(data);
+        if(data.accepted){
+          if(data.admin){
+            navigate("/admin");
+          }
+          else{
+            navigate("/home");
+          }
+        }
+        else{
+          set_error("Αναμένεται έγκριση από τον διαχειριστή");
+          return Promise.reject("Non Accepted User");
+        }
+      })
+      .catch((error)=>{
+        console.error(error);
+      })
     })
     .catch((error)=>{
       console.error(error);
