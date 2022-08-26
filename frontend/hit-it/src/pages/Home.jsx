@@ -7,7 +7,9 @@ import Announcement from '../components/Home/Announcement'
 import Footer from '../components/Global/Footer'
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd'
 import {Helmet, HelmetProvider} from "react-helmet-async";
-
+import useAuth from '../hooks/useAuth';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -17,6 +19,13 @@ const Container=styled.div`
 
 
 const Home = () => {
+  // const {auth} = useAuth();
+
+
+  let navigate = useNavigate();
+
+
+
   return (
 
     <Container>

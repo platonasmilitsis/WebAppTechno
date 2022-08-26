@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import TokenService from '../../services/token_service';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Container=styled.div`
     height:60px;
@@ -107,7 +108,11 @@ const UserInfo=styled.p`
 
 const NavBar = () => {
 
+    
+    const axiosPrivate = useAxiosPrivate();
+
     let navigate=useNavigate();
+
 
     const [user_clicked,set_user_clicked]=useState(false);
 
@@ -120,20 +125,15 @@ const NavBar = () => {
         console.log("USER: ",TokenService.get_user());
         console.log("ACCESS TOKEN: ",TokenService.get_local_access_token());
 
-        fetch("http://localhost:8080/users",{
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${TokenService.get_local_access_token()}`,
-            },
-        })
-        .then(response=>response.json())
-        .then((data)=>{
-            console.log(data);
-        })
-        .catch((error)=>{
-            // If Access Token has expired, handle here
-            console.error(error);
-        })
+        axiosPrivate.get("/users")
+        .then((res) => console.log(res.data));
+        // .catch((error)=>{
+        //     // If Access Token has expired, handle here
+        //     console.error(error);
+        // });
+        
+        
+        
     }
 
     const display=()=>{

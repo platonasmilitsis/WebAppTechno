@@ -12,6 +12,8 @@ import Business from "./pages/Categories/Business";
 import Product from "./pages/Product";
 import Admin from "./pages/Admin";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+
+import RequireAuth from "./components/Global/RequireAuth";
 import Approval from "./pages/Approval";
 import Map from "./pages/Map";
 import Error from "./pages/Error";
@@ -23,7 +25,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Welcome/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/admin" element={<Admin/>}/>
+
+        <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}> 
+          <Route path="/admin" element={<Admin/>}/>
+        </Route>
+
+
         <Route path="/register" element={<Register/>}/>
         <Route path="/home/technology" element={<Technology/>}/>
         <Route path="/home/home-garden" element={<HomeGarden/>}/>

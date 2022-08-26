@@ -14,6 +14,18 @@ const update_local_access_token=(token)=>{
     sessionStorage.setItem("user",JSON.stringify(user));
 };
 
+
+const get_local_username=()=>{
+    const user=JSON.parse(sessionStorage.getItem("user"));
+    return user?.username;
+};
+
+const get_local_roles=()=>{
+    const user=JSON.parse(sessionStorage.getItem("user"));
+    return user?.roles;
+};
+
+
 const get_user=()=>{
     return JSON.parse(sessionStorage.getItem("user"));
 }
@@ -31,6 +43,8 @@ const remove_user=() => {
 const TokenService = {
     get_local_refresh_token,
     get_local_access_token,
+    get_local_username,
+    get_local_roles,
     update_local_access_token,
     get_user,
     set_user,

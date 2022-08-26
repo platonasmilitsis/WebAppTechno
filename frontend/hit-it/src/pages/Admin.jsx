@@ -10,8 +10,13 @@ import { useEffect } from 'react';
 import { siLK } from '@mui/material/locale';
 import axios from 'axios';
 import UserService from '../services/user_service';
-import { useNavigate} from 'react-router-dom';
+// import { useNavigate} from 'react-router-dom';
 import TokenService from '../services/token_service';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import useRefreshToken from '../hooks/useRefreshToken';
+import useAuth from '../hooks/useAuth'; 
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+
 
 const drawerWidth = 240
 
@@ -44,18 +49,6 @@ const styles = {
 }
 
 
-const columns : GridColDef[] = [
-    {field:"id",hide:true},
-    {field:"username",headerName:"Username",width:150},
-    {field:"first_name",headerName:"First Name",width:150},
-    {field:"last_name",headerName:"Last Name",width:150},
-    {field:"telephone",headerName:"Telephone",width:150},
-    {field:"email",headerName:"E-mail",width:150},
-    {field:"address",headerName:"Address",width:150},
-    {field:"tin",headerName:"Tin",width:150}
-
-]
-
 
 
 
@@ -66,56 +59,72 @@ const columns : GridColDef[] = [
 
 
 const Admin = () =>{
+
+    const {auth} = useAuth();
+
+    const axiosPrivate = useAxiosPrivate();
+
+
+    const refresh = useRefreshToken();
+
+
+    const columns = [
+        {field:"id",hide:true},
+        {field:"username",headerName:"Username",width:150},
+        {field:"first_name",headerName:"First Name",width:150},
+        {field:"last_name",headerName:"Last Name",width:150},
+        {field:"telephone",headerName:"Telephone",width:150},
+        {field:"email",headerName:"E-mail",width:150},
+        {field:"address",headerName:"Address",width:150},
+        {field:"tin",headerName:"Tin",width:150}
+    ]
+    
+    
+
+    const [rows, setRows] = useState([]);
+
+
     
     let navigate = useNavigate();
-    
 
+    const [isAdmin,setAdmin] = useState(true);
+    const [myUser,setUser] = useState([]);
+    const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
     const [sendAccept, setSendAccept] = useState(false);
-
-    const myUser = UserService.get_myUser();
     const access_token = TokenService.get_local_access_token();
     const refresh_token = TokenService.get_local_access_token();
-
-    if(myUser.admin==false) navigate("/home");
- 
-    const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
     const  [AcceptedUsersData, setAcceptedUser] = useState([]);
+    const [update, setUpdate] = useState(true);
+    const [showNonAccepted, setShowNonAccepted] = useState(true);
+    const [showAccepted, setShowAccepted] = useState(false);
+    const classes = useStyles()
+
+    const [selectedRows, setSelectedRows] = useState([]);
 
 
 
-    const onRowsSelectionHandler = (ids,rows) => {
-        const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
-        console.log(selectedRowsData);
+
+    
+    const onRowsSelectionHandler = (ids) => {
+        const selectedIds = new Set(ids);
+        console.log(selectedIds);
+        setRows(new Set(ids));
+
     };
 
-      
+
+          
 
 
-    const [update, setUpdate] = useState(true);
 
-    const [selectedRows,setSelectedRows] = useState([]);
 
-    const MyDatagrid = (props) =>{
-
-        const data = props.users;
-        
-        return (
-            
-            <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
-            columns={columns}
-            rows = {data}
-            onSelectionModelChange = {(some) => onRowsSelectionHandler(some,data)
-                            // setSelectedRows(some);
-                // const ids = new Set(newSelectionModel);
-                // const selectedRows = newSelectionModel.rows.filter((row) => ids.has(row.id),);
-                // setSelectedRows(selectedRows);
-            }
-           
-            />
-        )
+    async function fetchmyUser() {
+        setAdmin(false);
+        axios.get(`http://localhost:8080/users/username=${auth?.username}`)
+        .then((res) => {
+            setUser(res.data);
+        })
     }
-    
-
 
 
 
@@ -132,7 +141,65 @@ const Admin = () =>{
             })
     }
 
-  
+
+
+    const MyDatagrid = (props) =>{
+     
+        const [myRows,setRowsId] = useState([]);
+
+
+        const onHandleAccept = async (event) =>{
+
+            try{
+                const response = await axiosPrivate.put(`users/accept?id=${myRows}`);
+                console.log(response?.data);
+            } catch(err) {
+                console.error(err);
+            }
+            
+        }
+
+        const onHandleDelete = event =>{
+            
+        }
+
+
+        return (
+            <Box sx = {{height:"80%",width:"90%"}}>
+                <DataGrid sx={{marginTop:"100px",height:"500px"}} checkboxSelection hideFooter 
+                columns={columns}
+                rows = {props.users}
+                getRowId = {(row) => row.id}
+                loading = {props.loading}
+                disableSelectionOnClick
+                onSelectionModelChange = {(ids) => setRowsId(ids)}
+                
+                />
+                <Box className='buttons-container' sx={{marginTop:"30px"}}>
+                {
+                    showNonAccepted && <div>
+                    <Button onClick={onHandleAccept} sx={{marginLeft:"20px"}} variant="contained"> Accept</Button>
+                    <Button variant="contained"
+                    style={{ marginLeft:"20px",backgroundColor:"#8b0000"}}>Delete</Button>
+                    </div>
+                }
+                {
+                    showAccepted &&
+                    <div>
+                    <Button variant="contained"
+                    style={{backgroundColor:"#8b0000"}}>Delete</Button>
+                    </div>
+                }          
+                </Box>
+            </Box>
+        )
+    }
+
+
+
+
+
+
 
     async function acceptUsers(props) {
         setSendAccept(false);
@@ -140,90 +207,76 @@ const Admin = () =>{
     }
 
 
-    {update && fetchUsers()}
 
-
-    const [showNonAccepted, setShowNonAccepted] = useState(true);
-    const [showAccepted, setShowAccepted] = useState(false);
-
-
-
-    const handleClickAccepted = event => {
-        setUpdate(true);
-        setShowAccepted(true);
-        setShowNonAccepted(false);
-
-    }
-
-
-
-    const handleClickNonAccepted = event => {
-        setUpdate(true);
-        setShowNonAccepted(true);
-        setShowAccepted(false);
-    }
-
-
-    
-
-    const classes = useStyles()
-
-
-
-    return (
-  
-        <Container>
-            <AppBar>
-                <Toolbar sx={{justifyContent:"flex-start"}}>
-
-                    <Typography 
-                        sx={styles.text}>
-                        Welcome {myUser.first_name}
-                        </Typography>
-
-                    <Button variant="outlined" sx={styles.button}
-                    onClick = {handleClickNonAccepted}
-                    >Non-Accepted-Users</Button>
-                
-                    <Button variant="outlined" sx={styles.button}
-                    onClick = {handleClickAccepted}
-                    >Accepted-Users</Button>
-
-                 </Toolbar>
-            </AppBar>
-
-            <Box className='main-container'>
-                {showNonAccepted && <MyDatagrid users={NonAcceptedUsersData}/>}
-                {showAccepted &&  <MyDatagrid users={AcceptedUsersData}/>}    
-            </Box>
-            <Box className='buttons-container'>
-            {
-                showNonAccepted && <div>
-                <Button sx={{marginLeft:"20px"}} variant="contained"> Accept</Button>
-                <Button variant="contained"
-                style={{ marginLeft:"20px",backgroundColor:"#8b0000"}}>Delete</Button>
-                </div>
-            }
-            {
-                showAccepted &&
-                <div>
-                <Button variant="contained"
-                style={{backgroundColor:"#8b0000"}}>Delete</Button>
-                </div>
-            }          
-            </Box>
-
-            <Box sx={{height:"200px"}}>
-            <div>
-                {selectedRows}
-            </div>
-            
-            </Box>
-
-
-        </Container>
+    {isAdmin && fetchmyUser()}
         
-    )
+
+
+
+    // if(myUser.admin===false){
+    //     return <Navigate to="/home" replace/>;
+    // }
+
+        {update && fetchUsers()}
+
+
+
+        const handleClickAccepted = event => {
+            setUpdate(true);
+            setShowAccepted(true);
+            setShowNonAccepted(false);
+
+        }
+
+
+
+        const handleClickNonAccepted = event => {
+            setUpdate(true);
+            setShowNonAccepted(true);
+            setShowAccepted(false);
+        }
+
+        const handleHome = event => {
+            navigate("/home");
+        }
+
+        return (
+
+            <Container>
+                <AppBar>
+                    <Toolbar sx={{justifyContent:"flex-start"}}>
+
+                        <Typography 
+                            sx={styles.text}>
+                            Welcome {myUser.first_name}
+                            </Typography>
+
+                        <Button variant="outlined" sx={styles.button}
+                        onClick = {handleClickNonAccepted}
+                        >Non-Accepted-Users</Button>
+                    
+                        <Button variant="outlined" sx={styles.button}
+                        onClick = {handleClickAccepted}
+                        >Accepted-Users</Button>
+
+                        <Button variant="outlined" sx={styles.button}
+                        onClick = {handleHome}
+                        >Hit-it</Button>
+                        
+
+                        </Toolbar>
+                </AppBar>
+
+                <Box className='main-container'>
+                    {showNonAccepted && <MyDatagrid users={NonAcceptedUsersData} loading={!NonAcceptedUsersData.length}/>}
+                    {showAccepted &&  <MyDatagrid users={AcceptedUsersData} loading={!AcceptedUsersData.length}/>}    
+                </Box>
+
+
+            </Container>
+            
+        )
+    
 }
 
 export default Admin

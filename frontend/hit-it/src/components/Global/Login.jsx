@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import { useNavigate} from 'react-router-dom';
+import { Link, useNavigate, useLocation} from 'react-router-dom';
 import TokenService from '../../services/token_service';
 import UserService from '../../services/user_service';
+import useAuth from '../../hooks/useAuth';
 
 const Container = styled.div`
     height:420px;
@@ -131,6 +132,11 @@ const ErrorMessage=styled.p`
 
 const Login = () => {
 
+  const {setAuth} = useAuth();
+
+  const tlocation = useLocation();
+  const from = tlocation?.state?.from?.pathname || "/";
+
   let navigate=useNavigate();
 
   const [username,set_username]=useState(null);
@@ -159,8 +165,28 @@ const Login = () => {
     .then((response)=>response.json())
     .then((data)=>{
       TokenService.set_user(data);
+      
+
+
       const user=TokenService.get_user();
-      console.log(user);
+      
+      // const username = TokenService.get_local_username();
+      // const access_token = TokenService.get_local_access_token();
+      // const refresh_token = TokenService.get_local_refresh_token();
+      // const roles = TokenService.get_local_roles();
+
+      
+
+      const username = data.username;
+      const access_token = data.access_token;
+      const refresh_token = data.refresh_token;
+      const roles = data.roles
+
+
+      setAuth({username, access_token, refresh_token, roles});
+
+      
+      
     })
     .catch((error)=>{
       console.error(error);
