@@ -153,13 +153,21 @@ const Admin = () =>{
             try{
                 const response = await axiosPrivate.put(`users/accept?id=${myRows}`);
                 console.log(response?.data);
+                setUpdate(true);
             } catch(err) {
                 console.error(err);
             }
             
         }
 
-        const onHandleDelete = event =>{
+        const onHandleDelete = async (event) =>{
+            try{
+                const response = await axiosPrivate.delete(`users?id=${myRows}`);
+                console.log(response?.data);
+                setUpdate(true);
+            } catch(err) {
+                console.error(err);
+            }
             
         }
 
@@ -179,14 +187,14 @@ const Admin = () =>{
                 {
                     showNonAccepted && <div>
                     <Button onClick={onHandleAccept} sx={{marginLeft:"20px"}} variant="contained"> Accept</Button>
-                    <Button variant="contained"
+                    <Button variant="contained" onClick={onHandleDelete}
                     style={{ marginLeft:"20px",backgroundColor:"#8b0000"}}>Delete</Button>
                     </div>
                 }
                 {
                     showAccepted &&
                     <div>
-                    <Button variant="contained"
+                    <Button variant="contained" onClick={onHandleDelete}
                     style={{backgroundColor:"#8b0000"}}>Delete</Button>
                     </div>
                 }          
