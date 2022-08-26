@@ -31,7 +31,7 @@ const get_user=()=>{
 }
 
 const set_user=(user) => {
-    console.log(JSON.stringify(user));
+    // console.log(JSON.stringify(user));
     sessionStorage.setItem("user", JSON.stringify(user));
 };
 

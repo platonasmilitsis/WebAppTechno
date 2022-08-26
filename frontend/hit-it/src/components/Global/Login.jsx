@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import { Link, useNavigate, useLocation} from 'react-router-dom';
 import TokenService from '../../services/token_service';
-import UserService from '../../services/user_service';
-import useAuth from '../../hooks/useAuth';
 
 const Container = styled.div`
     height:420px;
@@ -149,89 +147,77 @@ const Login = () => {
   }
 
   const login=()=>{
+    if(username && password){
 
-    const credentials={
-      username:username,
-      password:password
-    }
-
-    fetch('http://localhost:8080/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-    .then((response)=>response.json())
-    .then((data)=>{
-      TokenService.set_user(data);
-      
-
-
-      const user=TokenService.get_user();
-      
-      // const username = TokenService.get_local_username();
-      // const access_token = TokenService.get_local_access_token();
-      // const refresh_token = TokenService.get_local_refresh_token();
-      // const roles = TokenService.get_local_roles();
-
-      
-
-      const username = data.username;
-      const access_token = data.access_token;
-      const refresh_token = data.refresh_token;
-      const roles = data.roles
-
-
-      setAuth({username, access_token, refresh_token, roles});
-
-      
-      
-    })
-    .catch((error)=>{
-      console.error(error);
-      if(error instanceof SyntaxError){
-        throw new Error("Wrong Credentials")
+      const credentials={
+        username:username,
+        password:password
       }
-      else{
-        throw new Error("HTTP Error");
-      }
-    })
-    .then()
-    .catch((error)=>{
-      if(`${error.message[0]}`==="W"){
-        set_error("Λάθος όνομα χρήστη ή κωδικός")
-        return Promise.reject("Wrong Credentials")
-      }
-      else{
-        navigate("/error");
-      }
-    })
-    .then(()=>{
+
       fetch(`http://localhost:8080/users/username=${username}`)
       .then((response)=>response.json())
       .then((data)=>{
-        console.log(data);
-        if(data.accepted){
-          if(data.admin){
-            navigate("/admin");
-          }
-          else{
-            navigate("/home");
-          }
+
+        const message=data.message;
+        const admin=data.admin;
+        const accepted=data.accepted;
+
+        if(message!==undefined){
+          // Username doesn't exist
+          console.log(message);
+          return(
+            new Promise((reject)=>{
+              reject(set_error("Λάθος όνομα χρήστη ή κωδικός"));
+            })
+          )
         }
         else{
-          set_error("Αναμένεται έγκριση από τον διαχειριστή");
-          return Promise.reject("Non Accepted User");
+          // Username exists so Post at Login with decrypted password
+          fetch('http://localhost:8080/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials),
+          })
+          .then((response)=>response.json())
+          .then((data)=>{
+            // Credentials match, ready to Log In if User is accepted
+            return(
+              accepted?
+                new Promise((resolve)=>{
+                  console.log(data);
+                  TokenService.set_user(data);
+                  admin?
+                  resolve(navigate("/admin")):
+                    resolve(navigate("/home"))
+                  }):
+                new Promise((reject)=>{
+                  reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
+                })
+            )
+          })
+          .catch((error)=>{
+            // Credentials don't match, error from BackEnd
+            console.error(error);
+            return(
+              new Promise((reject)=>{
+                reject(set_error("Λάθος όνομα χρήστη ή κωδικός"));
+              })
+            )
+          })
         }
       })
       .catch((error)=>{
+        // BackEnd not running
         console.error(error);
+        return(
+          new Promise((reject)=>{
+            reject(navigate("/error"));
+          })
+        )
       })
-    })
-    .catch((error)=>{
-      console.error(error);
-    })
+    }
   }
 
   return (
