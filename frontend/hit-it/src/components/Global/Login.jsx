@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import { Link, useNavigate, useLocation} from 'react-router-dom';
 import TokenService from '../../services/token_service';
-
+import useAuth from '../../hooks/useAuth';
 const Container = styled.div`
     height:420px;
     width:380px;
@@ -183,19 +183,46 @@ const Login = () => {
           .then((response)=>response.json())
           .then((data)=>{
             // Credentials match, ready to Log In if User is accepted
+            const username = data.username;
+            const access_token = data.access_token;
+            const refresh_token = data.refresh_token;
+            const roles = data.roles;
+
+            setAuth({username,access_token,refresh_token,roles})
+
+
             return(
-              accepted?
-                new Promise((resolve)=>{
-                  console.log(data);
-                  TokenService.set_user(data);
-                  admin?
-                  resolve(navigate("/admin")):
-                    resolve(navigate("/home"))
-                  }):
-                new Promise((reject)=>{
+
+              roles.includes("ACCEPTED")
+              
+              ? new Promise((resolve) => {
+                TokenService.set_user(data)
+                roles.includes("ADMIN")
+                ? resolve(navigate("/admin"))
+                : resolve(navigate("/home"))
+              })
+              
+              : new Promise((reject) => {
                   reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
-                })
-            )
+              })
+              
+            );
+
+              
+            
+            
+              // accepted?
+              //   new Promise((resolve)=>{
+              //     console.log(data);
+                  
+
+              //     admin?
+              //     resolve(navigate("/admin")):
+              //       resolve(navigate("/home"))
+              //     }):
+              //   new Promise((reject)=>{
+              //     reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
+              //   })
           })
           .catch((error)=>{
             // Credentials don't match, error from BackEnd

@@ -13,7 +13,7 @@ import Product from "./pages/Product";
 import Admin from "./pages/Admin";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
-import RequireAuth from "./components/Global/RequireAuth";
+import RequireAuth from "./components/Global/RequireAuth.jsx";
 import Approval from "./pages/Approval";
 import Map from "./pages/Map";
 import Error from "./pages/Error";
