@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `last_name` VARCHAR(45) NOT NULL,
   `telephone` VARCHAR(45) NULL,
   `email` VARCHAR(45) NOT NULL,
-  `address` VARCHAR(45) NULL,
+  `address` VARCHAR(100) NULL,
   `tin` VARCHAR(10) NOT NULL,
   `admin` TINYINT NOT NULL,
   `accepted` TINYINT NOT NULL,
@@ -40,14 +40,14 @@ ENGINE = InnoDB;
 
 INSERT INTO users
 values
-    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Tositsas 18','010101',1,1),
-    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Theodosiou 18','0010101',0,1),
-    (3,'Dberos97','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitrios','Beros','2106262613','dberos97@gmail.com','Nea Smirni 18','000045',0,1),
-    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Valvi 27','431000',0,1),
-    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Loutsa 27','431120',0,1),
-    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Fellas 27','44442',0,1),
-    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Kolokotronis 27','443',0,0),
-    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Mpoumpoulinas 27','442',0,0);
+    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1),
+    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1),
+    (3,'Dberos97','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitrios','Beros','2106262613','dberos97@gmail.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1),
+    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1),
+    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1),
+    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1),
+    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Ελβετίας 21, Αγία Παρασκευή','443',0,0),
+    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Λεωφόρος Εθνικής Αντιστάσεως 172, Καισαριανή','442',0,0);
 
 
 
@@ -59,7 +59,7 @@ DROP TABLE IF EXISTS `mydb`.`item` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `id` INT NOT NULL auto_increment,
-  `name` VARCHAR(45) NOT NULL,
+  `name` TINYTEXT NOT NULL,
   `first_bid` INT NULL,
   `buy_price` INT NOT NULL,
   `location` VARCHAR(45) NOT NULL,
@@ -80,11 +80,28 @@ ENGINE = InnoDB;
 
 INSERT INTO item
 values
-    (1,'Item 1',400,4000,'Athens','Greece',null,null,'2',null,'Description 1'),
-    (2,'Item 2',400,4000,'Athens','Greece',null,null,'2',null,'Description 2'),
-    (3,'Item 3',400,4000,'Athens','Greece',null,null,'2',null,'Description 3'),
-    (4,'Item 4',400,4000,'Athens','Greece',null,null,'2',null,'Description 4'),
-    (5,'Item 5',400,4000,'Athens','Greece',null,null,'3',null,'Description 5'),
+    (1,'Xiaomi Redmi 10C NFC Dual SIM (4GB/64GB) Ocean Blue',400,4000,'Σοφοκλή Βενιζέλου 58, Περιστέρι','Ελλάδα','38.00566401446545', '23.693986330688112','2','../img/img_1.jpg','
+    Βασικά χαρακτηριστικά:
+
+        Μεγάλη Οθόνη 6.71"
+        Snapdragon 680
+        Διπλή πίσω κάμερα 50MP
+        Μπαταρία 5000mAh
+
+    Γρήγορη φόρτιση 18W. Θύρα 3.5mm για ακουστικά. FM ραδιόφωνο. Προστασία οθόνης με Corning Gorilla Glass.
+'),
+
+    (2,'Casio Ψηφιακό Ρολόι Χρονογράφος με Καουτσούκ Λουράκι σε Μαύρο χρώμα',400,4000,'Ομονοίας 19, Αθήνα','Ελλάδα','37.983764319462495', '23.727843673016075','2','../img/img_2.jpeg','Μηχανισμός: Μπαταρίας, Μέγεθος: 42 mm, Αδιάβροχο: 20 Atm
+
+    Ρολόι της G-SHOCK με αντοχή και στιλ, από ορυκτό γυαλί, ανθεκτικό στις γρατζουνιές, και κάσα από καουτσούκ.
+
+    Οι χρήστες που το έχουν αγοράσει το ξεχωρίζουν κυρίως γιατί δείχνει την ώρα με ακρίβεια και είναι ανθεκτικό στις πτώσεις και στις γρατσουνιές.
+'),
+
+
+    (3,'The Eye of the World, The Wheel of Time',400,4000,'Χορμοβίτου 242, Πειραιάς','Ελλάδα','37.958290164807146', '23.630909942697556','2','../img/img_3.jpg','Prepare to turn the Wheel of Time - discover the first novel in one of the most influential and popular fantasy epics ever published.'),
+    (4,'ΚΑΠΝΟΣ 30γρ KARELIAS ΠΟΡΤΟΚΑΛΙ',400,4000,'Μεταμορφώσεως 51, Χαλάνδρι','Ελλάδα','38.025647767028914', '23.82374272735476','2','../img/img_4.jpg','Βλάπτει σοβαρά την υγεία. Το δίνω γιατί θέλω να ανγκάσω την μάνα μου να το κόψει!'),
+    (5,'Πατσάς Καπέκα',400,4000,'Βάλβη 27, Καρδίτσα','Ελλάδ',null,null,'3',null,'Ο καλύτερος πατσάς της χώρας. Ο Πλάτωνας είχε δίκιο! Για αυτό μάζεψα λίγο ταψάκι να το μοιράσω στο λαό. Μην τον χάσετε!!'),
     (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6');
 
 
@@ -101,13 +118,13 @@ ENGINE = InnoDB;
 
 Insert Into category
 values
-    (1,'Texnologia'),
-    (2,'Ypologistes'),
-    (3,'Spiti'),
-    (4,'Kipos'),
-    (5,'Fagito'),
-    (6,'Pota'),
-    (7,'Patsa');
+    (1,'Τεχνολογία'),
+    (2,'Υπολογιστές'),
+    (3,'Σπίτι'),
+    (4,'Κήπος'),
+    (5,'Φαγητό'),
+    (6,'Ποτά'),
+    (7,'Πατσάς');
 
 
 -- -----------------------------------------------------
@@ -224,8 +241,8 @@ values
     (3,'2022-8-23 19:45',425,1,4),
     (4,'2022-8-23 19:50',450,1,5),
     (5,'2022-8-23 19:55',500,1,6),
-    (6,'2022-8-23 20:00',700,1,7),
-    (7,'2022-8-23 20:20',900,1,8),
+    (6,'2022-8-23 20:00',700,1,3),
+    (7,'2022-8-23 20:20',900,1,2),
     (8,'2022-8-23 19:40',401,2,2),
     (9,'2022-8-23 19:45',420,2,3),
     (10,'2022-8-23 19:50',425,2,4),

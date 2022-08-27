@@ -2,6 +2,8 @@ package com.hitit.services;
 
 import com.hitit.exceptions.ItemNotFoundException;
 import com.hitit.exceptions.UserNotFoundException;
+import com.hitit.models.BidsBidList;
+import com.hitit.models.FullItem;
 import com.hitit.models.Item;
 import com.hitit.models.Users;
 import com.hitit.repository.*;
@@ -12,17 +14,23 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 @Transactional
 public class ItemService {
 
     private final ItemRepository itemRepository;
 
+
+    private final BidsService bidsService;
+    private final ItemCategoryService itemCategoryService;
     private final UsersRepository usersRepository;
 
 
-    public ItemService(ItemRepository itemRepository, UsersRepository usersRepository) {
+    public ItemService(ItemRepository itemRepository, BidsService bidsService, ItemCategoryService itemCategoryService, UsersRepository usersRepository) {
         this.itemRepository = itemRepository;
+        this.bidsService = bidsService;
+        this.itemCategoryService = itemCategoryService;
 
         this.usersRepository = usersRepository;
     }
@@ -103,15 +111,38 @@ public class ItemService {
         return ResponseEntity.ok("OK");
     }
 
+//
+//    public void deleteItemsByUser(Long user_id) {
+//
+//        List<Item> list = itemRepository.findItemByUserId(user_id);
+//
+//        for(Item item : list){
+//
+//            itemRepository.deleteById(item.getId());
+//        }
+//
+//    }
 
-    public void deleteItemsByUser(Long user_id) {
+    public FullItem getFullItem(Long id) {
 
-        List<Item> list = itemRepository.findItemByUserId(user_id);
+        Optional<Item> item = itemRepository.findById(id);
+        FullItem fullItem = new FullItem();
+        BidsBidList bidsBidList = new BidsBidList();
 
-        for(Item item : list){
 
-            itemRepository.deleteById(item.getId());
+        if(item.isPresent()){
+            Item item1 = item.get();
+
+            bidsBidList.setBids_id(item1.getId());
+            bidsBidList.setBids(bidsService.getBidListByBidsId(item1.getId()));
+
+            fullItem.setItem(item1);
+            fullItem.setCategories(itemCategoryService.getCategoriesBasedOnItem(item1.getId()));
+            fullItem.setBids(bidsBidList);
+
+
         }
+        return fullItem;
 
     }
 }

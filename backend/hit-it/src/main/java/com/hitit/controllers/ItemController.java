@@ -1,6 +1,7 @@
 package com.hitit.controllers;
 
 
+import com.hitit.models.FullItem;
 import com.hitit.models.Item;
 import com.hitit.services.ItemService;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,13 @@ public class ItemController {
     @GetMapping("/items")
     public List<Item> getItems(){return itemService.getItems();}
 
+
+    @GetMapping("/items/{id}/all")
+    public FullItem getFullItem(@PathVariable Long id){
+        return itemService.getFullItem(id);
+    }
+
+
     @GetMapping("/items/{id}")
     public Optional<Item> getItem(@PathVariable Long id){return itemService.getItem(id);}
 
@@ -42,6 +50,9 @@ public class ItemController {
     public Item updateItem(@RequestBody Item updatedItem, @PathVariable Long id){
         return itemService.updateItem(updatedItem,id);
     }
+
+
+
 
     @DeleteMapping("/items/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable Long id){

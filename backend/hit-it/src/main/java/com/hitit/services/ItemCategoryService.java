@@ -1,5 +1,6 @@
 package com.hitit.services;
 
+import com.hitit.models.Category;
 import com.hitit.models.Item;
 import com.hitit.models.ItemCategory;
 import com.hitit.models.ItemCategoryID;
@@ -11,16 +12,19 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class ItemCategoryService {
 
     private final ItemCategoryRepository itemCategoryRepository;
+    private final CategoryService categoryService;
 
 
-    public ItemCategoryService(ItemCategoryRepository itemCategoryRepository) {
+    public ItemCategoryService(ItemCategoryRepository itemCategoryRepository, CategoryService categoryService) {
         this.itemCategoryRepository = itemCategoryRepository;
+        this.categoryService = categoryService;
     }
 
 
@@ -83,6 +87,22 @@ public class ItemCategoryService {
             itemCategoryRepository.deleteById(ic_id);
         }
         return ResponseEntity.ok("OK");
+
+    }
+
+    public List<Category> getCategoriesBasedOnItem(Long id) {
+
+        List<Long> ids = itemCategoryRepository.getCategoriesBasedOnItem(id);
+        List<Category> categories = new ArrayList<>();
+
+        for(Long myid: ids)
+        {
+            Optional<Category> category = categoryService.getCategory(myid);
+            category.ifPresent(categories::add);
+        }
+
+        return categories;
+
 
     }
 }

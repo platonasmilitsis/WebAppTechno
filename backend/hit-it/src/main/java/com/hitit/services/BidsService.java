@@ -60,4 +60,9 @@ public class BidsService {
 
 
     }
+
+
+    public List<Bid> getBidListByBidsId(Long id){
+        return bidRepository.findByBidsId(id);
+    }
 }
