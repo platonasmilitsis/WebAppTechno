@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import { Link, useNavigate, useLocation} from 'react-router-dom';
-import TokenService from '../../services/token_service';
+import {useNavigate} from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+
 const Container = styled.div`
     height:420px;
     width:380px;
@@ -131,10 +131,6 @@ const ErrorMessage=styled.p`
 const Login = () => {
 
   const {setAuth} = useAuth();
-
-  const tlocation = useLocation();
-  const from = tlocation?.state?.from?.pathname || "/";
-
   let navigate=useNavigate();
 
   const [username,set_username]=useState(null);
@@ -148,100 +144,49 @@ const Login = () => {
 
   const login=()=>{
     if(username && password){
-
       const credentials={
         username:username,
         password:password
       }
-
-      fetch(`http://localhost:8080/users/username=${username}`)
+      fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      })
       .then((response)=>response.json())
       .then((data)=>{
+        // Credentials match, ready to Log In if User is accepted
+        const username = data.username;
+        const access_token = data.access_token;
+        const refresh_token = data.refresh_token;
+        const roles = data.roles;
+        setAuth({username,access_token,refresh_token,roles});
 
-        const message=data.message;
-        const admin=data.admin;
-        const accepted=data.accepted;
-
-        if(message!==undefined){
-          // Username doesn't exist
-          console.log(message);
-          return(
+        return(
+          roles.includes("ACCEPTED")?
+            new Promise((resolve)=>{
+              roles.includes("ADMIN")?
+                resolve(navigate("/admin")):
+                  resolve(navigate("/home"));
+            }):
+            new Promise((reject)=>{
+              reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
+            })
+        )
+      })
+      .catch((error)=>{
+        // Credentials don't match or BackEnd not running
+        console.error(error);
+        return(
+          error instanceof TypeError?
+            new Promise((reject)=>{
+              reject(navigate("/error"));
+            }):
             new Promise((reject)=>{
               reject(set_error("Λάθος όνομα χρήστη ή κωδικός"));
             })
-          )
-        }
-        else{
-          // Username exists so Post at Login with decrypted password
-          fetch('http://localhost:8080/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-          })
-          .then((response)=>response.json())
-          .then((data)=>{
-            // Credentials match, ready to Log In if User is accepted
-            const username = data.username;
-            const access_token = data.access_token;
-            const refresh_token = data.refresh_token;
-            const roles = data.roles;
-
-            setAuth({username,access_token,refresh_token,roles})
-
-
-            return(
-
-              roles.includes("ACCEPTED")
-              
-              ? new Promise((resolve) => {
-                TokenService.set_user(data)
-                roles.includes("ADMIN")
-                ? resolve(navigate("/admin"))
-                : resolve(navigate("/home"))
-              })
-              
-              : new Promise((reject) => {
-                  reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
-              })
-              
-            );
-
-              
-            
-            
-              // accepted?
-              //   new Promise((resolve)=>{
-              //     console.log(data);
-                  
-
-              //     admin?
-              //     resolve(navigate("/admin")):
-              //       resolve(navigate("/home"))
-              //     }):
-              //   new Promise((reject)=>{
-              //     reject(set_error("Αναμένεται έγκριση από τον διαχειριστή"));
-              //   })
-          })
-          .catch((error)=>{
-            // Credentials don't match, error from BackEnd
-            console.error(error);
-            return(
-              new Promise((reject)=>{
-                reject(set_error("Λάθος όνομα χρήστη ή κωδικός"));
-              })
-            )
-          })
-        }
-      })
-      .catch((error)=>{
-        // BackEnd not running
-        console.error(error);
-        return(
-          new Promise((reject)=>{
-            reject(navigate("/error"));
-          })
         )
       })
     }
