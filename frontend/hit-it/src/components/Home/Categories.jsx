@@ -1,26 +1,34 @@
-import { ArrowLeftOutlined, ArrowRightOutlined} from "@material-ui/icons";
 import { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../../data";
 import { useNavigate } from 'react-router-dom';
 import Navigate from "../Global/Navigate";
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const Container=styled.div`
-    height:40vh;
-    display:flex;
-    position:relative;
-    overflow:hidden;
-    margin-left:285px;
-    margin-right:285px;
+    height:250px;
     margin-top:100px;
-    border-radius:25px;
-    max-width:1275px;
-    -drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+    margin-bottom:50px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    width:70%;
+    margin-left:15%;
+    margin-right:15%;
+    @media (max-width: 1000px) and (min-width:600px){
+        width:90%;
+        margin-left:5%;
+        margin-right:5%;
+    }
+    @media screen and (max-width: 601px){
+        width:100%;
+        margin-left:0;
+        margin-right:0;
+  }
+  overflow:hidden;
+
 `;
 
 const Arrow=styled.div`
@@ -32,31 +40,41 @@ const Arrow=styled.div`
     align-items:center;
     justify-content:center;
     position:absolute;
-    top:0;
     left:${props=>props.direction==="left" && "10px"};
     right:${props=>props.direction==="right" && "10px"};
-    bottom:0;
-    margin:auto;
+    margin-right:13%;
+    margin-left:13%;
     cursor:pointer;
-    opacity:0.5;
+    opacity:0.6;
     z-index:2;
     margin-top:110px;
+    @media only screen and (max-width: 1250px) {
+        display:none;
+    }
 `;
 
 const Wrapper=styled.div`
     display:flex;
     transition:all 1.5s ease;
-    transform:translateX(${props=>props.slide_index* -422}px);
+    transform:translateX(${props=>props.slide_index* -452}px);
+     @media only screen and (max-width: 1250px) {
+        overflow-y-hidden;
+        overflow-x:scroll;
+        transform:unset;
+        margin-left:5px;
+    }
 `;
 
 const Slide=styled.div`
-    width:200px;
-    height:25vh;
+    min-width:214px;
+    min-height:25vh;
     display:flex;
     align-items:center;
     border-radius:10px;
     background-color:${props=>props.bg};
-    margin:6px;
+    margin-right:12px;
+    margin-top:6px;
+    margin-bottom:6px;
 `;
 
 const Title=styled.h1`
@@ -114,7 +132,7 @@ const Categories = () => {
             if(slide_index===1 || slide_index===2){
                 return(
                 <Arrow direction="left" onClick={()=>handle_click("left")}>
-                    <ArrowLeftOutlined/>
+                    <KeyboardArrowLeftIcon fontSize="large"/>
                 </Arrow>
                 )
             }
@@ -145,11 +163,11 @@ const Categories = () => {
             
         </Wrapper>
         {(() => {
-            if(window.innerWidth<1800){
+            if(window.innerWidth<1800 && window.innerWidth>=1250){
                 if(slide_index===0 || slide_index===1){
                     return(
                     <Arrow direction="right" onClick={()=>handle_click("right")}>
-                        <ArrowRightOutlined/>
+                        <KeyboardArrowRightIcon fontSize="large"/>
                     </Arrow>
                     )
                 }
@@ -159,7 +177,7 @@ const Categories = () => {
                 if(slide_index===0){
                     return(
                     <Arrow direction="right" onClick={()=>handle_click("right")}>
-                        <ArrowRightOutlined/>
+                        <KeyboardArrowRightIcon fontSize="large"/>
                     </Arrow>
                     )
                 }
@@ -172,3 +190,4 @@ const Categories = () => {
 }
 
 export default Categories
+

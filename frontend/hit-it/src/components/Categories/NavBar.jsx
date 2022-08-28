@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import TokenService from '../../services/token_service';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth';
 
 const Container=styled.div`
     display:flex;
@@ -175,45 +176,36 @@ const UserInfo=styled.p`
 
 const NavBar = () => {
 
+    const axiosPrivate = useAxiosPrivate();
+    const {auth}=useAuth();
     let navigate=useNavigate();
 
     const [user_clicked,set_user_clicked]=useState(false);
 
     const logout=()=>{
-        TokenService.remove_user();
         navigate("/");
+        window.location.reload();
     }
 
     const profile=()=>{
-        console.log("USER: ",TokenService.get_user());
-        console.log("ACCESS TOKEN: ",TokenService.get_local_access_token());
-
-        fetch("http://localhost:8080/users",{
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${TokenService.get_local_access_token()}`,
-            },
-        })
-        .then(response=>response.json())
-        .then((data)=>{
-            console.log(data);
-        })
+        console.log(auth);
+        axiosPrivate.get("/users")
+        .then((res) => console.log(res.data))
         .catch((error)=>{
-            // If Access Token has expired, handle here
             console.error(error);
         })
     }
 
     const display=()=>{
-        try{
-            return(
+        return(
+            auth.username?
                 <AccountContainer>
                     <IconContainer>
                     <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                     </IconContainer>
                     {!user_clicked?
                         <UserName>
-                            {TokenService.get_user().username}
+                            {auth.username}
                         </UserName>:
                         <UserInfoContainer>
                             <UserInfo onClick={profile}>
@@ -223,21 +215,16 @@ const NavBar = () => {
                                 Αποσύνδεση
                             </UserInfo>
                         </UserInfoContainer>}
-                </AccountContainer>
-            )
-        }
-        catch(error){
-            return(
+                </AccountContainer>:
                 <ItemContainer>
-                    <Item onClick={()=>navigate("/register")}>
-                        Register
-                    </Item>
-                    <Item onClick={()=>navigate("/")}>
-                        Sign In
-                    </Item>
-                </ItemContainer>
-            )
-        }
+                <Item onClick={()=>navigate("/register")}>
+                    Register
+                </Item>
+                <Item onClick={()=>navigate("/")}>
+                    Sign In
+                </Item>
+            </ItemContainer>
+        )
     }
 
   return (

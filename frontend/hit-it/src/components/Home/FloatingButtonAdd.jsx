@@ -46,7 +46,8 @@ const Title = styled.h1`
 `;
 
 const Card = styled.div`
-  position: relative;
+  ${'' /* position: relative; */}
+  position:absolute;
   z-index: 2;
   background-color: white;
   border-radius: 4px;
