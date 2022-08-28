@@ -11,6 +11,7 @@ import AutoMoto from "./pages/Categories/AutoMoto";
 import Business from "./pages/Categories/Business";
 import Product from "./pages/Product";
 import Admin from "./pages/Admin";
+import ProductForm from "./pages/ProductForm";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 import RequireAuth from "./components/Global/RequireAuth.jsx";
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/register/Approval" element={<Approval/>}/>
         <Route path="/error" element={<Error/>}/>
         <Route path="/Map" element={<Map/>}/>
+        <Route path="product_form" element={<ProductForm/>}/>
       </Routes>
     </Router>
   );
