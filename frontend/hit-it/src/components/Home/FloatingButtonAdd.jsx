@@ -2,6 +2,7 @@ import {Fab} from "@mui/material";
 import {Add} from "@material-ui/icons";
 import styled from "styled-components";
 import React, {useState} from "react";
+import SellProduct from "../Global/SellProduct";
 
 const Container = styled.div`
   position: center;
@@ -86,6 +87,15 @@ const Button = styled.button`
 //   cursor: pointer;
 // `;
 
+const FormContainer=styled.div`
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0);
+  position:absolute;
+  width:100%;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  margin-top:-140px;
+`;
 
 
 function NewItem(props) {
@@ -132,7 +142,7 @@ function FloatingButtonAdd() {
             </Dee>
 
             {modalIsOpen && <Back onClick={backdropHandler}> <Backdrop/> </Back>}
-            {modalIsOpen && <Card> <NewItem onCal={backdropHandler}/></Card>}
+            {modalIsOpen && <FormContainer> <SellProduct onCal={backdropHandler}/></FormContainer>}
 
 
         </Container>
