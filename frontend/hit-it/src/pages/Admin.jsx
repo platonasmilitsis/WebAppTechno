@@ -37,12 +37,19 @@ const styles = {
         
     },
 
+    
+
     button:{
+        "&.MuiButton-outlined": {
+            backgroundColor: "#e67e22",
+            color:"white",
+            borderColor: "#e67e22"
+        },
+        
+        fontWeight:"bold",
         width:"30%",
         height:"40px",
-        marginLeft:"20px",
-        color:"white",
-
+        marginLeft:"20px"
     }
     
 
@@ -62,6 +69,7 @@ const Admin = () =>{
 
     const {auth} = useAuth();
 
+    const username = localStorage.getItem("username");
     const axiosPrivate = useAxiosPrivate();
 
 
@@ -120,7 +128,7 @@ const Admin = () =>{
 
     async function fetchmyUser() {
         setAdmin(false);
-        axios.get(`http://localhost:8080/users/username=${auth?.username}`)
+        axios.get(`http://localhost:8080/users/username=${username}`)
         .then((res) => {
             setUser(res.data);
         })
@@ -251,15 +259,20 @@ const Admin = () =>{
         return (
 
             <Container>
-                <AppBar>
+                <AppBar sx={{backgroundColor:"#e67e22"}}>
                     <Toolbar sx={{justifyContent:"flex-start"}}>
 
                         <Typography 
                             sx={styles.text}>
                             Welcome {myUser.first_name}
-                            </Typography>
+                        </Typography>
 
-                        <Button variant="outlined" sx={styles.button}
+
+                        <Button  variant="outlined" sx={styles.button}
+                        onClick = {refresh}
+                        >Refresh?</Button>
+
+                        <Button  variant="outlined" sx={styles.button}
                         onClick = {handleClickNonAccepted}
                         >Non-Accepted-Users</Button>
                     

@@ -4,6 +4,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import TokenService from '../../services/token_service';
 import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth';
 
 const Container=styled.div`
     height:60px;
@@ -108,6 +109,7 @@ const UserInfo=styled.p`
 
 const NavBar = () => {
 
+    const {setAuth} = useAuth();
     
     const axiosPrivate = useAxiosPrivate();
 
@@ -116,8 +118,10 @@ const NavBar = () => {
 
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const logout=()=>{
+    const logout=async()=>{
         TokenService.remove_user();
+        const res = await localStorage.clear();
+        setAuth({});
         navigate("/");
     }
 

@@ -132,8 +132,8 @@ const Login = () => {
 
   const {setAuth} = useAuth();
 
-  const tlocation = useLocation();
-  const from = tlocation?.state?.from?.pathname || "/";
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
 
   let navigate=useNavigate();
 
@@ -147,6 +147,8 @@ const Login = () => {
   }
 
   const login=()=>{
+
+    
     if(username && password){
 
       const credentials={
@@ -187,7 +189,21 @@ const Login = () => {
             const access_token = data.access_token;
             const refresh_token = data.refresh_token;
             const roles = data.roles;
+            const fun = async() => {
+              await localStorage.setItem("access_token",access_token);
 
+              
+              
+              await localStorage.setItem("username",username);
+              
+
+              await localStorage.setItem("roles",JSON.stringify(roles));
+              await localStorage.setItem("refresh_token",refresh_token);
+            }
+
+            fun();
+
+            
             setAuth({username,access_token,refresh_token,roles})
 
 

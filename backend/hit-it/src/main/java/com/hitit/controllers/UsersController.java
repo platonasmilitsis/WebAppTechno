@@ -12,7 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-
+import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -94,14 +98,38 @@ public class UsersController {
                         .withClaim("roles",authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                         .sign(algorithm);
 
-                Map<String, String> tokens = new HashMap<>();
 
-                tokens.put("username",username);
-                tokens.put("access_token",access_token);
-                tokens.put("refresh_token",refresh_token);
+
+
+                // Create the JsonGenerator to write to our OutputStream
+                JsonFactory factory = new JsonFactory();
+                JsonGenerator generator = factory.createGenerator(response.getOutputStream(), JsonEncoding.UTF8);
+
+                generator.writeStartObject();
+                generator.writeStringField("username", user.getUsername());
+                generator.writeStringField("access_token", access_token);
+                generator.writeStringField("refresh_token",refresh_token);        
+
+                generator.writeArrayFieldStart("roles");
+                
+
+                if(user.getAdmin())
+                    generator.writeString("ADMIN");
+
+                if(user.getAccepted())
+                    generator.writeString("ACCEPTED");
+                else
+                    generator.writeString("USER");
+
+                generator.flush();  // Flush buffered JSON to the output stream
+
+                generator.writeEndArray();
+                generator.writeEndObject();
+                generator.close();
+
+                
 
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(),tokens);
 
             }catch (Exception e) {
                 MyUtilityClass.forbiddenError(e, response);

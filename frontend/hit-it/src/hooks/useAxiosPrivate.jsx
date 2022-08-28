@@ -8,13 +8,17 @@ const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
     const {auth} = useAuth();
 
+
+    const access_token = localStorage.getItem("access_token");
+
+
     useEffect(() => {
 
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
             config => {
                 if(!config.headers['Authorization']){
-                    config.headers['Authorizaiton'] = `Bearer ${auth?.access_token}`
+                    config.headers['Authorizaiton'] = `Bearer ${access_token}`
                 }
                 return config;
             }, (error) => Promise.reject(error)  

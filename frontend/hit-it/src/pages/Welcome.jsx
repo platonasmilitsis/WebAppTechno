@@ -82,6 +82,7 @@ const Welcome = () => {
 
     let navigate=useNavigate();
 
+
   return (
     <Container>
         <HelmetProvider>
