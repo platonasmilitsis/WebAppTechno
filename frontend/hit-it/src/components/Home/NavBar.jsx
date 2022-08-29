@@ -113,9 +113,10 @@ const NavBar = () => {
 
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const logout=()=>{
+    const logout=async()=>{
+        await localStorage.clear();
         navigate("/");
-        window.location.reload();
+        // window.location.reload();
     }
 
     const profile=()=>{
