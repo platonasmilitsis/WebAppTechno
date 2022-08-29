@@ -14,7 +14,6 @@ import { useNavigate} from 'react-router-dom';
 // import TokenService from '../services/token_service';
 // import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import useRefreshToken from '../hooks/useRefreshToken';
-import useAuth from '../hooks/useAuth'; 
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 
@@ -67,7 +66,6 @@ const styles = {
 
 const Admin = () =>{
 
-    const {auth} = useAuth();
 
     const username = localStorage.getItem("username");
     const axiosPrivate = useAxiosPrivate();

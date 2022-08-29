@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import useAuth from '../../hooks/useAuth';
 
 const Container=styled.div`
     display:flex;
@@ -177,18 +176,16 @@ const UserInfo=styled.p`
 const NavBar = () => {
 
     const axiosPrivate = useAxiosPrivate();
-    const {auth}=useAuth();
     let navigate=useNavigate();
 
     const [user_clicked,set_user_clicked]=useState(false);
 
     const logout=()=>{
+        localStorage.clear();
         navigate("/");
-        window.location.reload();
     }
 
     const profile=()=>{
-        console.log(auth);
         axiosPrivate.get("/users")
         .then((res) => console.log(res.data))
         .catch((error)=>{
@@ -197,15 +194,16 @@ const NavBar = () => {
     }
 
     const display=()=>{
+        const username=localStorage.getItem("username");
         return(
-            auth.username?
+            username?
                 <AccountContainer>
                     <IconContainer>
                     <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                     </IconContainer>
                     {!user_clicked?
                         <UserName>
-                            {auth.username}
+                            {username}
                         </UserName>:
                         <UserInfoContainer>
                             <UserInfo onClick={profile}>

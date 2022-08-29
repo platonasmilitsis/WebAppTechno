@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import {useNavigate} from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
 
 const Container = styled.div`
     height:420px;
@@ -129,8 +128,6 @@ const ErrorMessage=styled.p`
 `;
 
 const Login = () => {
-
-  const {setAuth} = useAuth();
   let navigate=useNavigate();
 
   const [username,set_username]=useState(null);
@@ -166,15 +163,10 @@ const Login = () => {
         const roles = data.roles;
 
 
-        const fun = async() => {
-          await localStorage.setItem("username",username);
-          await localStorage.setItem("access_token",access_token);
-          await localStorage.setItem("refresh_token",refresh_token);
-          await localStorage.setItem("roles",JSON.stringify(roles));
-        }
-
-        fun();
-        setAuth({username,access_token,refresh_token,roles});
+        localStorage.setItem("username",username);
+        localStorage.setItem("access_token",access_token);
+        localStorage.setItem("refresh_token",refresh_token);
+        localStorage.setItem("roles",JSON.stringify(roles));
 
         return(
           roles.includes("ACCEPTED")?
