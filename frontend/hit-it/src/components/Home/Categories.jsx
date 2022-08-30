@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../../data";
 import { useNavigate } from 'react-router-dom';
@@ -116,25 +116,66 @@ const InfoContainer=styled.div`
 const Categories = () => {
 
     let navigate=useNavigate();
+    const [left_arrow,set_left_arrow]=useState(false);
+    const [right_arrow,set_right_arrow]=useState(true);
+
+    const findOverflows_prev = () => {
+        const documentWidth = document.documentElement.offsetWidth;
+    
+        document.querySelectorAll('*').forEach(element => {
+            const box = element.getBoundingClientRect();
+    
+            if (box.left < 0 || box.right > documentWidth) {
+                // console.log(element);
+                // element.style.border = '1px solid red';
+                if(parseInt(element.id)===slider_items[0].id){
+                    set_left_arrow(false);
+                }
+            }
+        });
+    };
+
+    const findOverflows_next = () => {
+        const documentWidth = document.documentElement.offsetWidth;
+    
+        document.querySelectorAll('*').forEach(element => {
+            const box = element.getBoundingClientRect();
+    
+            if (box.left < 0 || box.right > documentWidth) {
+                // console.log(element);
+                // element.style.border = '1px solid red';
+                if(parseInt(element.id)===slider_items[slider_items.length-1].id){
+                    set_right_arrow(false);
+                }
+            }
+        });
+    };
 
     const click_prev=()=>{
         document.getElementById('wrapper').scrollLeft=-456;
+        findOverflows_prev();
+        set_right_arrow(true);
     }
 
     const click_next=()=>{
         document.getElementById('wrapper').scrollLeft+=456;
+        findOverflows_next();
+        set_left_arrow(true);
     }
 
   return (
     <Container>
+        {
+        left_arrow &&
         <Arrow direction="left" onClick={click_prev}>
             <KeyboardArrowLeftIcon fontSize="large"/>
             </Arrow>
+        }
         <Wrapper id="wrapper">
         
             {slider_items.map((item)=>
                 {return(
-                    <Slide key={item.id} bg={item.bg}>
+                    <Slide id={item.id} key={item.id} bg={item.bg}>
                         <InfoContainer>
                             <Title onClick={()=>navigate(Navigate(item.title))}>
                                 {item.title}
@@ -154,9 +195,12 @@ const Categories = () => {
             )}
             
         </Wrapper>
+        {
+            right_arrow &&
         <Arrow direction="right" onClick={click_next}>
             <KeyboardArrowRightIcon fontSize="large"/>
             </Arrow>
+        }
     </Container>
   )
 }
