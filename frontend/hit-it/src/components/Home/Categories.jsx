@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import styled from "styled-components"
 import { slider_items } from "../../data";
 import { useNavigate } from 'react-router-dom';
@@ -55,26 +55,28 @@ const Arrow=styled.div`
 
 const Wrapper=styled.div`
     display:flex;
-    transition:all 1.5s ease;
-    transform:translateX(${props=>props.slide_index* -452}px);
-     @media only screen and (max-width: 1250px) {
-        overflow-y-hidden;
-        overflow-x:scroll;
-        transform:unset;
-        margin-left:5px;
+    overflow-y:hidden;
+    overflow-x:scroll;
+    scroll-behavior:smooth;
+
+    @media only screen and (min-width: 1250px) {
+        -webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;  
     }
+   
 `;
 
 const Slide=styled.div`
-    min-width:214px;
+    min-width:213px;
     min-height:25vh;
     display:flex;
     align-items:center;
     border-radius:10px;
     background-color:${props=>props.bg};
-    margin-right:12px;
-    margin-top:6px;
-    margin-bottom:6px;
+    margin:6px;
 `;
 
 const Title=styled.h1`
@@ -115,30 +117,20 @@ const Categories = () => {
 
     let navigate=useNavigate();
 
-    const [slide_index,set_slide_index]=useState(0);
+    const click_prev=()=>{
+        document.getElementById('wrapper').scrollLeft=-456;
+    }
 
-    const handle_click=(direction)=>{
-        if(direction==="left"){
-            set_slide_index(slide_index-1) 
-        }
-        else{
-            set_slide_index(slide_index+1) 
-        }
+    const click_next=()=>{
+        document.getElementById('wrapper').scrollLeft+=456;
     }
 
   return (
     <Container>
-        {(() => {
-            if(slide_index===1 || slide_index===2){
-                return(
-                <Arrow direction="left" onClick={()=>handle_click("left")}>
-                    <KeyboardArrowLeftIcon fontSize="large"/>
-                </Arrow>
-                )
-            }
-            return null;
-        })()}
-        <Wrapper slide_index={slide_index}>
+        <Arrow direction="left" onClick={click_prev}>
+            <KeyboardArrowLeftIcon fontSize="large"/>
+            </Arrow>
+        <Wrapper id="wrapper">
         
             {slider_items.map((item)=>
                 {return(
@@ -162,29 +154,9 @@ const Categories = () => {
             )}
             
         </Wrapper>
-        {(() => {
-            if(window.innerWidth<1800 && window.innerWidth>=1250){
-                if(slide_index===0 || slide_index===1){
-                    return(
-                    <Arrow direction="right" onClick={()=>handle_click("right")}>
-                        <KeyboardArrowRightIcon fontSize="large"/>
-                    </Arrow>
-                    )
-                }
-                return null;
-            }
-            else{
-                if(slide_index===0){
-                    return(
-                    <Arrow direction="right" onClick={()=>handle_click("right")}>
-                        <KeyboardArrowRightIcon fontSize="large"/>
-                    </Arrow>
-                    )
-                }
-                return null;
-            }
-            
-        })()}
+        <Arrow direction="right" onClick={click_next}>
+            <KeyboardArrowRightIcon fontSize="large"/>
+            </Arrow>
     </Container>
   )
 }
