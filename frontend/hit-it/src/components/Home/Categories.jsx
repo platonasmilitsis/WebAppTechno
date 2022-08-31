@@ -116,63 +116,70 @@ const InfoContainer=styled.div`
 const Categories = () => {
 
     let navigate=useNavigate();
-    const [left_arrow,set_left_arrow]=useState(false);
-    const [right_arrow,set_right_arrow]=useState(true);
+    const [next_arrow,set_next_arrow]=useState(true);
+    const [slide_index,set_slide_index]=useState(0)
 
-    const findOverflows_prev = () => {
+    const find_overflows=()=> {
         const documentWidth = document.documentElement.offsetWidth;
-    
+        var slides=[]
         document.querySelectorAll('*').forEach(element => {
             const box = element.getBoundingClientRect();
     
             if (box.left < 0 || box.right > documentWidth) {
-                // console.log(element);
-                // element.style.border = '1px solid red';
-                if(parseInt(element.id)===slider_items[0].id){
-                    set_left_arrow(false);
+                if(element.id!==""){
+                    slides.push(element);
                 }
             }
-        });
-    };
+        })
+        if(slides.length===1){
+            if(parseInt(slides[0].id)===slider_items[0].id){
+                set_next_arrow(false);
+            }
+            else if(parseInt(slides[0].id)===slider_items[slider_items.length-1].id){
+                if(window.innerWidth===1920){
+                    set_next_arrow(false);
+                }
+                else{
+                    set_next_arrow(true);
+                }
+            }
+            else{
+                set_next_arrow(true);
+            }
+        }
+        else{
+            const first_overflown=slides.find((element=>{
+                return parseInt(element.id)===slider_items[0].id;
+            }))
+            const last_overflown=slides.find((element=>{
+                return parseInt(element.id)===slider_items[slider_items.length-1].id;
+            }))
+            first_overflown && last_overflown?set_next_arrow(false):set_next_arrow(true);
+        }
+    }
 
-    const findOverflows_next = () => {
-        const documentWidth = document.documentElement.offsetWidth;
-    
-        document.querySelectorAll('*').forEach(element => {
-            const box = element.getBoundingClientRect();
-    
-            if (box.left < 0 || box.right > documentWidth) {
-                // console.log(element);
-                // element.style.border = '1px solid red';
-                if(parseInt(element.id)===slider_items[slider_items.length-1].id){
-                    set_right_arrow(false);
-                }
-            }
-        });
-    };
 
     const click_prev=()=>{
-        document.getElementById('wrapper').scrollLeft=-456;
-        findOverflows_prev();
-        set_right_arrow(true);
+        document.getElementById('wrapper').scrollLeft-=456;
+        set_next_arrow(true);
+        set_slide_index(slide_index-1);
     }
 
     const click_next=()=>{
         document.getElementById('wrapper').scrollLeft+=456;
-        findOverflows_next();
-        set_left_arrow(true);
+        find_overflows();
+        set_slide_index(slide_index+1);
     }
 
   return (
     <Container>
         {
-        left_arrow &&
-        <Arrow direction="left" onClick={click_prev}>
-            <KeyboardArrowLeftIcon fontSize="large"/>
-            </Arrow>
+        slide_index!==0 &&
+            <Arrow direction="left" onClick={click_prev}>
+                <KeyboardArrowLeftIcon fontSize="large"/>
+                </Arrow>
         }
         <Wrapper id="wrapper">
-        
             {slider_items.map((item)=>
                 {return(
                     <Slide id={item.id} key={item.id} bg={item.bg}>
@@ -196,9 +203,9 @@ const Categories = () => {
             
         </Wrapper>
         {
-            right_arrow &&
-        <Arrow direction="right" onClick={click_next}>
-            <KeyboardArrowRightIcon fontSize="large"/>
+            next_arrow &&
+            <Arrow direction="right" onClick={click_next}>
+                <KeyboardArrowRightIcon fontSize="large"/>
             </Arrow>
         }
     </Container>
