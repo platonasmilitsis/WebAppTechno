@@ -7,16 +7,17 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const Container=styled.div`
-    height:250px;
     margin-top:100px;
     margin-bottom:50px;
     border-radius:10px;
     display:flex;
     flex-direction:row;
-    justify-content:space-between;
-    width:70%;
-    margin-left:15%;
-    margin-right:15%;
+    justify-content:center;
+    @media (max-width: 1800px) and (min-width:1001px){
+        width:70%;
+        margin-left:15%;
+        margin-right:15%;
+    }
     @media (max-width: 1000px) and (min-width:600px){
         width:90%;
         margin-left:5%;
@@ -66,17 +67,18 @@ const Wrapper=styled.div`
         -ms-overflow-style: none;
         scrollbar-width: none;  
     }
+    width:1360px;
    
 `;
 
 const Slide=styled.div`
-    min-width:213px;
-    min-height:25vh;
+    min-width:210px;
+    min-height:233px;
     display:flex;
     align-items:center;
     border-radius:10px;
     background-color:${props=>props.bg};
-    margin:6px;
+    margin:8px;
 `;
 
 const Title=styled.h1`
@@ -136,12 +138,7 @@ const Categories = () => {
                 set_next_arrow(false);
             }
             else if(parseInt(slides[0].id)===slider_items[slider_items.length-1].id){
-                if(window.innerWidth===1920){
-                    set_next_arrow(false);
-                }
-                else{
-                    set_next_arrow(true);
-                }
+                set_next_arrow(false);
             }
             else{
                 set_next_arrow(true);
@@ -213,4 +210,3 @@ const Categories = () => {
 }
 
 export default Categories
-
