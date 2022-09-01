@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useMemo} from 'react'
 import NavBar from '../components/Home/NavBar'
 import Categories from '../components/Home/Categories'
 import styled from 'styled-components'
@@ -14,8 +14,12 @@ const Container=styled.div`
   width:100%;
 `;
 
-
 const Home = () => {
+  const user=localStorage.getItem('username');
+  const [seller,set_seller]=useState(null);
+  useMemo(()=>{
+    set_seller(user);
+  },[user])
   return (
 
     <Container>
@@ -30,7 +34,7 @@ const Home = () => {
       <NavBar/>
       <Main/>
       <Announcement/>
-      <FloatingButtonAdd/>
+      {seller && <FloatingButtonAdd/>}
       <Categories/>
       <Footer/>
     </Container>
