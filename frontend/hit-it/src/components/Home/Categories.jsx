@@ -48,6 +48,7 @@ const Arrow=styled.div`
     cursor:pointer;
     opacity:0.6;
     z-index:2;
+    transform:scale(0.9);
     margin-top:110px;
     @media only screen and (max-width: 1250px) {
         display:none;
@@ -74,8 +75,12 @@ const Wrapper=styled.div`
 const Slide=styled.div`
     min-width:210px;
     min-height:233px;
-    display:flex;
+    display:inline-block;
     align-items:center;
+    ${'' /* font-size:14px;
+    line-height: 18px; */}
+    box-sizing:border-box;
+    position:relative;
     border-radius:10px;
     background-color:${props=>props.bg};
     margin:8px;
@@ -87,7 +92,9 @@ const Title=styled.h1`
     font-family: 'Arial', sans-serif;
     color:white;
     cursor:pointer;
+    ${'' /* position:absolute; */}
     margin-bottom:20px;
+    margin-top:30px;
     &:hover{
         text-decoration:underline;
     }
@@ -99,6 +106,7 @@ const Description=styled.p`
     margin-bottom:10px;
     margin-left:20px;
     margin-right:20px;
+    ${'' /* position:absolute; */}
     color:white;
     cursor:pointer;
     width: 160px;
@@ -113,6 +121,28 @@ const Description=styled.p`
 
 const InfoContainer=styled.div`
     flex:1;
+`;
+
+const ImageContainer=styled.div`
+    display:flex;
+    justify-content:center;
+    bottom:0px;
+    position:absolute;
+    margin-left:20px;
+    &:hover{
+        overflow:hidden;
+    }
+`;
+
+const Image=styled.img`
+    &:hover{
+        -webkit-transition: .3s ease-in-out;
+	    transition: .3s ease-in-out;
+        -webkit-transform: scale(1.1);
+	    transform: scale(1.1);
+    }
+    object-fit:cover;
+    cursor:pointer;
 `;
 
 const Categories = () => {
@@ -194,6 +224,9 @@ const Categories = () => {
                                 {item.desc3}
                             </Description>
                         </InfoContainer>
+                        <ImageContainer>
+                            <Image src={require("../../assets/"+item.img)} onClick={()=>navigate(Navigate(item.title))}/>
+                        </ImageContainer>
                     </Slide>
                 )}
             )}
