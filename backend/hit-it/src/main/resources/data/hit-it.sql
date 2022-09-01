@@ -42,7 +42,7 @@ INSERT INTO users
 values
     (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1),
     (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1),
-    (3,'Dberos97','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitrios','Beros','2106262613','dberos97@gmail.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1),
+    (3,'dberos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitris','Beros','2106262613','dberos@hit-it.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1),
     (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1),
     (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1),
     (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1),
@@ -119,12 +119,13 @@ ENGINE = InnoDB;
 Insert Into category
 values
     (1,'Τεχνολογία'),
-    (2,'Υπολογιστές'),
-    (3,'Σπίτι'),
-    (4,'Κήπος'),
-    (5,'Φαγητό'),
-    (6,'Ποτά'),
-    (7,'Πατσάς');
+    (2,'Σπίτι - Κήπος'),
+    (3,'Μόδα'),
+    (4,'Hobby - Αθλητισμός'),
+    (5,'Υγεία - Ομορφιά'),
+    (6,'Παιδικά - Βρεφικά'),
+    (7,'Auto - Moto'),
+    (8,'Επαγγελματικά - B2B');
 
 
 -- -----------------------------------------------------
