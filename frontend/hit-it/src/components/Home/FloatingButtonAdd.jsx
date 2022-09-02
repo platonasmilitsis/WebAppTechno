@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { axiosPrivate } from "../../api/axios";
+import { slider_items } from "../../data";
 
 
 const Container = styled.div`
@@ -290,7 +290,7 @@ const FloatingButtonAdd=()=>{
         if(!description){
           errors.description="Η περιγραφή του προϊόντος είναι υποχρεωτική";
         }
-        if(!category){
+        if(category.length===0){
           errors.category="Η κατηγορία του προϊόντος είναι υποχρεωτική";
         }
         if(!first_bid){
@@ -322,7 +322,6 @@ const FloatingButtonAdd=()=>{
 
     const check_name=(str)=>{
         set_name(str);
-        console.log(str);
         if(str.length===0){
           notifications.name=false;
           errors.name="Το όνομα του προϊόντος είναι υποχρεωτικό";
@@ -358,13 +357,13 @@ const FloatingButtonAdd=()=>{
     };
 
     const check_first_bid=(str)=>{
-        set_first_bid(parseInt(str));
+        set_first_bid(str);
         if(str.length===0){
             notifications.first=false;
             errors.first_bid="Η τιμή έναρξης της δημοπρασίας είναι υποχρεωτική";
         }
         else{
-            if(!isNaN(first_bid)){
+            if(!isNaN(str)){
                 errors.first_bid=null;
                 notifications.first_bid=true;
             }
@@ -376,13 +375,13 @@ const FloatingButtonAdd=()=>{
     }
 
     const check_buy_price=(str)=>{
-        set_buy_price(parseInt(str));
+        set_buy_price(str);
         if(str.length===0){
             notifications.buy_price=false;
             errors.buy_price="Η τιμή λήξης της δημοπρασίας είναι υποχρεωτική";
         }
         else{
-            if(!isNaN(buy_price)){
+            if(!isNaN(str)){
                 errors.buy_price=null;
                 notifications.buy_price=true;
             }
@@ -459,38 +458,57 @@ const FloatingButtonAdd=()=>{
     const submit=(e)=>{
         e.preventDefault();
         set_errors(validate());
-        let user_id=null;
-        const credentials ={
-                  name:name,
-                  description:description,
-                  first_bid:first_bid,
-                  buy_price:buy_price,
-                  location:location,
-                  country:country,
-                  latitude:latitude,
-                  longitude:longitude,
-                  img_path:image_link
-                  };
-    
-        fetch(`http://localhost:8080/users/username=${localStorage.getItem('username')}`)
-        .then((response)=>response.json())
-        .then((data)=>{
-            user_id=data.id;
-            const headers={
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer' + localStorage.getItem('username').access_token
-            }
-            axiosPrivate.post(`/users/${user_id}/items`,{credentials},{headers})
-            .then((response)=>{
-                console.log(response);
-            })
-            .catch((error)=>{
-                console.error(error);
-            })
-        })
-        .catch((error)=>{
-            console.error(error);
-        })
+        if(name && description && category.length!==0
+            && first_bid && buy_price && location && country){
+                let user_id=null;
+                const product ={
+                        name:name,
+                        description:description,
+                        first_bid:first_bid,
+                        buy_price:buy_price,
+                        location:location,
+                        country:country,
+                        latitude:latitude,
+                        longitude:longitude,
+                        img_path:image_link
+                        };
+                fetch(`http://localhost:8080/users/username=${localStorage.getItem('username')}`)
+                .then((response)=>response.json())
+                .then((data)=>{
+                    user_id=data.id;
+                    const headers={
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                    axiosPrivate.post(`/users/${user_id}/items`,product,{headers})
+                    .then((response)=>{
+                        console.log(response);
+                        console.log(response.data);
+                        const item_id=response.data.id;
+                        var category_ids=[];
+                        category.forEach((element)=>{
+                            const categ=slider_items.find(slider_items=>slider_items.title===element);
+                            category_ids.push(categ?.id);
+                        })
+                        axiosPrivate.post(`/items/${item_id}?category_id=${category_ids}`,{headers})
+                        .then((response)=>{
+                            console.log(response);
+                            console.log(response.data);
+                            set_success(true);
+                        })
+                        .catch((error)=>{
+                            console.error(error);
+                        })
+                        
+                    })
+                    .catch((error)=>{
+                        console.error(error);
+                    })
+                })
+                .catch((error)=>{
+                    console.error(error);
+                })
+        }
     }
 
     return (
