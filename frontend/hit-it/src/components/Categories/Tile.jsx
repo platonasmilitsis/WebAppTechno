@@ -3,39 +3,49 @@ import styled from 'styled-components'
 
 const Container=styled.div`
     background-color:white;
-    height:300px;
-    width:200px;
+    height:500px;
+    width:300px;
     border-radius:10px;
-    margin-left:20px;
-    margin-top:20px;
+    display:flex;
+    margin-right:4%;
+    margin-top:2%;
+    justify-content:center;
+    flex-direction:column;
+    overflow-anchor: none;
 `;
 
 
 const ImageContainer=styled.div`
     flex:1;
-    height:200px;
-    width:200px;
+    height:140px;
+    width:100%;
     border-radius:10px;
     margin-top:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 `;
 
 const Image=styled.img`
     object-fit:cover;
-    height:200px;
-    width:200px;
+    width:300px;
 `;
 
 
 const Title=styled.h1`
-    font-size:15px;
+    font-size:18px;
     margin-left:20px;
+    margin-top:20px;
+    width:90%;
     font-family: 'Arial', sans-serif;
     color:black;
     cursor:pointer;
-    margin-bottom:20px;
+    margin-bottom:30px;
+    overflow-y:scroll;
     &:hover{
         text-decoration:underline;
     }
+    height:60px;
 `;
 
 const Description=styled.p`
@@ -43,23 +53,20 @@ const Description=styled.p`
     font-size:15px;
     margin-bottom:10px;
     margin-left:20px;
-    margin-right:20px;
+    width:90%;
     color:black;
     cursor:pointer;
-    width: 160px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    opacity:0.6;
+    overflow-y:scroll;
     &:hover{
         text-decoration:underline;
-        white-space:normal;
     }
+    height:90px;
 `;
 
-const Tile = (image,title,description) => {
+const Tile = (id,image,title,description) => {
   return (
-    <Container key={image}>
-    {/* Unique key warning will be fixed when different assets will be added*/}
+    <Container key={title+"?"+id}>
         <ImageContainer>
             <Image src={require("../../assets/"+image)}/>
         </ImageContainer>

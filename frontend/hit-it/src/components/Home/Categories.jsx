@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components"
 import { slider_items } from "../../data";
 import { useNavigate } from 'react-router-dom';
-import Navigate from "../Global/Navigate";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
@@ -211,7 +210,7 @@ const Categories = () => {
                 {return(
                     <Slide id={item.id} key={item.id} bg={item.bg}>
                         <InfoContainer>
-                            <Title onClick={()=>navigate(Navigate(item.title))}>
+                            <Title onClick={()=>navigate(`/home/category_id=${item.id}`)}>
                                 {item.title}
                             </Title>
                             <Description>
@@ -225,7 +224,7 @@ const Categories = () => {
                             </Description>
                         </InfoContainer>
                         <ImageContainer>
-                            <Image src={require("../../assets/"+item.img)} onClick={()=>navigate(Navigate(item.title))}/>
+                            <Image src={require("../../assets/"+item.img)} onClick={()=>navigate(`/home/category_id=${item.id}`)}/>
                         </ImageContainer>
                     </Slide>
                 )}
