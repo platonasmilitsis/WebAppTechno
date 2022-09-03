@@ -10,6 +10,7 @@ import Approval from "./pages/Approval";
 import Map from "./pages/Map";
 import Error from "./pages/Error";
 import Category from "./pages/Category";
+import { Navigate } from "react-router-dom";
 
 const App = () => {
 
@@ -32,10 +33,11 @@ const App = () => {
             <Route path="/admin" element={<Admin/>}/>
           </Route>
 
-        <Route path="/home/category_id=:id" element={<Category/>}/>
-        <Route path="/home/products/product_id=:id" element={<Product/>}/>
+        <Route path="/home/categories/:id/:name" element={<Category/>}/>
+        <Route path="/home/categories/:id/:name/:product_id" element={<Product/>}/>
         <Route path="/register/Approval" element={<Approval/>}/>
         <Route path="/Map" element={<Map/>}/>
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
 
     </Router>

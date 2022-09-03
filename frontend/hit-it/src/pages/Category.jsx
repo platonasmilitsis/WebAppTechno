@@ -1,16 +1,12 @@
 import React,{useEffect, useState, useMemo} from 'react'
 import styled from "styled-components"
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-// import NavBar from '../../components/Categories/NavBar';
-// import Breadcrumb from '../../components/Global/Breadcrumb';
-// import CategoryName from '../../components/Categories/CategoryName';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
 import CategoryName from '../components/Categories/CategoryName';
-// import Grid from '../../components/Categories/Grid';
-// import Footer from '../../components/Global/Footer';
 import Footer from '../components/Global/Footer';
 import { useNavigate, useParams } from 'react-router-dom';
+import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -72,6 +68,7 @@ const ImageContainer=styled.div`
 const Image=styled.img`
     object-fit:cover;
     width:300px;
+    cursor:pointer;
 `;
 
 
@@ -98,12 +95,8 @@ const Description=styled.p`
     margin-left:20px;
     width:90%;
     color:black;
-    cursor:pointer;
     opacity:0.6;
     overflow-y:scroll;
-    &:hover{
-        text-decoration:underline;
-    }
     height:90px;
 `;
 
@@ -112,43 +105,14 @@ const Category = () => {
   let navigate=useNavigate();
   const params=useParams();
 
-  const page_names=["Καλωσοριστική","Αρχική"];
-  const page_links=["/","/home"];
+  const page_names=["Αρχική"];
+  const page_links=["/home"];
 
   const [products,set_products]=useState([]);
-  const [page_name,set_page_name]=useState(null);
 
-  const find_page_name=()=>{
-    switch(parseInt(params.id)){
-      case 1:
-        set_page_name("Τεχνολογία");
-        break;
-      case 2:
-        set_page_name("Σπίτι - Κήπος");
-        break;
-      case 3:
-        set_page_name("Μόδα");
-        break;
-      case 4:
-        set_page_name("Hobby - Αθλητισμός");
-        break;
-      case 5:
-        set_page_name("Υγεία - Ομορφιά");
-        break;
-      case 6:
-        set_page_name("Παιδικά - Βρεφικά");
-        break;
-      case 7:
-        set_page_name("Auto - Moto");
-        break;
-      case 8:
-        set_page_name("Επαγγελματικά - B2B");
-        break;
-      default:
-        set_page_name("error")
-    }
-  }
-  useMemo(()=>find_page_name(),[page_name]);
+  const [user,set_user]=useState(null);
+  const floating_button=()=>{set_user(localStorage.getItem('username'));}
+  useMemo(()=>floating_button(),[]);
 
   useEffect(() => {
     fetch(`http://localhost:8080/categories/${params.id}/items`)
@@ -164,7 +128,7 @@ const Category = () => {
         console.error(error);
         navigate("/error");
       })
-  },[])
+  },[navigate,params.id])
 
   return (
     <Container>
@@ -172,7 +136,7 @@ const Category = () => {
         <Helmet>
           <meta charSet="utf-8" />
           <title>
-              {page_name}
+              {params.name}
           </title>
         </Helmet>
       </HelmetProvider>
@@ -181,16 +145,16 @@ const Category = () => {
           {Breadcrumb(page_names,page_links)}
       </BreadcrumbContainer>
       <CategoryNameContainer>
-          {CategoryName(page_name)}
+          {CategoryName(params.name)}
       </CategoryNameContainer>
       <GridContainer>
           {products.map((product)=>{
               return(
                   <ProductContainer key={product.name+"?"+product.id}>
                       <ImageContainer>
-                          <Image src={require("../assets/logoreact.png")}/>
+                          <Image src={require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}/>
                       </ImageContainer>
-                      <Title>
+                      <Title onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}>
                           {product.name}
                       </Title>
                       <Description>
@@ -200,6 +164,7 @@ const Category = () => {
               )
           })}
       </GridContainer>
+      {user && <FloatingButtonAdd/>}
       <Footer/>
     </Container>
   )

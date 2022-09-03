@@ -210,7 +210,7 @@ const Categories = () => {
                 {return(
                     <Slide id={item.id} key={item.id} bg={item.bg}>
                         <InfoContainer>
-                            <Title onClick={()=>navigate(`/home/category_id=${item.id}`)}>
+                            <Title onClick={()=>navigate(`/home/categories/${item.id}/${item.title}`)}>
                                 {item.title}
                             </Title>
                             <Description>
@@ -224,7 +224,7 @@ const Categories = () => {
                             </Description>
                         </InfoContainer>
                         <ImageContainer>
-                            <Image src={require("../../assets/"+item.img)} onClick={()=>navigate(`/home/category_id=${item.id}`)}/>
+                            <Image src={require("../../assets/"+item.img)} onClick={()=>navigate(`/home/categories/${item.id}/${item.title}`)}/>
                         </ImageContainer>
                     </Slide>
                 )}

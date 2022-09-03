@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useMemo} from 'react'
 import styled from 'styled-components'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
@@ -7,7 +7,7 @@ import Main from '../components/Products/Main';
 import Footer from '../components/Global/Footer';
 import { useParams } from "react-router-dom";
 import Map from '../pages/Map';
-
+import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 
 const Container=styled.div`
     background-color:#eaeded; 
@@ -52,11 +52,13 @@ const FootCont=styled.div`
 
 const Product = () => {
 
-    const page_names=["Καλωσοριστική","Αρχική"];
-    const page_links=["/","/home"];
-
-
     const params = useParams();
+    const page_names=["Αρχική",`${params.name}`];
+    const page_links=["/home",`/home/categories/${params.id}/${params.name}`];
+
+    const [user,set_user]=useState(null);
+    const floating_button=()=>{set_user(localStorage.getItem('username'));}
+    useMemo(()=>floating_button(),[]);
 
     return (
         <Container>
@@ -64,13 +66,13 @@ const Product = () => {
                 <Helmet>
                     <meta charSet="utf-8" />
                     <title>
-                        Προϊόντα
+                        {`Προϊόν ${params.product_id}`}
                     </title>
                 </Helmet>
             </HelmetProvider>
             <NavBar/>
             {Breadcrumb(page_names,page_links)}
-            {Main(params.id)}
+            {Main(params.product_id)}
             <MapInfoContainer>
                 <MapContainer>
                     <Map/>
@@ -89,6 +91,7 @@ const Product = () => {
                     </Info>
                 </InfoContainer>
             </MapInfoContainer>
+            {user && <FloatingButtonAdd/>}
             <FootCont>
                 <Footer/>
             </FootCont>

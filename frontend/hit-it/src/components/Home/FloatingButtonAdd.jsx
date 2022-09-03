@@ -64,7 +64,7 @@ const SellContainer=styled.div`
     z-index:2;
     display:flex;
     justify-content:center;
-    margin-top:-80px;
+    top:0;
 `;
 
 const OutsideContainer=styled.div`
