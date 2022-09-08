@@ -30,6 +30,7 @@ public class Item {
     private String img_path;
     private String description;
 
+    private Long item_start_biding_sold;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "users_id", nullable = false)

@@ -39,20 +39,15 @@ public class BidService {
     }
 
     public Bid addBid(Long id, Long bids_id, Bid newBid) {
-        Optional<Bid> bid = bidRepository.findByBidsAndBidderId(id,bids_id);
-        if(bid.isPresent()){
-            this.checkSet(bid.get(),newBid);
-            return bidRepository.save(bid.get());
-        }
-        else{
-            newBid.setBids_id(bids_id);
-            Optional<Bidder> bidder = bidderRepository.findById(id) ;
-            if(bidder.isPresent())
-                newBid.setBidder(bidder.get());
-            else throw new UserNotFoundException();
+        
+        newBid.setBids_id(bids_id);
+        Optional<Bidder> bidder = bidderRepository.findById(id) ;
+        if(bidder.isPresent())
+            newBid.setBidder(bidder.get());
+        else throw new UserNotFoundException();
 
-            return bidRepository.save(newBid);
-        }
+        return bidRepository.save(newBid);
+    
     }
 
     private void checkSet(Bid bid, Bid newBid) {

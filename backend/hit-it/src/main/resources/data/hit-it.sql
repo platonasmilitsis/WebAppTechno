@@ -67,8 +67,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `latitude` VARCHAR(45),
   `longitude` VARCHAR(45),
   `users_id` INT NOT NULL,
-  `img_path` VARCHAR(45),
+  `img_path` TEXT,
   `description` TEXT,
+  `item_start_biding_sold` TINYINT,
   PRIMARY KEY (`id`),
   INDEX `fk_item_users1_idx` (`users_id` ASC) VISIBLE,
   CONSTRAINT `fk_item_users1`
@@ -80,29 +81,36 @@ ENGINE = InnoDB;
 
 INSERT INTO item
 values
-    (1,'Xiaomi Redmi 10C NFC Dual SIM (4GB/64GB) Ocean Blue',400,4000,'Σοφοκλή Βενιζέλου 58, Περιστέρι','Ελλάδα','38.00566401446545', '23.693986330688112','2','../img/img_1.jpg','
-    Βασικά χαρακτηριστικά:
+    (1,'Xiaomi Redmi 10C NFC Dual SIM (4GB/64GB) Ocean Blue',400,4000,'Σοφοκλή Βενιζέλου 58, Περιστέρι','Ελλάδα','38.00452848307119', '23.694068664418385','2','https://b.scdn.gr/images/sku_main_images/035519/35519747/xlarge_20220419111329_xiaomi_redmi_10c_4gb_64gb_ocean_blue.jpeg','
+    <h2> Βασικά χαρακτηριστικά: </h2>
+    <ul>
+        <li> Μεγάλη Οθόνη 6.71" </li>
+        <li>Snapdragon 680</li>
+        <li>Διπλή πίσω κάμερα 50MP</li>
+        <li>Μπαταρία 5000mAh</li>
+        <li>Γρήγορη φόρτιση 18W</li> 
+        <li>Θύρα 3.5mm για ακουστικά</li>
+        <li>FM ραδιόφωνο</li>
+        <li>Προστασία οθόνης με Corning Gorilla Glass</li>
+    </ul>
+',0),
 
-        Μεγάλη Οθόνη 6.71"
-        Snapdragon 680
-        Διπλή πίσω κάμερα 50MP
-        Μπαταρία 5000mAh
+    (2,'Casio Ψηφιακό Ρολόι Χρονογράφος με Καουτσούκ Λουράκι σε Μαύρο χρώμα',400,4000,'Ομονοίας 19, Αθήνα','Ελλάδα','37.983764319462495', '23.727843673016075','2','https://b.scdn.gr/images/sku_main_images/004548/4548700/fixedratio_20220802184810_casio_psifiako_roloi_chronografos_mpatarias_me_kaoutsouk_louraki_se_mayro_chroma_ae_1300wh_1avef_ae_1300wh_1av.jpeg','
+    
 
-    Γρήγορη φόρτιση 18W. Θύρα 3.5mm για ακουστικά. FM ραδιόφωνο. Προστασία οθόνης με Corning Gorilla Glass.
-'),
+    <p>Μηχανισμός: Μπαταρίας, Μέγεθος: 42 mm, Αδιάβροχο: 20 Atm</p> <br/>
 
-    (2,'Casio Ψηφιακό Ρολόι Χρονογράφος με Καουτσούκ Λουράκι σε Μαύρο χρώμα',400,4000,'Ομονοίας 19, Αθήνα','Ελλάδα','37.983764319462495', '23.727843673016075','2','../img/img_2.jpeg','Μηχανισμός: Μπαταρίας, Μέγεθος: 42 mm, Αδιάβροχο: 20 Atm
+    <p>Ρολόι της G-SHOCK με αντοχή και στιλ, από ορυκτό γυαλί, ανθεκτικό στις γρατζουνιές, και κάσα από καουτσούκ.</p>
 
-    Ρολόι της G-SHOCK με αντοχή και στιλ, από ορυκτό γυαλί, ανθεκτικό στις γρατζουνιές, και κάσα από καουτσούκ.
-
-    Οι χρήστες που το έχουν αγοράσει το ξεχωρίζουν κυρίως γιατί δείχνει την ώρα με ακρίβεια και είναι ανθεκτικό στις πτώσεις και στις γρατσουνιές.
-'),
+    <br/>
+    <p>Οι χρήστες που το έχουν αγοράσει το ξεχωρίζουν κυρίως γιατί δείχνει την ώρα με ακρίβεια και είναι ανθεκτικό στις πτώσεις και στις γρατσουνιές.</p>
+',0),
 
 
-    (3,'The Eye of the World, The Wheel of Time',400,4000,'Χορμοβίτου 242, Πειραιάς','Ελλάδα','37.958290164807146', '23.630909942697556','2','../img/img_3.jpg','Prepare to turn the Wheel of Time - discover the first novel in one of the most influential and popular fantasy epics ever published.'),
-    (4,'ΚΑΠΝΟΣ 30γρ KARELIAS ΠΟΡΤΟΚΑΛΙ',400,4000,'Μεταμορφώσεως 51, Χαλάνδρι','Ελλάδα','38.025647767028914', '23.82374272735476','2','../img/img_4.jpg','Βλάπτει σοβαρά την υγεία. Το δίνω γιατί θέλω να ανγκάσω την μάνα μου να το κόψει!'),
-    (5,'Πατσάς Καπέκα',400,4000,'Βάλβη 27, Καρδίτσα','Ελλάδ',null,null,'3',null,'Ο καλύτερος πατσάς της χώρας. Ο Πλάτωνας είχε δίκιο! Για αυτό μάζεψα λίγο ταψάκι να το μοιράσω στο λαό. Μην τον χάσετε!!'),
-    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6');
+    (3,'The Eye of the World, The Wheel of Time',400,4000,'Χορμοβίτου 242, Πειραιάς','Ελλάδα','37.958290164807146', '23.630909942697556','2','https://images-na.ssl-images-amazon.com/images/I/51tLvp90p4L._SY291_BO1,204,203,200_QL40_FMwebp_.jpg','Prepare to turn the Wheel of Time - discover the first novel in one of the most influential and popular fantasy epics ever published.',0),
+    (4,'ΚΑΠΝΟΣ 30γρ KARELIAS ΠΟΡΤΟΚΑΛΙ',400,4000,'Μεταμορφώσεως 51, Χαλάνδρι','Ελλάδα','38.025647767028914', '23.82374272735476','2','https://www.tobacconistas.gr/wp-content/uploads/2014/10/753-Kapnos-Karelias-Kaphe-30gr-10-temachia.jpg','Βλάπτει σοβαρά την υγεία. Το δίνω γιατί θέλω να ανγκάσω την μάνα μου να το κόψει!',0),
+    (5,'Πατσάς Καπέκα',400,4000,'Βάλβη 27, Καρδίτσα','Ελλάδα',null,null,'3',null,'Ο καλύτερος πατσάς της χώρας. Ο Πλάτωνας είχε δίκιο! Για αυτό μάζεψα λίγο ταψάκι να το μοιράσω στο λαό. Μην τον χάσετε!!',0),
+    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6',0);
 
 
 -- -----------------------------------------------------
@@ -186,6 +194,7 @@ DROP TABLE IF EXISTS `mydb`.`bidder` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
   `id` INT NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
   `location` VARCHAR(45) NOT NULL,
   `country` VARCHAR(45) NOT NULL,
   `rating` float NULL,
@@ -200,12 +209,12 @@ ENGINE = InnoDB;
 
 INSERT INTO bidder
 values
-    (1,'Cholargos','Greece',200),
-    (2,'Chalandri','Greece',220),
-    (3,'Nea Smirni','Greece',180),
-    (4,'Karditsa','Greece',100),
-    (5,'Loutsa','Greece',1000),
-    (6,'Agia Paraskevi','Greece',250);
+    (1,'admin','Cholargos','Greece',200),
+    (2,'Lst','Chalandri','Greece',220),
+    (3,'Dberos97','Nea Smirni','Greece',180),
+    (4,'Ourt','Karditsa','Greece',100),
+    (5,'PlasPlas','Loutsa','Greece',1000),
+    (6,'Felarxos','Agia Paraskevi','Greece',250);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`bid`

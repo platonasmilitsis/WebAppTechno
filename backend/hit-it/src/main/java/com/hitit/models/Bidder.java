@@ -19,6 +19,10 @@ public class Bidder {
     @Id
     private Long id;
 
+
+
+    private String username;
+
     private String location;
     private String country;
     private Float rating;

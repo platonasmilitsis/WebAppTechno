@@ -97,28 +97,18 @@ const Admin = () =>{
     const [myUser,setUser] = useState([]);
     const  [NonAcceptedUsersData, setNonAcceptedUser] = useState([]);
     const [sendAccept, setSendAccept] = useState(false);
-    // const access_token = TokenService.get_local_access_token();
-    // const refresh_token = TokenService.get_local_access_token();
     const  [AcceptedUsersData, setAcceptedUser] = useState([]);
     const [update, setUpdate] = useState(true);
     const [showNonAccepted, setShowNonAccepted] = useState(true);
     const [showAccepted, setShowAccepted] = useState(false);
     const classes = useStyles()
 
-    const [selectedRows, setSelectedRows] = useState([]);
 
 
 
 
     
-    const onRowsSelectionHandler = (ids) => {
-        const selectedIds = new Set(ids);
-        console.log(selectedIds);
-        setRows(new Set(ids));
-
-    };
-
-
+   
           
 
 
@@ -265,11 +255,6 @@ const Admin = () =>{
                             Welcome {myUser.first_name}
                         </Typography>
 
-
-                        <Button  variant="outlined" sx={styles.button}
-                        onClick = {refresh}
-                        >Refresh?</Button>
-
                         <Button  variant="outlined" sx={styles.button}
                         onClick = {handleClickNonAccepted}
                         >Non-Accepted-Users</Button>
@@ -287,8 +272,8 @@ const Admin = () =>{
                 </AppBar>
 
                 <Box className='main-container'>
-                    {showNonAccepted && <MyDatagrid users={NonAcceptedUsersData} loading={!NonAcceptedUsersData.length}/>}
-                    {showAccepted &&  <MyDatagrid users={AcceptedUsersData} loading={!AcceptedUsersData.length}/>}    
+                    {showNonAccepted && <MyDatagrid users={NonAcceptedUsersData} />}
+                    {showAccepted &&  <MyDatagrid users={AcceptedUsersData} />}    
                 </Box>
 
 

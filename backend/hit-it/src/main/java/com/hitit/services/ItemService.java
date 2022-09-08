@@ -47,6 +47,7 @@ public class ItemService {
         if(user.isPresent())
         {
             newItem.setUser(user.get());
+            newItem.setItem_start_biding_sold(0L);
             return itemRepository.save(newItem);
         }
         else throw new UserNotFoundException();
