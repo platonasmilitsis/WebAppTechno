@@ -115,7 +115,6 @@ const Main = (id) => {
         (result) => {
           set_is_loaded(true);
           set_items(result);
-          console.log(result)          
         },
         (error) => {
           set_is_loaded(true);

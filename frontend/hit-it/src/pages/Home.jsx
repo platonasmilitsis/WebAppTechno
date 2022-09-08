@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useMemo} from 'react'
 import NavBar from '../components/Home/NavBar'
 import Categories from '../components/Home/Categories'
 import styled from 'styled-components'
@@ -14,10 +14,12 @@ const Container=styled.div`
   width:100%;
 `;
 
-
 const Home = () => {
-  return (
+  const [user,set_user]=useState(null);
+  const floating_button=()=>{set_user(localStorage.getItem('username'));}
+  useMemo(()=>floating_button(),[]);
 
+  return (
     <Container>
       <HelmetProvider>
         <Helmet>
@@ -30,7 +32,7 @@ const Home = () => {
       <NavBar/>
       <Main/>
       <Announcement/>
-      <FloatingButtonAdd/>
+      {user && <FloatingButtonAdd/>}
       <Categories/>
       <Footer/>
     </Container>
