@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState} from 'react';
+import {useState, useMemo} from 'react';
 import styled from 'styled-components'
 import { useLocation, Navigate } from "react-router-dom";
 
@@ -30,6 +30,7 @@ import { Button } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
 
 import Modal from '@mui/material/Modal';
+import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 
 
 
@@ -82,11 +83,19 @@ import Modal from '@mui/material/Modal';
 }
 `;
 
+const FootCont=styled.div`
+    ${'' /* margin-top:150px; */}
+    width:100%;
+`;
+
 
 const Product = () => {
 
-
-
+    let navigate=useNavigate();
+    const [user,set_user]=useState(null);
+    const floating_button=()=>{set_user(localStorage.getItem('username'));}
+    useMemo(()=>floating_button(),[]);
+    const [seller,set_seller]=useState(null);
 
 
     // const [newitemTitle,newsetItemTitle] = useState('');
@@ -144,26 +153,42 @@ const Product = () => {
     }
 
     useEffect(() => {
-        getItem(params.id).then((myItem) => {
-            setItem(myItem.item);
-            setBidsList(myItem.bids.bids);
-            return myItem;
-        }).then((myItem)=>{
+        // getItem(params.product_id).then((myItem) => {
+        //     setItem(myItem.item);
+        //     setBidsList(myItem.bids.bids);
+        //     return myItem;
+        // }).then((myItem)=>{
 
-            console.log(myItem.item);
-            console.log("BIDS ",myItem.bids);
-            myItem.item
-            ?  setLoadImage(true)
-            :  setItemNotFound(true);
-        });       
-    },[])
+        //     console.log(myItem.item);
+        //     console.log("BIDS ",myItem.bids);
+        //     myItem.item
+        //     ?  setLoadImage(true)
+        //     :  setItemNotFound(true);
+        // });       
+
+        fetch(`http://localhost:8080/items/${params.product_id}/all`)
+        .then((response)=>response.json())
+        .then((data)=>{
+            console.log("data",data);
+            setItem(data?.item);
+            setBidsList(data?.bids?.bids);
+            data.item?setLoadImage(true):setItemNotFound(true);
+            const is_seller=data.item.user;
+            is_seller.username===user?set_seller(true):set_seller(false);
+        })
+        .catch((error)=>{
+            console.error(error);
+            navigate("/error");
+            
+        })
+    },[navigate])
 
 
 
     const BidsTable = ( {rows} ) => {
         return(
             <TableContainer sx={{ maxHeight:"250px",height:"250px"}} component={Paper}>
-                <Table style={{ backgroundColor:"#eaeded" }} stickyHeader='true' sx={{ maxHeight:"250px", height:"250px", width:"20%" }} aria-label="simple table">
+                <Table style={{ backgroundColor:"#eaeded" }} sx={{ maxHeight:"250px", height:"250px", width:"20%" }} aria-label="simple table">
                     <StyledTableHead >
                         <TableRow >
                             <TableCell>Όνομα Χρήστη</TableCell>
@@ -313,7 +338,6 @@ const Product = () => {
     
     return (
         
-
        <Box className="main-product-container" >
         
 
@@ -379,9 +403,9 @@ const Product = () => {
                 <Box className="description-container">
                     <h1>{item?.name}</h1>
                     <br/>
-                    <Typography dangerouslySetInnerHTML={{ __html: item?.description }}></Typography>
+                    <Typography component={"span"} variant={"body2"} dangerouslySetInnerHTML={{ __html: item?.description }}></Typography>
                     <br/>
-                    <Typography>
+                    <Typography component={"span"} variant={"body2"}>
                             <p> <MapIcon/> <span style={{color:"#e67e22"}}>Τοποθεσία</span>: {item?.location}, {item?.country}</p>
                     </Typography>
 
@@ -390,7 +414,7 @@ const Product = () => {
                         item?.item_start_biding_sold === 0
                         ? 
 
-                        <Typography>
+                        <Typography component={"span"} variant={"body2"}>
                             <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Εναρκτήριο Ποσό</span>: {item?.first_bid}€</p>
                             <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
                         </Typography>
@@ -400,15 +424,19 @@ const Product = () => {
                     }
 
                 </Box>
-
-                <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                {
+                    seller &&
+                    <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
                     '&:hover': {
                         backgroundColor:"#000000"
                     } }} className='edit-button-container'
                     onClick={handleEditModal}
+                    style={{position:"absolute,marginRight:2%"}}
                     >
                     <EditIcon/>
                 </Button>
+                }
+                
             </Box>
           
             <Box className='bids-map-container'>
@@ -427,16 +455,23 @@ const Product = () => {
                             :<></>
                         }
                     </Box>
-                    <Box className='form-button-container'>
+                    {
+                        user &&
+                        <Box className='form-button-container'>
                         <form className="form-bid">
                             <input className='edit-input' type="text" placeholder="Χτύπα το ρε μάγκα!"/>
                         </form>
                         <Button sx={{color:"black"}}className='button-bid'><GavelIcon ></GavelIcon></Button>
                     </Box>
+                    }
+                    
                 </Box>
             </Box>
 
-
+            {user && <FloatingButtonAdd/>}
+            <FootCont>
+                <Footer/>
+            </FootCont>
        </Box>
        
     )
