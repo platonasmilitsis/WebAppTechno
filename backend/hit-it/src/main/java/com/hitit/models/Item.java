@@ -4,7 +4,12 @@ package com.hitit.models;
 import lombok.*;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.util.Date;
+
 
 @Entity
 @Getter
@@ -29,6 +34,18 @@ public class Item {
 
     private String img_path;
     private String description;
+
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date start_time;
+
+   
+    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date end_time;
+
 
     private Long item_start_biding_sold;
 

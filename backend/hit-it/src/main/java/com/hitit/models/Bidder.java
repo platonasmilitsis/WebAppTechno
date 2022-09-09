@@ -25,6 +25,6 @@ public class Bidder {
 
     private String location;
     private String country;
-    private Float rating;
+    private Long rating;
 
 }

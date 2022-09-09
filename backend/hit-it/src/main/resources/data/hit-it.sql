@@ -85,7 +85,7 @@ ENGINE = InnoDB;
 INSERT INTO item
 values
     (1,'Xiaomi Redmi 10C NFC Dual SIM (4GB/64GB) Ocean Blue',400,4000,'Σοφοκλή Βενιζέλου 58, Περιστέρι','Ελλάδα','38.00452848307119', '23.694068664418385','2','https://b.scdn.gr/images/sku_main_images/035519/35519747/xlarge_20220419111329_xiaomi_redmi_10c_4gb_64gb_ocean_blue.jpeg','
-    <h2> Βασικά χαρακτηριστικά: </h2>
+    <h3> Βασικά χαρακτηριστικά: </h3>
     <ul>
         <li> Μεγάλη Οθόνη 6.71" </li>
         <li>Snapdragon 680</li>
@@ -96,7 +96,7 @@ values
         <li>FM ραδιόφωνο</li>
         <li>Προστασία οθόνης με Corning Gorilla Glass</li>
     </ul>
-',0,'2022-8-22  13:20' ),
+',0,'2022-8-22  13:20', '2022-9-9 19:00'),
 
     (2,'Casio Ψηφιακό Ρολόι Χρονογράφος με Καουτσούκ Λουράκι σε Μαύρο χρώμα',400,4000,'Ομονοίας 19, Αθήνα','Ελλάδα','37.983764319462495', '23.727843673016075','2','https://b.scdn.gr/images/sku_main_images/004548/4548700/fixedratio_20220802184810_casio_psifiako_roloi_chronografos_mpatarias_me_kaoutsouk_louraki_se_mayro_chroma_ae_1300wh_1avef_ae_1300wh_1av.jpeg','
     
@@ -107,13 +107,13 @@ values
 
     <br/>
     <p>Οι χρήστες που το έχουν αγοράσει το ξεχωρίζουν κυρίως γιατί δείχνει την ώρα με ακρίβεια και είναι ανθεκτικό στις πτώσεις και στις γρατσουνιές.</p>
-',0),
+',0, '2022-8-22  13:20', '2022-9-9 19:00'),
 
 
-    (3,'The Eye of the World, The Wheel of Time',400,4000,'Χορμοβίτου 242, Πειραιάς','Ελλάδα','37.958290164807146', '23.630909942697556','2','https://images-na.ssl-images-amazon.com/images/I/51tLvp90p4L._SY291_BO1,204,203,200_QL40_FMwebp_.jpg','Prepare to turn the Wheel of Time - discover the first novel in one of the most influential and popular fantasy epics ever published.',0),
-    (4,'ΚΑΠΝΟΣ 30γρ KARELIAS ΠΟΡΤΟΚΑΛΙ',400,4000,'Μεταμορφώσεως 51, Χαλάνδρι','Ελλάδα','38.025647767028914', '23.82374272735476','2','https://www.tobacconistas.gr/wp-content/uploads/2014/10/753-Kapnos-Karelias-Kaphe-30gr-10-temachia.jpg','Βλάπτει σοβαρά την υγεία. Το δίνω γιατί θέλω να ανγκάσω την μάνα μου να το κόψει!',0),
-    (5,'Πατσάς Καπέκα',400,4000,'Βάλβη 27, Καρδίτσα','Ελλάδα',null,null,'3',null,'Ο καλύτερος πατσάς της χώρας. Ο Πλάτωνας είχε δίκιο! Για αυτό μάζεψα λίγο ταψάκι να το μοιράσω στο λαό. Μην τον χάσετε!!',0),
-    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6',0);
+    (3,'The Eye of the World, The Wheel of Time',400,4000,'Χορμοβίτου 242, Πειραιάς','Ελλάδα','37.958290164807146', '23.630909942697556','2','https://images-na.ssl-images-amazon.com/images/I/51tLvp90p4L._SY291_BO1,204,203,200_QL40_FMwebp_.jpg','Prepare to turn the Wheel of Time - discover the first novel in one of the most influential and popular fantasy epics ever published.',0, '2022-8-22  13:20', '2022-9-9 19:00'),
+    (4,'ΚΑΠΝΟΣ 30γρ KARELIAS ΠΟΡΤΟΚΑΛΙ',400,4000,'Μεταμορφώσεως 51, Χαλάνδρι','Ελλάδα','38.025647767028914', '23.82374272735476','2','https://www.tobacconistas.gr/wp-content/uploads/2014/10/753-Kapnos-Karelias-Kaphe-30gr-10-temachia.jpg','Βλάπτει σοβαρά την υγεία. Το δίνω γιατί θέλω να ανγκάσω την μάνα μου να το κόψει!',0, '2022-8-22  13:20', '2022-9-9 19:00'),
+    (5,'Πατσάς Καπέκα',400,4000,'Βάλβη 27, Καρδίτσα','Ελλάδα',null,null,'3',null,'Ο καλύτερος πατσάς της χώρας. Ο Πλάτωνας είχε δίκιο! Για αυτό μάζεψα λίγο ταψάκι να το μοιράσω στο λαό. Μην τον χάσετε!!',0, '2022-8-22  13:20', '2022-9-9 19:00'),
+    (6,'Item 6',400,4000,'Athens','Greece',null,null,'4',null,'Description 6',0, '2022-8-22  13:20', '2022-9-9 19:00');
 
 
 -- -----------------------------------------------------
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
   `username` VARCHAR(45) NOT NULL,
   `location` VARCHAR(45) NOT NULL,
   `country` VARCHAR(45) NOT NULL,
-  `rating` float NULL,
+  `rating` int NULL,
   INDEX `fk_bidder_users_idx` (`id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_bidder_users`
@@ -213,12 +213,12 @@ ENGINE = InnoDB;
 
 INSERT INTO bidder
 values
-    (1,'admin','Cholargos','Greece',200),
     (2,'Lst','Chalandri','Greece',220),
     (3,'Dberos97','Nea Smirni','Greece',180),
     (4,'Ourt','Karditsa','Greece',100),
     (5,'PlasPlas','Loutsa','Greece',1000),
     (6,'Felarxos','Agia Paraskevi','Greece',250);
+
 
 -- -----------------------------------------------------
 -- Table `mydb`.`bid`

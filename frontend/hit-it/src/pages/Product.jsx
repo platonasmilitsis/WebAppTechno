@@ -11,65 +11,25 @@ import Main from '../components/Products/Main';
 import Footer from '../components/Global/Footer';
 import { useNavigate, useParams } from "react-router-dom";
 import BasicMap from '../pages/Map';
-import { Breadcrumbs, Link, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, withStyles} from '@material-ui/core';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField} from '@material-ui/core';
 import Paper from '@mui/material/Paper';
 
 
 import "./Product.css";
 import { axiosPrivate } from '../api/axios';
-import { arSD } from '@mui/material/locale';
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { useAsync } from "react-async"
 import { Typography } from '@material-ui/core';
 import MapIcon from '@mui/icons-material/Map';
 import EuroIcon from '@mui/icons-material/Euro';
 import GavelIcon from '@mui/icons-material/Gavel';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
-import { ClickAwayListener } from '@mui/base';
 
 import Modal from '@mui/material/Modal';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 
 
-
-
-// const Logo=styled.h3`
-//     color:#e67e22; 
-//     font-weight:700;
-//     font-size:70px;
-//     margin-top:90px;
-// `;
-
-// const MapInfoContainer=styled.div`
-//     display: flex;
-//     flex-direction:row;
-//     flex-wrap:wrap;
-//     margin-bottom:50px;
-//     margin-top:50px;
-
-// `;
-
-// const MapContainer=styled.div`
-//     background-color:#ffffff;
-//     width:50%;
-// `;
-
-// const InfoContainer=styled.div`
-//     background-color:#ffffff;
-//     width:50%;
-//     text-align:center;
-// `;
-
-// const Info=styled.div`
-//     margin-top:50px;
-// `;
-
-// const FootCont=styled.div`
-//     width:100%;
-//     height:20px;
-// `;
 
 
 
@@ -91,31 +51,33 @@ const FootCont=styled.div`
 
 const Product = () => {
 
+
+
+   
     let navigate=useNavigate();
+    
+    
     const [user,set_user]=useState(null);
+    
+
+    const [myUser,setMyUser] = useState({});
+
     const floating_button=()=>{set_user(localStorage.getItem('username'));}
     useMemo(()=>floating_button(),[]);
+    
+    
     const [seller,set_seller]=useState(null);
 
-
-    // const [newitemTitle,newsetItemTitle] = useState('');
-    // const [newitemDescription,newsetItemDescription] = useState('');
-    // const [newitemFirstBid,newsetItemFirstBid] = useState('');
-    // const [newitemBuyPrice,newsetItemBuyPrice] = useState('');
-    // const [newitemLocation,newsetItemLocation] = useState('');
-    // const [newitemCountry,newsetItemCountry] = useState('');
-    // const [newitemLat,newsetItemLat] = useState('');
-    // const [newitemLong,newsetItemLong] = useState('');
-    // const [newitemImagePath,newsetItemImagePath] = useState('');
-
-
-
-
+    const [isBidder,setBidder] = useState(null);
+    const [maxBidder,setMaxBidder] = useState(null);
+    const [maxValue,setMaxValue] = useState(null);
 
     const page_names=["Καλωσοριστική","Αρχική"];
     const page_links=["/","/home"];
 
     const [mylocation, setmyLocation] = useState({});
+
+    const [refresh, setRefresh]  = useState(false);
 
 
     
@@ -140,7 +102,22 @@ const Product = () => {
 
     const [itemNotFound, setItemNotFound] = useState(false);
 
+
+    const[callBidder,setCallBidder] = useState(false);
     
+    const [currentBid, setCurrentBid] = useState();
+
+
+    const fetchmyUser = async() => {
+        const resUser = await axiosPrivate.get(`http://localhost:8080/users/username=${user}`)
+        .then((res) => {
+            console.log(res.data);
+            setMyUser(res.data);
+            return res.data;
+        })
+        return resUser;
+    }
+
 
     
     const handleEditModal = () => {
@@ -150,30 +127,36 @@ const Product = () => {
 
     const handleClose = () => {
         setCallEdit(false);
+        setCallBidder(false);
     }
 
     useEffect(() => {
-        // getItem(params.product_id).then((myItem) => {
-        //     setItem(myItem.item);
-        //     setBidsList(myItem.bids.bids);
-        //     return myItem;
-        // }).then((myItem)=>{
+        setRefresh(false);
+                
+        fetchmyUser()
+        .then((resUser) => {
+            console.log("undefine?",resUser);
+            axiosPrivate.get(`http://localhost:8080/bidders/${resUser?.id}`)
+            .then((res) => 
+                {
+                    res.data
+                        ?setBidder(true)
+                        :setBidder(false)
 
-        //     console.log(myItem.item);
-        //     console.log("BIDS ",myItem.bids);
-        //     myItem.item
-        //     ?  setLoadImage(true)
-        //     :  setItemNotFound(true);
-        // });       
+                }
+            )
+        });
 
-        fetch(`http://localhost:8080/items/${params.product_id}/all`)
-        .then((response)=>response.json())
+
+        axiosPrivate(`http://localhost:8080/items/${params.product_id}/all`)
         .then((data)=>{
-            console.log("data",data);
-            setItem(data?.item);
-            setBidsList(data?.bids?.bids);
-            data.item?setLoadImage(true):setItemNotFound(true);
-            const is_seller=data.item.user;
+            console.log("EDWW",data?.data.bids);
+            setItem(data?.data.item);
+            setBidsList(data?.data.bids?.bids);
+            setMaxBidder(data?.data.bids?.bids[0].bidder.id);
+            setMaxValue(data?.data.bids?.bids[0].amount);
+            data.data.item?setLoadImage(true):setItemNotFound(true);
+            const is_seller=data.data.item.user;
             is_seller.username===user?set_seller(true):set_seller(false);
         })
         .catch((error)=>{
@@ -181,14 +164,14 @@ const Product = () => {
             navigate("/error");
             
         })
-    },[navigate])
+    },[navigate,isBidder,refresh])
 
 
 
     const BidsTable = ( {rows} ) => {
         return(
             <TableContainer sx={{ maxHeight:"250px",height:"250px"}} component={Paper}>
-                <Table style={{ backgroundColor:"#eaeded" }} sx={{ maxHeight:"250px", height:"250px", width:"20%" }} aria-label="simple table">
+                <Table style={{ backgroundColor:"#eaeded" }} stickyHeader={true} sx={{ maxHeight:"250px", height:"250px", width:"20%" }} aria-label="simple table">
                     <StyledTableHead >
                         <TableRow >
                             <TableCell>Όνομα Χρήστη</TableCell>
@@ -221,6 +204,72 @@ const Product = () => {
         );
     }
 
+
+
+    const BidForm = () => {
+        const [bidderLocation, setBidderLocation]  = useState('');
+        const [bidderCountry, setBidderCountry]  = useState('');
+
+        const  handleSubmit = async() => {
+            const res = await axiosPrivate.post(`/bidders/${myUser.id}`,
+                {
+                    id:0,
+                    rating:0,
+                    username: myUser.username,
+                    location: bidderLocation,
+                    country: bidderCountry,
+                })
+                .then(async(result) => 
+                {
+                    console.log(result.data);
+                    setBidder(true);
+                    setCallBidder(false);
+                    
+                    var today = new Date();
+
+                    const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' '
+                        + today.getHours() + ":" + today.getMinutes() ; 
+
+                    console.log("date:",date);
+
+                    const newRes = axiosPrivate.post(`/bidder/${myUser.id}/bid/${item.id}`,
+                        {
+                            time: date, 
+                            amount : currentBid,
+                        }
+                    )
+                    return newRes.data;
+                })
+                .catch((error) => console.error(error.message));
+            }
+
+
+        return(
+            <form className='edit-form'>
+                <h2>Πρέπει να γίνεις πρώτα Χτυπημένος!</h2>
+  
+                <TextField  className = 'edit-div' style={{color:"black"}}
+                    required
+                    onChange = {event => {  setBidderLocation(event.target.value)}}
+                    id="bidder-location-form" label="Εισάγετε την τοποθεσία σας" variant="standard"
+                >
+                </TextField>
+
+                <TextField  className = 'edit-div' style={{color:"black"}}
+                    required
+                    onChange = {event => {  setBidderCountry(event.target.value)}}
+                    id="bidder-country-form" label="Εισάγετε την χώρα σας" variant="standard"
+                >
+                </TextField>
+
+                <Button onClick={handleSubmit} variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                '&:hover': {
+                    backgroundColor:"#000000"
+                } }} className='ypovoli-button'>ΧΤΥΠΑ ΤΟΥΣ ΟΛΟΥΣ ΜΑΓΚΑ!</Button>
+            </form>
+        )
+
+    }
 
 
 
@@ -329,6 +378,81 @@ const Product = () => {
         );   
     }
 
+    const ValueBidForm = () => {
+
+
+        const [bidValue,setBidValue] = useState();
+        const [currentBidder, setCurrentBidder] = useState(false);
+
+       
+
+        
+        const [empty,setEmpty] = useState(false);
+        
+        const isbidValid = (bidValue) => (bidValue <= maxValue && bidValue.length>0) || empty ;
+        
+
+
+        const handleXtipima = () => {
+            if(!bidValue)
+                setEmpty(true);
+            else if(isbidValid(bidValue))
+                <></>
+                          
+            else if(!isBidder){
+                setCallBidder(true);
+                setCurrentBid(bidValue);
+            }
+            else if(myUser.id === maxBidder)
+                setCurrentBidder(true);
+
+            else{
+                var today = new Date();
+
+                const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' '
+                    + today.getHours() + ":" + today.getMinutes() ; 
+
+                console.log("date:",date);
+
+                const newRes = axiosPrivate.post(`/bidder/${myUser.id}/bid/${item.id}`,
+                    {
+                        time: date, 
+                        amount : bidValue,
+                    }
+                ).then(() => setRefresh(true));
+            
+            }
+            
+            
+        }
+
+        return(
+            <>
+            <Box className='form-button-container'>
+            <form  className="form-bid">
+               
+                <TextField style={{color:"black"}}
+                
+                error={isbidValid(bidValue) }
+                helperText={empty? "Πρέπει να βάλεις κάποιο ποσό..."
+                                : isbidValid(bidValue) 
+                                    ? "Πρέπει να χτυπήσεις με μεγαλύτερο ποσό!" 
+                                    : currentBidder ? "Πρέπει να σε χτυπήσει κάποιος άλλος ρε φάτσα!" : "" 
+                            }
+                onChange = {event => {  setBidValue(event.target.value); setEmpty(false);}}
+                id="bid-form" label="Χτύπα το ρε μάγκα!" variant="standard"
+                >
+                </TextField>
+               
+                <Button onClick={handleXtipima} sx={{color:"black"}}className='button-bid'><GavelIcon ></GavelIcon></Button>
+        
+            </form>
+            </Box>
+            </>
+
+        )
+
+    }
 
 
     const MyMap = () => {
@@ -359,15 +483,26 @@ const Product = () => {
             
             </>
 
-            {/* <Box className="edit-modal-container">
-                <Typography  id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
-            </Box> */}
         </Modal>
+
+        <Modal open={callBidder} onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    style={{flexDirection:'column',display:'flex',alignItems:'center',justifyContent:'center'}}
+        >
+            
+            <>
+            <div className='logo-container'>
+                <h1>HIT IT</h1>
+            </div>
+        
+            <Box className='edit-form-container' >
+                <BidForm/>
+            </Box>
+            </>
+        </Modal>
+
+
 
         {itemNotFound && <Navigate to="/"/>}
 
@@ -456,13 +591,8 @@ const Product = () => {
                         }
                     </Box>
                     {
-                        user &&
-                        <Box className='form-button-container'>
-                        <form className="form-bid">
-                            <input className='edit-input' type="text" placeholder="Χτύπα το ρε μάγκα!"/>
-                        </form>
-                        <Button sx={{color:"black"}}className='button-bid'><GavelIcon ></GavelIcon></Button>
-                    </Box>
+                        user && <ValueBidForm/>
+                    
                     }
                     
                 </Box>
@@ -480,30 +610,3 @@ const Product = () => {
 
 export default Product
 
-
-{
-    // <Container>
-    //    
-    //     <MapInfoContainer>
-    //         <MapContainer>
-    //             <Map/>
-    //         </MapContainer>
-    //         <InfoContainer>
-    //             <Info>
-    //                 <ul>
-    //                     <h3>Πληροφορίες Καταστήματος</h3>
-    //                     <br></br>
-    //                     <li>Διεύθυνση: Βάλβη 27, ΤΚ:43100</li>
-    //                     <li>Τηλέφωνο: 24410 11111</li>
-    //                 </ul> 
-    //                 <Logo>
-    //                     hit-it
-    //                 </Logo>
-    //             </Info>
-    //         </InfoContainer>
-    //     </MapInfoContainer>
-    //     <FootCont>
-    //         <Footer/>
-    //     </FootCont>
-    // </Container>
-   }

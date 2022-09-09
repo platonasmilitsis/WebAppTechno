@@ -43,9 +43,9 @@ public class BidderService {
 
     }
 
-    public Bidder newBidder(@NotNull Bidder bidder, Long id) {
+    public Bidder newBidder(Bidder bidder, Long id) {
         bidder.setId(id);
-        bidder.setRating(0.0F);
+        bidder.setRating(0L);
         if(bidderRepository.findById(id).isPresent()) return bidderRepository.findById(id).get();
         return bidderRepository.save(bidder);
     }
