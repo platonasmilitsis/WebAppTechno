@@ -34,20 +34,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `tin` VARCHAR(10) NOT NULL,
   `admin` TINYINT NOT NULL,
   `accepted` TINYINT NOT NULL,
+  `seller_rating` INT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
 INSERT INTO users
 values
-    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1),
-    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1),
-    (3,'dberos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitris','Beros','2106262613','dberos@hit-it.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1),
-    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1),
-    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1),
-    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1),
-    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Ελβετίας 21, Αγία Παρασκευή','443',0,0),
-    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Λεωφόρος Εθνικής Αντιστάσεως 172, Καισαριανή','442',0,0);
+    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1,250),
+    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1,124),
+    (3,'dberos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitris','Beros','2106262613','dberos@hit-it.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1,200),
+    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1,300),
+    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1,210),
+    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1,224),
+    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Ελβετίας 21, Αγία Παρασκευή','443',0,0,0),
+    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Λεωφόρος Εθνικής Αντιστάσεως 172, Καισαριανή','442',0,0,0);
 
 
 
@@ -70,6 +71,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `img_path` TEXT,
   `description` TEXT,
   `item_start_biding_sold` TINYINT,
+  `start_time` timestamp NOT NULL,
+  `end_time` timestamp NOT NULL, 
   PRIMARY KEY (`id`),
   INDEX `fk_item_users1_idx` (`users_id` ASC) VISIBLE,
   CONSTRAINT `fk_item_users1`
@@ -93,7 +96,7 @@ values
         <li>FM ραδιόφωνο</li>
         <li>Προστασία οθόνης με Corning Gorilla Glass</li>
     </ul>
-',0),
+',0,'2022-8-22  13:20' ),
 
     (2,'Casio Ψηφιακό Ρολόι Χρονογράφος με Καουτσούκ Λουράκι σε Μαύρο χρώμα',400,4000,'Ομονοίας 19, Αθήνα','Ελλάδα','37.983764319462495', '23.727843673016075','2','https://b.scdn.gr/images/sku_main_images/004548/4548700/fixedratio_20220802184810_casio_psifiako_roloi_chronografos_mpatarias_me_kaoutsouk_louraki_se_mayro_chroma_ae_1300wh_1avef_ae_1300wh_1av.jpeg','
     
