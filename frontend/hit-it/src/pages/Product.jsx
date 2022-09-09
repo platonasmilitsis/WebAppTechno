@@ -51,7 +51,7 @@ const FootCont=styled.div`
 
 const Product = () => {
 
-
+    const params = useParams();
 
    
     let navigate=useNavigate();
@@ -62,8 +62,18 @@ const Product = () => {
 
     const [myUser,setMyUser] = useState({});
 
-    const floating_button=()=>{set_user(localStorage.getItem('username'));}
-    useMemo(()=>floating_button(),[]);
+    const user_function=()=>{
+        set_user(localStorage.getItem('username'));
+        user && fetch(`http://localhost:8080/users/username=${user}`)
+        .then((response)=>response.json())
+        .then((data)=>{
+            setMyUser(data);
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
+    }
+    useEffect(()=>user_function(),[user]);
     
     
     const [seller,set_seller]=useState(null);
@@ -72,8 +82,8 @@ const Product = () => {
     const [maxBidder,setMaxBidder] = useState(null);
     const [maxValue,setMaxValue] = useState(null);
 
-    const page_names=["Καλωσοριστική","Αρχική"];
-    const page_links=["/","/home"];
+    const page_names=["Αρχική",`${params.name}`];
+    const page_links=["/home",`/home/categories/${params.id}/${params.name}`];
 
     const [mylocation, setmyLocation] = useState({});
 
@@ -86,19 +96,11 @@ const Product = () => {
     const [imgPath,setPath] = useState();
     const [item,setItem] = useState({});
 
-    const params = useParams();
     
     const [reload, setReload]  = useState(true);
 
 
     const [callEdit, setCallEdit] = useState(false);
-
-    const getItem = async(id) =>{
-        const response = await axiosPrivate.get(`items/${id}/all`);
-
-        console.log(response?.data);
-        return response?.data;
-    }
 
     const [itemNotFound, setItemNotFound] = useState(false);
 
@@ -107,16 +109,6 @@ const Product = () => {
     
     const [currentBid, setCurrentBid] = useState();
 
-
-    const fetchmyUser = async() => {
-        const resUser = await axiosPrivate.get(`http://localhost:8080/users/username=${user}`)
-        .then((res) => {
-            console.log(res.data);
-            setMyUser(res.data);
-            return res.data;
-        })
-        return resUser;
-    }
 
 
     
@@ -130,41 +122,26 @@ const Product = () => {
         setCallBidder(false);
     }
 
-    useEffect(() => {
+    const bids_function=()=>{
         setRefresh(false);
-                
-        fetchmyUser()
-        .then((resUser) => {
-            console.log("undefine?",resUser);
-            axiosPrivate.get(`http://localhost:8080/bidders/${resUser?.id}`)
-            .then((res) => 
-                {
-                    res.data
-                        ?setBidder(true)
-                        :setBidder(false)
+        fetch(`http://localhost:8080/items/${params.product_id}/all`)
+            .then((response)=>response.json())
+            .then((data)=>{
+                setItem(data?.item);
+                setBidsList(data?.bids?.bids);
+                setMaxBidder(data?.bids?.bids[0].bidder.id);
+                setMaxValue(data?.bids?.bids[0].amount);
+                data.item?setLoadImage(true):setItemNotFound(true);
+                const is_seller=data.item.user;
+                is_seller.username===user?set_seller(true):set_seller(false);
+            })
+            .catch((error)=>{
+                console.error(error);
+                navigate("/error");
+            })
+    }
 
-                }
-            )
-        });
-
-
-        axiosPrivate(`http://localhost:8080/items/${params.product_id}/all`)
-        .then((data)=>{
-            console.log("EDWW",data?.data.bids);
-            setItem(data?.data.item);
-            setBidsList(data?.data.bids?.bids);
-            setMaxBidder(data?.data.bids?.bids[0].bidder.id);
-            setMaxValue(data?.data.bids?.bids[0].amount);
-            data.data.item?setLoadImage(true):setItemNotFound(true);
-            const is_seller=data.data.item.user;
-            is_seller.username===user?set_seller(true):set_seller(false);
-        })
-        .catch((error)=>{
-            console.error(error);
-            navigate("/error");
-            
-        })
-    },[navigate,isBidder,refresh])
+    useEffect(()=>bids_function(),[navigate,isBidder,refresh])
 
 
 
@@ -546,16 +523,12 @@ const Product = () => {
 
                     {
 
-                        item?.item_start_biding_sold === 0
-                        ? 
 
+                        item?.item_start_biding_sold === 0 && 
                         <Typography component={"span"} variant={"body2"}>
                             <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Εναρκτήριο Ποσό</span>: {item?.first_bid}€</p>
                             <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
                         </Typography>
-
-
-                        : console.log("oxi",item)
                     }
 
                 </Box>
