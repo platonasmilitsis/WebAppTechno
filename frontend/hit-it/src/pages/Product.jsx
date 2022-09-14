@@ -123,14 +123,13 @@ const Product = () => {
     }
 
     const bids_function=()=>{
-        setRefresh(false);
         fetch(`http://localhost:8080/items/${params.product_id}/all`)
             .then((response)=>response.json())
             .then((data)=>{
                 setItem(data?.item);
                 setBidsList(data?.bids?.bids);
-                setMaxBidder(data?.bids?.bids[0].bidder.id);
-                setMaxValue(data?.bids?.bids[0].amount);
+                setMaxBidder(data?.bids?.bids[0]?.bidder.id);
+                setMaxValue(data?.bids?.bids[0]?.amount);
                 data.item?setLoadImage(true):setItemNotFound(true);
                 const is_seller=data.item.user;
                 is_seller.username===user?set_seller(true):set_seller(false);
@@ -141,7 +140,7 @@ const Product = () => {
             })
     }
 
-    useEffect(()=>bids_function(),[navigate,isBidder,refresh])
+    useEffect(()=>bids_function(),[navigate,user])
 
 
 
@@ -564,7 +563,7 @@ const Product = () => {
                         }
                     </Box>
                     {
-                        user && <ValueBidForm/>
+                        user && !seller && <ValueBidForm/>
                     
                     }
                     
