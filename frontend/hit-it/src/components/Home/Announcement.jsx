@@ -4,6 +4,7 @@ import styled from 'styled-components'
 const Container=styled.div`
   background-color:#e67e22;
   height:300px;
+  margin-top:40px;
   border-radius:10px;
   display:flex;
   flex-direction:row;
