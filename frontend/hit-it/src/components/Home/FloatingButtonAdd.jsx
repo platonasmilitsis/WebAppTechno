@@ -454,6 +454,15 @@ const FloatingButtonAdd=()=>{
 
     const axiosPrivate = useAxiosPrivate();
 
+    const get_date=()=>{
+        var today=new Date();
+        var start_date=today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + 
+            ' '+today.getHours() + ':' + today.getMinutes();
+        var end_date=today.getFullYear()+1 + '-' + (today.getMonth() + 1) + '-' + today.getDate() + 
+            ' '+today.getHours() + ':' + today.getMinutes();
+        return {start_date,end_date}
+    }
+
 
     const submit=(e)=>{
         e.preventDefault();
@@ -470,7 +479,9 @@ const FloatingButtonAdd=()=>{
                         country:country,
                         latitude:latitude,
                         longitude:longitude,
-                        img_path:image_link
+                        img_path:image_link,
+                        start_time:get_date().start_date,
+                        end_time:get_date().end_date
                         };
                 fetch(`http://localhost:8080/users/username=${localStorage.getItem('username')}`)
                 .then((response)=>response.json())

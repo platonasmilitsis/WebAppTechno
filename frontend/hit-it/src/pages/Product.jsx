@@ -131,8 +131,7 @@ const Product = () => {
                 setMaxBidder(data?.bids?.bids[0]?.bidder.id);
                 setMaxValue(data?.bids?.bids[0]?.amount);
                 data.item?setLoadImage(true):setItemNotFound(true);
-                const is_seller=data.item.user;
-                is_seller.username===user?set_seller(true):set_seller(false);
+                data?.item?.user?.username===user?set_seller(true):set_seller(false);
             })
             .catch((error)=>{
                 console.error(error);
