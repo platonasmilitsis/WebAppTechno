@@ -85,7 +85,7 @@ ENGINE = InnoDB;
 INSERT INTO item
 values
     (1,'Xiaomi Redmi 10C NFC Dual SIM (4GB/64GB) Ocean Blue',400,4000,'Σοφοκλή Βενιζέλου 58, Περιστέρι','Ελλάδα','38.00452848307119', '23.694068664418385','2','https://b.scdn.gr/images/sku_main_images/035519/35519747/xlarge_20220419111329_xiaomi_redmi_10c_4gb_64gb_ocean_blue.jpeg','
-    <h3> Βασικά χαρακτηριστικά: </h3>
+    <p><strong> Βασικά χαρακτηριστικά: </strong> </p>
     <ul>
         <li> Μεγάλη Οθόνη 6.71" </li>
         <li>Snapdragon 680</li>
