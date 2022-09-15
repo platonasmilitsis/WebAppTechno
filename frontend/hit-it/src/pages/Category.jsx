@@ -67,7 +67,8 @@ const ImageContainer=styled.div`
 
 const Image=styled.img`
     object-fit:cover;
-    width:300px;
+    ${'' /* width:300px; */}
+    width:50%;
     cursor:pointer;
 `;
 
@@ -152,7 +153,7 @@ const Category = () => {
               return(
                   <ProductContainer key={product.name+"?"+product.id}>
                       <ImageContainer>
-                          <Image src={require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}/>
+                          <Image src={product.img_path?product.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}/>
                       </ImageContainer>
                       <Title onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}>
                           {product.name}
