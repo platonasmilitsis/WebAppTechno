@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useCloseModal from '../../hooks/useCloseModal';
 
 const Container=styled.div`
     display:flex;
@@ -193,11 +194,15 @@ const NavBar = () => {
         })
     }
 
+    let ref=useCloseModal(()=>{
+        set_user_clicked(false);
+    });
+
     const display=()=>{
         const username=localStorage.getItem("username");
         return(
             username?
-                <AccountContainer>
+                <AccountContainer ref={ref}>
                     <IconContainer>
                     <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                     </IconContainer>
