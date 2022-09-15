@@ -1,22 +1,18 @@
 import React from 'react'
-import {useState, useMemo} from 'react';
+import { useState } from 'react';
 import styled from 'styled-components'
-import { useLocation, Navigate } from "react-router-dom";
-
-import { Container } from '@mui/system';
+import { Navigate } from "react-router-dom";
+import { Form } from '../components/Products/Form';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
-import Main from '../components/Products/Main';
 import Footer from '../components/Global/Footer';
 import { useNavigate, useParams } from "react-router-dom";
 import BasicMap from '../pages/Map';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField} from '@material-ui/core';
-import Paper from '@mui/material/Paper';
-
-
+import BidForm from '../components/Products/BidForm'
+import { ValueBidForm } from '../components/Products/ValueBidForm';
+import BidsTable from '../components/Products/BidsTable';
 import "./Product.css";
-import { axiosPrivate } from '../api/axios';
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import { Typography } from '@material-ui/core';
@@ -25,23 +21,9 @@ import EuroIcon from '@mui/icons-material/Euro';
 import GavelIcon from '@mui/icons-material/Gavel';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
-
 import Modal from '@mui/material/Modal';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 
-
-
-
-
-
-
-  export const StyledTableHead = styled(TableHead)`
-  & .MuiTableCell-root {
-    background-color: #e67e22;
-    color:white;
-    font-weight: bold;
-}
-`;
 
 const FootCont=styled.div`
     ${'' /* margin-top:150px; */}
@@ -51,82 +33,57 @@ const FootCont=styled.div`
 
 const Product = () => {
 
-    const params = useParams();
-
-   
+    //Parameters
     let navigate=useNavigate();
-    
-    
+    const params = useParams();
     const [user,set_user]=useState(null);
-    
-
     const [myUser,setMyUser] = useState({});
+    const [isBidder,setBidder] = useState(null);
+    const [seller,set_seller]=useState(null);
+    const [maxBidder,setMaxBidder] = useState(null);
+    const [maxValue,setMaxValue] = useState(null);
+    const page_names=["Αρχική",`${params.name}`];
+    const page_links=["/home",`/home/categories/${params.id}/${params.name}`];
+    const [refresh, setRefresh]  = useState(false);
+    const [bidsList,setBidsList] = useState([]);
+    const [loadImage, setLoadImage] = useState(false);
+    const [item,setItem] = useState({});
+    const [callEdit, setCallEdit] = useState(false);
+    const [itemNotFound, setItemNotFound] = useState(false);
+    const[callBidder,setCallBidder] = useState(false);
+    const [currentBid, setCurrentBid] = useState();
+    const [categories,setCategory] = useState([]);
+     
 
+    /* Async Functions */
+   
     const user_function=()=>{
         set_user(localStorage.getItem('username'));
         user && fetch(`http://localhost:8080/users/username=${user}`)
         .then((response)=>response.json())
         .then((data)=>{
             setMyUser(data);
+            fetch(`http://localhost:8080/bidders/${data.id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    data 
+                        ?setBidder(data)
+                        : <></>
+
+                })
         })
         .catch((error)=>{
             console.error(error);
         })
     }
-    useEffect(()=>user_function(),[user]);
     
-    
-    const [seller,set_seller]=useState(null);
-
-    const [isBidder,setBidder] = useState(null);
-    const [maxBidder,setMaxBidder] = useState(null);
-    const [maxValue,setMaxValue] = useState(null);
-
-    const page_names=["Αρχική",`${params.name}`];
-    const page_links=["/home",`/home/categories/${params.id}/${params.name}`];
-
-    const [mylocation, setmyLocation] = useState({});
-
-    const [refresh, setRefresh]  = useState(false);
-
-
-    
-    const [bidsList,setBidsList] = useState([]);
-    const [loadImage, setLoadImage] = useState(false);
-    const [imgPath,setPath] = useState();
-    const [item,setItem] = useState({});
-
-    
-    const [reload, setReload]  = useState(true);
-
-
-    const [callEdit, setCallEdit] = useState(false);
-
-    const [itemNotFound, setItemNotFound] = useState(false);
-
-
-    const[callBidder,setCallBidder] = useState(false);
-    
-    const [currentBid, setCurrentBid] = useState();
-
-
-
-    
-    const handleEditModal = () => {
-        setCallEdit(true);
-    }
-
-
-    const handleClose = () => {
-        setCallEdit(false);
-        setCallBidder(false);
-    }
-
     const bids_function=()=>{
         fetch(`http://localhost:8080/items/${params.product_id}/all`)
             .then((response)=>response.json())
             .then((data)=>{
+                setCategory(data?.categories);
                 setItem(data?.item);
+                console.log(data?.item);
                 setBidsList(data?.bids?.bids);
                 setMaxBidder(data?.bids?.bids[0]?.bidder.id);
                 setMaxValue(data?.bids?.bids[0]?.amount);
@@ -139,295 +96,26 @@ const Product = () => {
             })
     }
 
-    useEffect(()=>bids_function(),[navigate,user])
+    // Handlers
+    
+    const handleEditModal = () => {
+        setCallEdit(true);
+    }
 
-
-
-    const BidsTable = ( {rows} ) => {
-        return(
-            <TableContainer sx={{ maxHeight:"250px",height:"250px"}} component={Paper}>
-                <Table style={{ backgroundColor:"#eaeded" }} stickyHeader={true} sx={{ maxHeight:"250px", height:"250px", width:"20%" }} aria-label="simple table">
-                    <StyledTableHead >
-                        <TableRow >
-                            <TableCell>Όνομα Χρήστη</TableCell>
-                            <TableCell align="right">Χτυπητέο Ποσό</TableCell>
-                            <TableCell align="right">Ώρα Κρούσης</TableCell>
-
-                        </TableRow>
-                    </StyledTableHead>
-                    <TableBody sx={{backgroundColor:"#eaeded"}}>
-                        {rows.map((row) => (
-                            <TableRow key={row.id}
-                                sx={{   '&:last-child td, &:last-child th': {border:0}}}
-                            >
-                                <TableCell component="th" scope="row">{row.bidder.username}</TableCell>
-                                <TableCell align='right'>{row.amount}€</TableCell>
-                                <TableCell align='right'>{row.time}</TableCell>
-
-                            </TableRow>
-                        ))}
-
-                    </TableBody>
-
-
-                </Table>
-
-            
-
-
-            </TableContainer>
-        );
+    const handleClose = () => {
+        setCallEdit(false);
+        setCallBidder(false);
     }
 
 
+    //UseEffect
 
-    const BidForm = () => {
-        const [bidderLocation, setBidderLocation]  = useState('');
-        const [bidderCountry, setBidderCountry]  = useState('');
+    useEffect(()=> {
+        setRefresh(false);
+        user_function();
+        bids_function();
+    },[navigate,user,refresh])
 
-        const  handleSubmit = async() => {
-            const res = await axiosPrivate.post(`/bidders/${myUser.id}`,
-                {
-                    id:0,
-                    rating:0,
-                    username: myUser.username,
-                    location: bidderLocation,
-                    country: bidderCountry,
-                })
-                .then(async(result) => 
-                {
-                    console.log(result.data);
-                    setBidder(true);
-                    setCallBidder(false);
-                    
-                    var today = new Date();
-
-                    const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' '
-                        + today.getHours() + ":" + today.getMinutes() ; 
-
-                    console.log("date:",date);
-
-                    const newRes = axiosPrivate.post(`/bidder/${myUser.id}/bid/${item.id}`,
-                        {
-                            time: date, 
-                            amount : currentBid,
-                        }
-                    )
-                    return newRes.data;
-                })
-                .catch((error) => console.error(error.message));
-            }
-
-
-        return(
-            <form className='edit-form'>
-                <h2>Πρέπει να γίνεις πρώτα Χτυπημένος!</h2>
-  
-                <TextField  className = 'edit-div' style={{color:"black"}}
-                    required
-                    onChange = {event => {  setBidderLocation(event.target.value)}}
-                    id="bidder-location-form" label="Εισάγετε την τοποθεσία σας" variant="standard"
-                >
-                </TextField>
-
-                <TextField  className = 'edit-div' style={{color:"black"}}
-                    required
-                    onChange = {event => {  setBidderCountry(event.target.value)}}
-                    id="bidder-country-form" label="Εισάγετε την χώρα σας" variant="standard"
-                >
-                </TextField>
-
-                <Button onClick={handleSubmit} variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
-                '&:hover': {
-                    backgroundColor:"#000000"
-                } }} className='ypovoli-button'>ΧΤΥΠΑ ΤΟΥΣ ΟΛΟΥΣ ΜΑΓΚΑ!</Button>
-            </form>
-        )
-
-    }
-
-
-
-
-
-
-
-
-
-    const Form = () => {
-
-        const [itemTitle,setItemTitle] = useState('');
-        const [itemDescription,setItemDescription] = useState('');
-        const [itemFirstBid,setItemFirstBid] = useState('');
-        const [itemBuyPrice,setItemBuyPrice] = useState('');
-        const [itemLocation,setItemLocation] = useState('');
-        const [itemCountry,setItemCountry] = useState('');
-        const [itemLat,setItemLat] = useState('');
-        const [itemLong,setItemLong] = useState('');
-        const [itemImagePath,setItemImagePath] = useState('');
-
-
-
-        const handleSubmit = event => {
-            console.log('handleSubmit ran');
-            event.preventDefault(); // 👈️ prevent page refresh
-        
-            console.log('title 👉️', itemTitle);
-            console.log('Description 👉️', itemDescription);
-        
-            setItemTitle('');
-            setItemDescription('');
-        }
-
-        return (
-            <form onSubmit={handleSubmit} className='edit-form'>
-                <p className='edit-field'>
-                    Όνομα Προϊόντος
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemTitle(event.target.value)} value={itemTitle} className='edit-input' type="text" placeholder="Εισάγετε το όνομά του προϊόντος"/>
-                </div>
-                <p className ='edit-field'>
-                    Περιγραφή Προϊόντος
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemDescription(event.target.value)}
-                    value={itemDescription} className='edit-input' type="text" placeholder="Εισάγετε την περιγραφή του προϊόντος"/>
-                </div>
-                <p className ='edit-field'>
-                    Έναρξη Δημοπρασίας
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemFirstBid(event.target.value)}
-                    value={itemFirstBid} className='edit-input' type="text" placeholder="Εισάγετε την τιμή έναρξης της δημοπρασίας"/>
-                </div>
-                <p className ='edit-field'>
-                    Λήξη Δημοπρασίας
-                </p>
-                <div className='edit-div'>
-                    <input 
-                    onChange={event => setItemBuyPrice(event.target.value)}
-                    value={itemBuyPrice} className='edit-input' type="text" placeholder="Εισάγετε την τιμή λήξης της δημοπρασίας"/>
-                </div>
-                <p className ='edit-field'>
-                    Περιοχή Κατοικίας
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemLocation(event.target.value)}
-                    value={itemLocation} className='edit-input' type="text" placeholder="Εισάγετε την περιοχή κατοικίας σας"/>
-                </div>
-                <p className ='edit-field'>
-                    Χώρα Διαμονής
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemCountry(event.target.value)}
-                    value={itemCountry} className='edit-input' type="text" placeholder="Εισάγετε την χώρα διαμονής σας"/>
-                </div>
-                <p className ='edit-field'>
-                    Γεωγραφικό Πλάτος
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemLat(event.target.value)}
-                    value={itemLat} className='edit-input' type="text" placeholder="Εισάγετε το γεωγραφίκο πλάτος της κατοικίας σας"/>
-                </div>
-                <p className ='edit-field'>
-                    Γεωγραφικό Μήκος
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemLong(event.target.value)}
-                    value={itemLong} className='edit-input' type="text" placeholder="Εισάγετε το γεωγραφίκο μήκος της κατοικίας σας"/>
-                </div>
-                <p className ='edit-field'>
-                    Εικόνα Προϊόντος
-                </p>
-                <div className='edit-div'>
-                    <input onChange={event => setItemImagePath(event.target.value)}
-                    value={itemImagePath} className='edit-input' type="text" placeholder="Εισάγετε το link της εικόνας του προϊόντος σας"/>
-                </div>
-            <Button type="submit" variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
-            '&:hover': {
-                backgroundColor:"#000000"
-            } }} className='ypovoli-button'>ΑΝΑΝΕΩΣΗ</Button>
-            </form>
-
-        );   
-    }
-
-    const ValueBidForm = () => {
-
-
-        const [bidValue,setBidValue] = useState();
-        const [currentBidder, setCurrentBidder] = useState(false);
-
-       
-
-        
-        const [empty,setEmpty] = useState(false);
-        
-        const isbidValid = (bidValue) => (bidValue <= maxValue && bidValue.length>0) || empty ;
-        
-
-
-        const handleXtipima = () => {
-            if(!bidValue)
-                setEmpty(true);
-            else if(isbidValid(bidValue))
-                <></>
-                          
-            else if(!isBidder){
-                setCallBidder(true);
-                setCurrentBid(bidValue);
-            }
-            else if(myUser.id === maxBidder)
-                setCurrentBidder(true);
-
-            else{
-                var today = new Date();
-
-                const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' '
-                    + today.getHours() + ":" + today.getMinutes() ; 
-
-                console.log("date:",date);
-
-                const newRes = axiosPrivate.post(`/bidder/${myUser.id}/bid/${item.id}`,
-                    {
-                        time: date, 
-                        amount : bidValue,
-                    }
-                ).then(() => setRefresh(true));
-            
-            }
-            
-            
-        }
-
-        return(
-            <>
-            <Box className='form-button-container'>
-            <form  className="form-bid">
-               
-                <TextField style={{color:"black"}}
-                
-                error={isbidValid(bidValue) }
-                helperText={empty? "Πρέπει να βάλεις κάποιο ποσό..."
-                                : isbidValid(bidValue) 
-                                    ? "Πρέπει να χτυπήσεις με μεγαλύτερο ποσό!" 
-                                    : currentBidder ? "Πρέπει να σε χτυπήσει κάποιος άλλος ρε φάτσα!" : "" 
-                            }
-                onChange = {event => {  setBidValue(event.target.value); setEmpty(false);}}
-                id="bid-form" label="Χτύπα το ρε μάγκα!" variant="standard"
-                >
-                </TextField>
-               
-                <Button onClick={handleXtipima} sx={{color:"black"}}className='button-bid'><GavelIcon ></GavelIcon></Button>
-        
-            </form>
-            </Box>
-            </>
-
-        )
-
-    }
 
 
     const MyMap = () => {
@@ -452,7 +140,7 @@ const Product = () => {
             
             <Box className='edit-form-container' >
 
-                <Form/>
+                <Form setCallEdit={setCallEdit} setRefresh={setRefresh} itemId ={item?.id} />
             </Box>
 
             
@@ -472,7 +160,7 @@ const Product = () => {
             </div>
         
             <Box className='edit-form-container' >
-                <BidForm/>
+                <BidForm setRefresh = {setRefresh} userId = {myUser.id} userUsername={myUser.username} itemId ={item?.id} setBidder={setBidder} setCallBidder={setCallBidder} currentBid={currentBid} />
             </Box>
             </>
         </Modal>
@@ -502,6 +190,7 @@ const Product = () => {
                     ? item?.img_path 
                         ? <img 
                         src={item.img_path}
+                        alt = 'Image not Found'
                         className='image-container'/>
                         :   <img 
                         src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png' 
@@ -512,6 +201,8 @@ const Product = () => {
                 
                 <Box className="description-container">
                     <h1>{item?.name}</h1>
+
+
                     <br/>
                     <Typography component={"span"} variant={"body2"} dangerouslySetInnerHTML={{ __html: item?.description }}></Typography>
                     <br/>
@@ -562,7 +253,10 @@ const Product = () => {
                         }
                     </Box>
                     {
-                        user && !seller && <ValueBidForm/>
+                        user && !seller && <ValueBidForm 
+                        maxValue = {maxValue} isBidder = {isBidder} setCallBidder = {setCallBidder}
+                        setCurrentBid = {setCurrentBid}  myUser = {myUser} maxBidder={maxBidder} refresh={refresh}
+                        item={item} setRefresh={setRefresh}/>
                     
                     }
                     

@@ -58,11 +58,3 @@ public class MessagesController {
 
 }
 
-
-/*
-
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIkFETUlOIiwiQUNDRVBURUQiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlZnJlc2giLCJleHAiOjE2NjEzNDY1Nzd9.ud2XqRzwGEjahcwBI449FTQ7UAo5bgvIQYJieF9fp68",
-  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY2MzkzNzQ5OH0.vZSxE6c8FDOE8SFSmF-4z_NDR4OmnQ67BKwha70yhRc",
-  "username": "admin"
-}
- */

@@ -4,7 +4,6 @@ import './Product.css';
 
 const BasicMap = ( {mylat,mylong}  ) => {
 
-    console.log("lat:",mylat)
     return (   
             <MapContainer  className='my-map-container' center={[ mylat, mylong]} zoom={15} scrollWheelZoom={true}>
                 <TileLayer  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

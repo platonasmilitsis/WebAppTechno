@@ -57,6 +57,8 @@ public class ItemService {
         return itemRepository.findById(id)
                 .map(item -> {
                     this.checkSetName(item, newItem.getName());
+                    this.checkSetDescription(item, newItem.getDescription());
+                    this.checkSetFirstBid(item, newItem.getFirst_bid());
                     this.checkSetBuyPrice(item, newItem.getBuy_price());
                     this.checkSetLocation(item, newItem.getLocation());
                     this.checkSetCountry(item, newItem.getCountry());
@@ -67,6 +69,14 @@ public class ItemService {
                 }).orElseThrow(ItemNotFoundException:: new);
 
 
+    }
+
+    private void checkSetDescription(Item item, String description) {
+        if(description!=null) item.setDescription(description);
+    }
+
+    private void checkSetFirstBid(Item item, Long firstBid) {
+        if(firstBid!=null) item.setFirst_bid(firstBid);
     }
 
     private void checkSetImgPath(Item item, String img_path) {
