@@ -1,21 +1,21 @@
 const Navigate = (title) => {
     switch(title){
         case "Τεχνολογία":
-            return("/home/technology");
+            return(`/home/categories/1/${title}`);
         case "Σπίτι - Κήπος":
-            return("/home/home-garden");
+            return(`/home/categories/2/${title}`);
         case "Μόδα":
-            return("/home/fashion");
+            return(`/home/categories/3/${title}`);
         case "Hobby - Αθλητισμός":
-            return("/home/hobby-sports");
+            return(`/home/categories/4/${title}`);
         case "Υγεία - Ομορφιά":
-            return("/home/health-beauty");
+            return(`/home/categories/5/${title}`);
         case "Παιδικά - Βρεφικά":
-            return("/home/childrenry");
+            return(`/home/categories/6/${title}`);
         case "Auto - Moto":
-            return("/home/auto-moto");
+            return(`/home/categories/7/${title}`);
         case "Επαγγελματικά - B2B":
-            return("/home/business-b2b");
+            return(`/home/categories/8/${title}`);
         default:
             return("/");
     }

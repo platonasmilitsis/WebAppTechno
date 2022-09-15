@@ -5,6 +5,7 @@ import { search_results } from '../../data';
 import CloseIcon from '@material-ui/icons/Close';
 import { useNavigate } from 'react-router-dom';
 import Navigate from "../Global/Navigate";
+import useCloseModal from "../../hooks/useCloseModal";
 
 const Container=styled.div`
     display:flex;
@@ -19,11 +20,11 @@ const SearchContainer=styled.div`
     background-color:white;
     justify-content:flex-start;
     align-items:center;
+    border:1px solid transparent;
+    box-sizing:border-box;
     &:hover{
-        border:1px;
-        border-style:solid;
+        border:1px solid #e67e22;
         border-color:#e67e22;
-        box-sizing:border-box;
     }
     flex-direction:row;
     @media screen and (max-width: 650px) {
@@ -76,7 +77,8 @@ const ResultsContainer=styled.div`
 
 const ResultContainer=styled.div`
     height:30px;
-    justify-content:center;
+    display:flex;
+    align-items:center;
     border-radius:0 0 3px 3px;
     &:hover{
         cursor:pointer;
@@ -120,6 +122,17 @@ const SearchBar = () => {
         set_word_entered("");
     }
 
+    const handle_navigate=(page)=>{
+        clear_input();
+        navigate(Navigate(page));
+    }
+
+    let ref=useCloseModal(()=>{
+        clear_input();
+    });
+
+    
+
   return (
     <Container>
         <SearchContainer>
@@ -136,10 +149,10 @@ const SearchBar = () => {
             </InputContainer>
         </SearchContainer>
         {filtered_data.length !==0 && (
-            <ResultsContainer>
+            <ResultsContainer ref={ref}>
                 {filtered_data.map((value)=>
                     {return(
-                        <ResultContainer key={value.id} onClick={()=>navigate(Navigate(value.title))}>
+                        <ResultContainer key={value.id} onClick={()=>handle_navigate(value.title)}>
                             <Result key={value.id} target="_blank">
                                 {value.title}
                             </Result>
