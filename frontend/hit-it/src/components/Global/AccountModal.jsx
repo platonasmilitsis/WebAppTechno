@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import useCloseModal from '../../hooks/useCloseModal';
 import { useNavigate } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import MessagesList from '../Chat/MessagesList';
 
 const Container=styled.div`
     position:relative;
@@ -98,7 +99,15 @@ const AccountModal = () => {
 
     let ref=useCloseModal(()=>{
         set_user_clicked(false);
+        set_messages(false);
     });
+
+    const [messages,set_messages]=useState(false);
+
+    const show_messages=()=>{
+        set_user_clicked(false);
+        set_messages(true);
+    }
 
     return(
         user?
@@ -107,15 +116,17 @@ const AccountModal = () => {
                 <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                 </IconContainer>
                 {!user_clicked?
-                    <UserName>
-                        {user}
-                    </UserName>:
+                    messages?
+                    <MessagesList/>:
+                        <UserName>
+                            {user}
+                        </UserName>:
                     <UserInfoContainer admin={is_admin}>
                         {is_admin && 
                             <UserInfo onClick={()=>navigate("/admin")}>
                                 Admin Panel
                             </UserInfo>}
-                        <UserInfo>
+                        <UserInfo onClick={()=>show_messages()}>
                             Συνομιλίες
                         </UserInfo>
                         <UserInfo onClick={logout}>
