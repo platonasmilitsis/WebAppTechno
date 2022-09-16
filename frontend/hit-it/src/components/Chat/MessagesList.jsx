@@ -2,6 +2,8 @@ import React,{useState, useEffect, useMemo} from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import useGetUserByID from '../../hooks/useGetUserByID';
+import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 
 const Container=styled.div`
     background-color:#7f8c8d;
@@ -23,11 +25,6 @@ const MessagesList = () => {
     let navigate=useNavigate();
 
     const [user,set_user]=useState(null);
-    // const floating_button=()=>{set_user(localStorage.getItem('username'));}
-    // useMemo(()=>floating_button(),[]);
-    
-
-    // const [messages,set_messages]=useState([]);
 
     const [user_id,set_user_id]=useState(null);
     const [contacts,set_contacts]=useState(null);
@@ -35,12 +32,13 @@ const MessagesList = () => {
     const [contacts_ids,set_contacts_ids]=useState([]);
     const [contacts_names,set_contacts_names]=useState([]);
 
+    const get_user_by_id=useGetUserByID();
+    const get_user_by_username=useGetUserByUsername();
+
     useEffect(()=>{
-        console.log(uname);
-        fetch(`http://localhost:8080/users/username=${uname}`)
-        .then((response)=>response.json())
-        .then((data)=>{
-            set_user_id(data.id);
+        const get_name=async()=>{
+            const name=await get_user_by_username(uname);
+            set_user_id(name.id);
             user_id && axiosPrivate.get(`messagesList/${user_id}`)
             .then((response)=>{
                 set_contacts(response.data);
@@ -48,7 +46,8 @@ const MessagesList = () => {
             .catch((error)=>{
                 console.error(error);
             })
-        })
+        }
+        get_name()
         .catch((error)=>{
             console.error(error);
         })
@@ -61,15 +60,13 @@ const MessagesList = () => {
         })
     },[contacts])
     useEffect(()=>{
-        var names=[];
         contacts_ids?.forEach((element)=>{
-            fetch(`http://localhost:8080/users/${element}`)
-            .then((response)=>response.json())
-            .then((data)=>{
-                names.push(data.username);
-                const contact_name=[...contacts_names,data.username];
+            const get_name=async()=>{
+                const name=await get_user_by_id(element);
+                const contact_name=[...contacts_names,name.username];
                 set_contacts_names(contact_name);
-            })
+            }
+            get_name()
             .catch((error)=>{
                 console.error(error);
             })
@@ -81,7 +78,6 @@ const MessagesList = () => {
     <Container>
         {
             contacts_names?.map((name)=>{
-                console.log("CONTACT NAME:",name);
                 return(
                     <p key={name}>
                         {name}
