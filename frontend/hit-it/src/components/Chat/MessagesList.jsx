@@ -1,31 +1,60 @@
-import React,{useState, useEffect, useMemo} from 'react'
-import { useNavigate } from 'react-router-dom';
+import React,{useState, useEffect} from 'react'
 import styled from 'styled-components'
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import useGetUserByID from '../../hooks/useGetUserByID';
 import useGetUserByUsername from '../../hooks/useGetUserByUsername';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Container=styled.div`
     background-color:#7f8c8d;
-    min-height:200px;
+    min-height:215px;
     width:150px;
     z-index:1;
     border-radius:5px;
-    margin-top:138px;
+    margin-top:159px;
     overflow-y:scroll;
-    color:black;
+    border-style:groove;
+    @media (max-width: 1000px) {
+        min-height:100px;
+        width:100px;
+        margin-top:38px;
+    }
+`;
+
+const ContactContainer=styled.div`
+    display:flex;
+    flex-direction:row;
+    height:30px;
+    border-style:outset;
+    align-items:center;
+    &:hover{
+        background-color:#bdc3c7;
+    }
+    cursor:pointer;
+    justify-content:flex-start;
+    @media (max-width: 1000px) {
+        height:28px;
+    }
+`;
+
+const IconContainer=styled.div`
+    margin-right:10px;
+    margin-top:5px;
+    margin-left:5px;
+`;
+
+const Name=styled.p`
     font-family: 'Arial', sans-serif;
-    font-size:16px;
+    font-size:18px;
     font-weight:500;
+    @media (max-width: 1000px) {
+        font-size:16px;
+    }
 `;
 
 const MessagesList = () => {
 
     const axiosPrivate=useAxiosPrivate();
-    let navigate=useNavigate();
-
-    const [user,set_user]=useState(null);
-
     const [user_id,set_user_id]=useState(null);
     const [contacts,set_contacts]=useState(null);
     const uname=localStorage.getItem('username');
@@ -51,13 +80,14 @@ const MessagesList = () => {
         .catch((error)=>{
             console.error(error);
         })
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[axiosPrivate,uname,user_id])
     useEffect(()=>{
         contacts?.forEach((element)=>{
             const contact_id=[...contacts_ids,element.seller_id];
             set_contacts_ids(contact_id);
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[contacts])
     useEffect(()=>{
         contacts_ids?.forEach((element)=>{
@@ -71,6 +101,7 @@ const MessagesList = () => {
                 console.error(error);
             })
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[contacts_ids])
 
 
@@ -79,9 +110,14 @@ const MessagesList = () => {
         {
             contacts_names?.map((name)=>{
                 return(
-                    <p key={name}>
-                        {name}
-                    </p>
+                    <ContactContainer key={name}>
+                        <IconContainer>
+                            <PersonIcon fontSize='medium'/>
+                        </IconContainer>
+                            <Name>
+                                {name}
+                            </Name>
+                    </ContactContainer>
                 )
             })
         }
