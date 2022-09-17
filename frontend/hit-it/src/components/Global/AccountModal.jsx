@@ -104,10 +104,6 @@ const AccountModal = () => {
 
     const [messages,set_messages]=useState(false);
 
-    const show_messages=()=>{
-        set_user_clicked(false);
-        set_messages(true);
-    }
 
     return(
         user?
@@ -115,24 +111,27 @@ const AccountModal = () => {
                 <IconContainer>
                 <AccountBoxIcon fontSize='large' onClick={()=>set_user_clicked(!user_clicked)}/>
                 </IconContainer>
-                {!user_clicked?
+                <UserName>
+                    {user}
+                </UserName>
+                {
+                    user_clicked?
                     messages?
                     <MessagesList/>:
-                        <UserName>
-                            {user}
-                        </UserName>:
                     <UserInfoContainer admin={is_admin}>
                         {is_admin && 
                             <UserInfo onClick={()=>navigate("/admin")}>
                                 Admin Panel
                             </UserInfo>}
-                        <UserInfo onClick={()=>show_messages()}>
+                        <UserInfo onClick={()=>set_messages(!messages)}>
                             Συνομιλίες
                         </UserInfo>
                         <UserInfo onClick={logout}>
                             Αποσύνδεση
                         </UserInfo>
-                    </UserInfoContainer>}
+                    </UserInfoContainer>:
+                    <></>
+                }
             </Container>:
             <>
             <MenuItem onClick={()=>navigate("/register")}>

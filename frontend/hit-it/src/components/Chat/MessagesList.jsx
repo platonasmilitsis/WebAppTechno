@@ -4,12 +4,13 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import useGetUserByID from '../../hooks/useGetUserByID';
 import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import PersonIcon from '@mui/icons-material/Person';
+import Message from './Message';
 
 const Container=styled.div`
     background-color:#7f8c8d;
     min-height:215px;
     width:150px;
-    z-index:1;
+    z-index:3;
     border-radius:5px;
     margin-top:159px;
     overflow-y:scroll;
@@ -19,6 +20,7 @@ const Container=styled.div`
         width:100px;
         margin-top:38px;
     }
+    position:relative;
 `;
 
 const ContactContainer=styled.div`
@@ -104,25 +106,57 @@ const MessagesList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[contacts_ids])
 
+    const [open_chat,set_open_chat]=useState(false);
+    const [contact,set_contact]=useState(null);
+    const [send_contact,set_send_contact]=useState(null);
 
-  return (
-    <Container>
-        {
-            contacts_names?.map((name)=>{
-                return(
-                    <ContactContainer key={name}>
-                        <IconContainer>
-                            <PersonIcon fontSize='medium'/>
-                        </IconContainer>
-                            <Name>
-                                {name}
-                            </Name>
-                    </ContactContainer>
-                )
-            })
+    const handle_click=async(str)=>{
+        set_open_chat(!open_chat);
+        set_contact(str);
+    }
+
+    useEffect(()=>{
+        set_send_contact(contact);
+    },[contact,send_contact])
+
+    const chat=()=>{
+        if(!open_chat){
+            return (
+                <Container>
+                    {
+                        contacts_names?.map((name)=>{
+                            return(
+                                <ContactContainer key={name} onClick={()=>handle_click(name)}>
+                                    <IconContainer>
+                                        <PersonIcon fontSize='medium'/>
+                                    </IconContainer>
+                                        <Name>
+                                            {name}
+                                        </Name>
+                                </ContactContainer>
+                            )
+                        })
+                    }
+                    
+                </Container>
+              )
         }
-    </Container>
-  )
+        else{
+            return(
+                
+                <Message send_contact={send_contact}/>
+                
+            )
+        }
+    }
+    
+    return(
+        <div>
+            {chat()}
+        </div>
+    )
+
+  
 }
 
 export default MessagesList
