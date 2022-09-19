@@ -30,7 +30,7 @@ const Dee = styled.div`
 
 const Back = styled.div`
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
   height: 100vh;
@@ -61,7 +61,7 @@ const SellContainer=styled.div`
     
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0);
     position:absolute;
-    z-index:2;
+    z-index:4;
     display:flex;
     justify-content:center;
     top:0;
