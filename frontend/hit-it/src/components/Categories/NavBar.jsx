@@ -1,8 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
 import AccountModal from '../Global/AccountModal';
+import { StopPropagation } from '../Chat/StopPropagation';
+import Message from '../Chat/Message';
 
 const Container=styled.div`
     display:flex;
@@ -100,6 +102,9 @@ const NavBar = () => {
 
     let navigate=useNavigate();
 
+    const [open,set_open]=useState(false);
+    const [name,set_name]=useState(null);
+
   return (
     <Container>
         <LogoContainer>
@@ -111,9 +116,12 @@ const NavBar = () => {
             <SearchBar/>
         </SearchContainter>
         <RightContainer>
+        <StopPropagation.Provider value={{open,set_open,name,set_name}}>
             <AccountModalContainer>
                 <AccountModal/>
+                {open && <Message/>}
             </AccountModalContainer>
+        </StopPropagation.Provider>
         </RightContainer>
     </Container>
   )

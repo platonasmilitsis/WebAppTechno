@@ -1,6 +1,8 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from 'styled-components'
+import Message from '../Chat/Message';
 import AccountModal from '../Global/AccountModal';
+import { StopPropagation } from '../Chat/StopPropagation';
 
 const Container=styled.div`
     height:60px;
@@ -32,11 +34,17 @@ const Right=styled.div`
 
 const NavBar = () => {
 
+    const [open,set_open]=useState(false);
+    const [name,set_name]=useState(null);
+
   return (
     <Container>
         <Wrapper>
             <Right>
-                <AccountModal/>
+                <StopPropagation.Provider value={{open,set_open,name,set_name}}>
+                    <AccountModal/>
+                    {open && <Message/>}
+                </StopPropagation.Provider>
             </Right>
         </Wrapper>
     </Container>

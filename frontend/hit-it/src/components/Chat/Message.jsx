@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
+import { StopPropagation } from './StopPropagation';
 
 const Container=styled.div`
     background-color:#7f8c8d;
@@ -13,10 +14,19 @@ const Container=styled.div`
     border-style:groove;
 `;
 
-const Message = (props) => {
+const Button=styled.button`
+  width:100px;
+  height:100px;
+`;
+
+const Message = () => {
+
+  const {set_open,name}=useContext(StopPropagation);
+
   return (
     <Container>
-      {props.send_contact}
+      {name && name}
+      <Button onClick={()=>set_open(false)}/>
     </Container>
   )
 }

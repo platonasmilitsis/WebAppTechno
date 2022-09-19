@@ -1,31 +1,28 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import styled from 'styled-components'
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import useGetUserByID from '../../hooks/useGetUserByID';
 import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import PersonIcon from '@mui/icons-material/Person';
-import Message from './Message';
+import { StopPropagation } from './StopPropagation';
 
 const Container=styled.div`
     background-color:#7f8c8d;
-    min-height:215px;
+    height:215px;
     width:150px;
     z-index:3;
     border-radius:5px;
-    ${'' /* margin-top:159px; */}
-    ${'' /* margin-right:300px; */}
-    margin-left:-80px;
-    margin-top:-5px;
     overflow-y:scroll;
     border-style:groove;
     @media (max-width: 1000px) {
-        min-height:100px;
+        height:100px;
         width:100px;
         margin-left:-55px;
         margin-top:-8px;
-        ${'' /* margin-top:38px; */}
     }
     position:absolute;
+    margin-left:-82px;
+    margin-top:-5px;
 `;
 
 const ContactContainer=styled.div`
@@ -115,49 +112,47 @@ const MessagesList = () => {
     const [contact,set_contact]=useState(null);
     const [send_contact,set_send_contact]=useState(null);
 
+    const {set_open,set_name}=useContext(StopPropagation);
+
+
     const handle_click=async(str)=>{
         set_open_chat(!open_chat);
         set_contact(str);
+        set_open(false); // Close possibly other open chats
+        set_open(true); // Open new
     }
+
+
 
     useEffect(()=>{
         set_send_contact(contact);
-    },[contact,send_contact])
-
-    const chat=()=>{
-        if(!open_chat){
-            return (
-                <Container>
-                    {
-                        contacts_names?.map((name)=>{
-                            return(
-                                <ContactContainer key={name} onClick={()=>handle_click(name)}>
-                                    <IconContainer>
-                                        <PersonIcon fontSize='medium'/>
-                                    </IconContainer>
-                                        <Name>
-                                            {name}
-                                        </Name>
-                                </ContactContainer>
-                            )
-                        })
-                    }
-                    
-                </Container>
-              )
-        }
-        else{
-            return(
-                
-                <Message send_contact={send_contact}/>
-                
-            )
-        }
-    }
+        set_name(contact);
+    },[set_name,set_open,contact,send_contact])
     
     return(
-        <div>
-            {chat()}
+        <div style={{position:"relative"}}>
+        {
+            !open_chat && 
+                <Container>
+                {
+                    contacts_names?.map((name)=>{
+                        return(
+                            <ContactContainer key={name} onClick={()=>handle_click(name)}>
+                                <IconContainer>
+                                    <PersonIcon fontSize='medium'/>
+                                </IconContainer>
+                                    <Name>
+                                        {name}
+                                    </Name>
+                            </ContactContainer>
+                        )
+                    })
+                }
+                        
+            </Container>
+        }
+        
+        
         </div>
     )
 
