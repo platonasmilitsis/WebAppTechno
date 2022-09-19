@@ -38,11 +38,10 @@ const Logo=styled.h1`
 `;
 
 const SearchContainter=styled.div`
-    margin-top:60px;
+    margin-top:50px;
     display:flex;
     @media (max-width: 1077px) {
         order:3;
-        margin-top:-30px;
         @media screen and (max-width:1077px) and (min-width:1000px){
             margin-left:200px;
         }
@@ -92,9 +91,9 @@ const RightContainer=styled.div`
 `;
 
 const AccountModalContainer=styled.div`
-    @media (max-width: 1000px) {
-        margin-top:-20px;
-    }
+    position:absolute;
+    margin-left:-100px;
+    margin-top:-50px;
 `;
 
 const NavBar = () => {

@@ -12,15 +12,20 @@ const Container=styled.div`
     width:150px;
     z-index:3;
     border-radius:5px;
-    margin-top:159px;
+    ${'' /* margin-top:159px; */}
+    ${'' /* margin-right:300px; */}
+    margin-left:-80px;
+    margin-top:-5px;
     overflow-y:scroll;
     border-style:groove;
     @media (max-width: 1000px) {
         min-height:100px;
         width:100px;
-        margin-top:38px;
+        margin-left:-55px;
+        margin-top:-8px;
+        ${'' /* margin-top:38px; */}
     }
-    position:relative;
+    position:absolute;
 `;
 
 const ContactContainer=styled.div`

@@ -6,33 +6,32 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MessagesList from '../Chat/MessagesList';
 
 const Container=styled.div`
-    position:relative;
     display:flex;
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    height:130px;
-    width:150px;
+    position:absolute;
     @media (max-width: 1000px) {
-        width:100px;
+        margin-top:30px;
+        margin-right:30px;
     }
+    margin-top:50px;
+    margin-right:50px;
 `;
 
 const UserName=styled.h1`
     font-family: 'Arial', sans-serif;
     font-size:18px;
     font-weight:normal;
-    top:40px;
-    position:absolute;
     @media (max-width: 1000px) {
         font-size:16px;
-        top:35px;
     }
+    position:absolute;
+    margin-top:60px;
+
 `;
 
 const IconContainer=styled.div`
-    position:absolute;
-    top:0;
     cursor:pointer;
     transform:scale(1.3);
     @media (max-width: 1000px) {
@@ -46,15 +45,15 @@ const UserInfoContainer=styled.div`
     border-radius:5px;
     height:${props=>props.admin?"100px":"70px"};
     width:120px;
-    position:absolute;
     text-align:center;
-    position:relative;
-    margin-top:${props=>props.admin?"34px":"8px"};
     background-color:#7f8c8d;
     @media (max-width: 1000px) {
         width:100px;
-        margin-top:${props=>props.admin?"30px":"2px"};
+        margin-top:${props=>props.admin?"123px":"93px"};
     }
+    position:absolute;
+    margin-top:${props=>props.admin?"129px":"98px"};
+
 `;
 
 const UserInfo=styled.p`
@@ -70,12 +69,13 @@ const UserInfo=styled.p`
 
 const MenuItem=styled.div`
     cursor:pointer;
-    margin-left:25px;
     @media (max-width: 1000px) {
         margin:0 auto;
     }
     font-size:16px;
     font-weight:normal;
+    position:absolute;
+
 `;
 
 const AccountModal = () => {
