@@ -110,9 +110,8 @@ const MessagesList = () => {
 
     const [open_chat,set_open_chat]=useState(false);
     const [contact,set_contact]=useState(null);
-    const [send_contact,set_send_contact]=useState(null);
 
-    const {set_open,set_name}=useContext(StopPropagation);
+    const {set_open,name,set_name,clicked_name,set_clicked_name}=useContext(StopPropagation);
 
 
     const handle_click=async(str)=>{
@@ -125,9 +124,22 @@ const MessagesList = () => {
 
 
     useEffect(()=>{
-        set_send_contact(contact);
-        set_name(contact);
-    },[set_name,set_open,contact,send_contact])
+        if(!name.includes(contact)){ // Not losing values after closing modal
+            const cont=[...name,contact];
+            set_name(cont);
+        }
+    },[set_name,set_open,contact,name])
+
+    useEffect(()=>{
+        if(contact===null){
+            set_clicked_name(clicked_name)
+        }
+        else{
+            set_clicked_name(contact);
+        }
+    },[contact,clicked_name,set_clicked_name])
+
+    
     
     return(
         <div style={{position:"relative"}}>

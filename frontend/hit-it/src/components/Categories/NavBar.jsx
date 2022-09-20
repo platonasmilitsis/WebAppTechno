@@ -103,7 +103,9 @@ const NavBar = () => {
     let navigate=useNavigate();
 
     const [open,set_open]=useState(false);
-    const [name,set_name]=useState(null);
+    const [name,set_name]=useState([]);
+    const [clicked_name,set_clicked_name]=useState([]);
+
 
   return (
     <Container>
@@ -116,7 +118,7 @@ const NavBar = () => {
             <SearchBar/>
         </SearchContainter>
         <RightContainer>
-        <StopPropagation.Provider value={{open,set_open,name,set_name}}>
+        <StopPropagation.Provider value={{open,set_open,name,set_name,clicked_name,set_clicked_name}}>
             <AccountModalContainer>
                 <AccountModal/>
                 {open && <Message/>}

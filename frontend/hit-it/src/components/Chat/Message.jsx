@@ -21,11 +21,11 @@ const Button=styled.button`
 
 const Message = () => {
 
-  const {set_open,name}=useContext(StopPropagation);
+  const {set_open,clicked_name}=useContext(StopPropagation);
 
   return (
     <Container>
-      {name && name}
+      {clicked_name && clicked_name}
       <Button onClick={()=>set_open(false)}/>
     </Container>
   )

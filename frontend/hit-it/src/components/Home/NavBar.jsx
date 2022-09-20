@@ -35,13 +35,14 @@ const Right=styled.div`
 const NavBar = () => {
 
     const [open,set_open]=useState(false);
-    const [name,set_name]=useState(null);
+    const [name,set_name]=useState([]);
+    const [clicked_name,set_clicked_name]=useState([]);
 
   return (
     <Container>
         <Wrapper>
             <Right>
-                <StopPropagation.Provider value={{open,set_open,name,set_name}}>
+                <StopPropagation.Provider value={{open,set_open,name,set_name,clicked_name,set_clicked_name}}>
                     <AccountModal/>
                     {open && <Message/>}
                 </StopPropagation.Provider>

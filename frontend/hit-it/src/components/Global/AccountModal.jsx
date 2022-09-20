@@ -107,7 +107,7 @@ const AccountModal = () => {
 
     const handle=()=>{
         set_user_clicked(!user_clicked);
-        set_open(false);
+        // set_open(false);
         set_messages(false);
     }
 
