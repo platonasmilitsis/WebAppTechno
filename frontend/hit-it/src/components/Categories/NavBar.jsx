@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Global/SearchBar';
@@ -98,13 +98,35 @@ const AccountModalContainer=styled.div`
     margin-top:-50px;
 `;
 
+const MessengerContainer=styled.div`
+    overflow-x:scroll;
+    position:fixed;
+    bottom:0;
+    z-index:3;
+    display:flex;
+    flex:1;
+    flex-direction:row;
+    width:80%;
+    margin-left:10%;
+    margin-right:10%;
+    justify-content:safe flex-end;
+    flex-flow:row nowrap;
+    @media (max-width: 1000px) {
+        width:307px;
+    }
+`;
+
 const NavBar = () => {
 
     let navigate=useNavigate();
 
-    const [open,set_open]=useState(false);
-    const [name,set_name]=useState([]);
     const [clicked_name,set_clicked_name]=useState([]);
+
+    const ScrollEnd=()=> {
+        const el=useRef();
+        useEffect(()=>el.current.scrollIntoView());
+        return <div ref={el}/>;
+      };
 
 
   return (
@@ -117,14 +139,26 @@ const NavBar = () => {
         <SearchContainter>
             <SearchBar/>
         </SearchContainter>
+        <StopPropagation.Provider value={{clicked_name,set_clicked_name}}>
         <RightContainer>
-        <StopPropagation.Provider value={{open,set_open,name,set_name,clicked_name,set_clicked_name}}>
             <AccountModalContainer>
                 <AccountModal/>
-                {open && <Message/>}
             </AccountModalContainer>
-        </StopPropagation.Provider>
         </RightContainer>
+        <MessengerContainer>
+            {
+                clicked_name?.map((value)=>{
+                    return(
+                        value && clicked_name.includes(value) &&
+                            <div key={value}>
+                            <Message name={value}/>
+                            <ScrollEnd/>
+                            </div>
+                    )
+                })
+            }
+        </MessengerContainer>
+        </StopPropagation.Provider>
     </Container>
   )
 }

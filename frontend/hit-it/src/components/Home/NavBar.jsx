@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import styled from 'styled-components'
 import Message from '../Chat/Message';
 import AccountModal from '../Global/AccountModal';
@@ -32,19 +32,52 @@ const Right=styled.div`
     }
 `;
 
+const MessengerContainer=styled.div`
+    overflow-x:scroll;
+    position:fixed;
+    margin-right:100px;
+    bottom:0;
+    z-index:3;
+    display:flex;
+    flex:1;
+    flex-direction:row;
+    width:1530px;
+    justify-content:safe flex-end;
+    flex-flow:row nowrap;
+    @media (max-width: 1000px) {
+        width:307px;
+    }
+`;
+
 const NavBar = () => {
 
-    const [open,set_open]=useState(false);
-    const [name,set_name]=useState([]);
     const [clicked_name,set_clicked_name]=useState([]);
+
+    const ScrollEnd=()=> {
+        const el=useRef();
+        useEffect(()=>el.current.scrollIntoView());
+        return <div ref={el}/>;
+      };
 
   return (
     <Container>
         <Wrapper>
             <Right>
-                <StopPropagation.Provider value={{open,set_open,name,set_name,clicked_name,set_clicked_name}}>
+                <StopPropagation.Provider value={{clicked_name,set_clicked_name}}>
                     <AccountModal/>
-                    {open && <Message/>}
+                    <MessengerContainer>
+                        {
+                            clicked_name?.map((value)=>{
+                                return(
+                                    value && clicked_name.includes(value) &&
+                                        <div key={value}>
+                                        <Message name={value}/>
+                                        <ScrollEnd/>
+                                        </div>
+                                )
+                            })
+                        }
+                    </MessengerContainer>
                 </StopPropagation.Provider>
             </Right>
         </Wrapper>

@@ -54,6 +54,9 @@ const Name=styled.p`
     @media (max-width: 1000px) {
         font-size:16px;
     }
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 `;
 
 const MessagesList = () => {
@@ -63,7 +66,7 @@ const MessagesList = () => {
     const [contacts,set_contacts]=useState(null);
     const uname=localStorage.getItem('username');
     const [contacts_ids,set_contacts_ids]=useState([]);
-    const [contacts_names,set_contacts_names]=useState([]);
+    const [contacts_names,set_contacts_names]=useState(['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','b','c','d','e','f','g','h','i','j']);
 
     const get_user_by_id=useGetUserByID();
     const get_user_by_username=useGetUserByUsername();
@@ -111,34 +114,22 @@ const MessagesList = () => {
     const [open_chat,set_open_chat]=useState(false);
     const [contact,set_contact]=useState(null);
 
-    const {set_open,name,set_name,clicked_name,set_clicked_name}=useContext(StopPropagation);
+    const {clicked_name,set_clicked_name}=useContext(StopPropagation);
 
 
     const handle_click=async(str)=>{
         set_open_chat(!open_chat);
         set_contact(str);
-        set_open(false); // Close possibly other open chats
-        set_open(true); // Open new
     }
 
 
 
     useEffect(()=>{
-        if(!name.includes(contact)){ // Not losing values after closing modal
-            const cont=[...name,contact];
-            set_name(cont);
+        if(!clicked_name.includes(contact)){
+            const cont=[...clicked_name,contact];
+            set_clicked_name(cont);
         }
-    },[set_name,set_open,contact,name])
-
-    useEffect(()=>{
-        if(contact===null){
-            set_clicked_name(clicked_name)
-        }
-        else{
-            set_clicked_name(contact);
-        }
-    },[contact,clicked_name,set_clicked_name])
-
+    },[contact,set_clicked_name,clicked_name])
     
     
     return(
