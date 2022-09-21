@@ -1,7 +1,5 @@
 import React,{useState, useEffect, useContext} from 'react'
 import styled from 'styled-components'
-import useGetUserByID from '../../hooks/useGetUserByID';
-import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import PersonIcon from '@mui/icons-material/Person';
 import { StopPropagation } from './StopPropagation';
 
@@ -60,63 +58,14 @@ const Name=styled.p`
 
 const MessagesList = () => {
 
-    const [user_id,set_user_id]=useState(null);
-    const [contacts,set_contacts]=useState(null);
-    const uname=localStorage.getItem('username');
-    // const [contacts_names,set_contacts_names]=useState(['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','b','c','d','e','f','g','h','i','j']);
-    const [contacts_names,set_contacts_names]=useState([]);
-
-    const get_user_by_id=useGetUserByID();
-    const get_user_by_username=useGetUserByUsername();
-    
-
-    useEffect(()=>{
-        const get_id=async()=>{
-            const name=await get_user_by_username(uname);
-            set_user_id(name.id);
-        }
-        get_id()
-        .catch((error)=>console.error(error));
-    },[uname,user_id,get_user_by_username])
-
-    useEffect(()=>{
-        const get_contacts=async()=>{
-            user_id && fetch(`http://localhost:8080/messagesList/${user_id}`)
-            .then((response)=>response.json())
-            .then((data)=>{
-                set_contacts(data);
-            })
-            .catch((error)=>console.error(error));
-        }
-        get_contacts()
-        .catch((error)=>console.error(error));
-    },[user_id])
-
-    useEffect(()=>{
-        const get_contact=async(element)=>{
-            const name=await get_user_by_id(element.seller_id);
-            if(!contacts_names.includes(name.username)){
-                set_contacts_names([...contacts_names,name.username]);
-            }
-        }
-        contacts?.forEach((element)=>{
-            get_contact(element);
-        })
-    },[contacts,get_user_by_id,contacts_names,set_contacts_names])
-
-
     const [open_chat,set_open_chat]=useState(false);
     const [contact,set_contact]=useState(null);
-
-    const {clicked_name,set_clicked_name}=useContext(StopPropagation);
-
+    const {clicked_name,set_clicked_name,contacts_names}=useContext(StopPropagation);
 
     const handle_click=async(str)=>{
         set_open_chat(!open_chat);
         set_contact(str);
     }
-
-
 
     useEffect(()=>{
         if(!clicked_name.includes(contact)){
@@ -124,7 +73,6 @@ const MessagesList = () => {
             set_clicked_name(cont);
         }
     },[contact,set_clicked_name,clicked_name])
-    
     
     return(
         <div style={{position:"relative"}}>
@@ -152,8 +100,6 @@ const MessagesList = () => {
         
         </div>
     )
-
-  
 }
 
 export default MessagesList
