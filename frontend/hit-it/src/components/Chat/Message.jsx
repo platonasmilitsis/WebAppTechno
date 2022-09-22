@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState, useRef} from 'react'
 import styled from 'styled-components'
 import { StopPropagation } from './StopPropagation';
 import PersonIcon from '@mui/icons-material/Person';
@@ -43,7 +43,7 @@ const Name=styled.p`
 const CloseIconContainer=styled.div`
   cursor:pointer;
   position:absolute;
-  margin-left:265px;
+  margin-left:270px;
 `;
 
 const BottomDiv=styled.div`
@@ -64,21 +64,36 @@ const Input=styled.input`
 
 const SendIconContainer=styled.div`
   position:absolute;
-  bottom:0;
-  margin-left:265px;
+  bottom:2px;
+  margin-left:270px;
   cursor:pointer;
 `;
 
 const MessagesContainter=styled.div`
   position:absolute;
   overflow-y:scroll;
-  margin-top:35px;
-  height:50px;
+  margin-top:40px;
+  height:330px;
   width:300px;
+  
 `;
 
-const Chat=styled.p`
+const Chat=styled.div`
+  background-color:${props=>props.sender_id===props.uid?"#515a5a":"#95a5a6"};
+  max-width:40%;
+  width:fit-content;
+  block-size:fit-content;
+  margin-bottom:1px;
+  border-radius:10px;
+  margin-left:${props=>props.sender_id===props.uid?"auto":"5px"};
+  margin-right:${props=>props.sender_id===props.uid?"5px":"auto"};
+`;
 
+const Talk=styled.p`
+  font-family: 'Arial', sans-serif;
+  font-size:16px;
+  padding:8px;
+  
 `;
 
 const Message = (props) => {
@@ -86,6 +101,12 @@ const Message = (props) => {
   const {set_clicked_name}=useContext(StopPropagation);
 
   const get_user_by_username=useGetUserByUsername();
+
+  const ScrollEnd=()=> {
+    const el=useRef();
+    useEffect(()=>el.current.scrollIntoView());
+    return <div ref={el}/>;
+  };
 
 
   const handle_click=()=>{
@@ -158,8 +179,11 @@ const Message = (props) => {
           {
             messages && messages.map((value)=>{
               return(
-                <Chat key={value.id}>
-                  {value.message}
+                <Chat key={value.id} sender_id={value.sender_id} uid={props.uid}>
+                  <Talk>
+                    {value.message}
+                  </Talk>
+                <ScrollEnd/>
                 </Chat>
               )
             })
