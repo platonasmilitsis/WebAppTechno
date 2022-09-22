@@ -1,10 +1,11 @@
-import React, {useContext, useEffect, useState, useRef} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { StopPropagation } from './StopPropagation';
 import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@mui/icons-material/Send';
 import useGetUserByUsername from '../../hooks/useGetUserByUsername';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Container=styled.div`
     background-color:#7f8c8d;
@@ -93,20 +94,23 @@ const Talk=styled.p`
   font-family: 'Arial', sans-serif;
   font-size:16px;
   padding:8px;
-  
 `;
 
+const Form=styled.form``;
+
 const Message = (props) => {
+
+  const axiosPrivate=useAxiosPrivate();
 
   const {set_clicked_name}=useContext(StopPropagation);
 
   const get_user_by_username=useGetUserByUsername();
 
-  const ScrollEnd=()=> {
-    const el=useRef();
-    useEffect(()=>el.current.scrollIntoView());
-    return <div ref={el}/>;
-  };
+  // const ScrollEnd=()=> {
+  //   const el=useRef();
+  //   useEffect(()=>el.current.scrollIntoView());
+  //   return <div ref={el}/>;
+  // };
 
 
   const handle_click=()=>{
@@ -125,7 +129,7 @@ const Message = (props) => {
       set_contact_id(name.id);
     }
     get_id()
-    .catch((error)=>console.error(error));
+    .catch(()=>{});
   },[get_user_by_username,props.name])
 
   useEffect(()=>{
@@ -159,7 +163,35 @@ const Message = (props) => {
     .then((data)=>{
       set_messages(data);
     })
-  },[message_id])
+    .catch(()=>{})
+  },[message_id,messages])
+
+  const [form_value,set_form_value]=useState('');
+
+  const get_date=()=>{
+    var today=new Date();
+    var date=today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + 
+        ' '+today.getHours() + ':' + today.getMinutes();
+    return date;
+  }
+
+  const handle_submit=async(e)=>{
+    e.preventDefault();
+    const headers={
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+    const message={
+      message:form_value,
+      is_read:false,
+      sender_id:props.uid,
+      messages_list_id:message_id,
+      time:get_date()
+    };
+    axiosPrivate.post(`messagesList/${message_id}`,message,{headers})
+    .catch((error)=>console.error(error));
+    set_form_value('');
+  }
 
 
   return (
@@ -175,7 +207,7 @@ const Message = (props) => {
           <CloseIcon fontSize='medium' onClick={()=>handle_click()}/>
         </CloseIconContainer>
       </TopDiv>
-      <MessagesContainter>
+      <MessagesContainter id="chat-window">
           {
             messages && messages.map((value)=>{
               return(
@@ -183,16 +215,18 @@ const Message = (props) => {
                   <Talk>
                     {value.message}
                   </Talk>
-                <ScrollEnd/>
                 </Chat>
               )
             })
           }
+      {/* <ScrollEnd/> */}
       </MessagesContainter>
       <BottomDiv>
-        <Input type='text'/>
+          <Form onSubmit={handle_submit}>
+            <Input type='text' value={form_value} onChange={(e)=>set_form_value(e.target.value)}/>
+          </Form>
         <SendIconContainer>
-          <SendIcon fontSize='small'/>
+          <SendIcon fontSize='small' onClick={handle_submit}/>
         </SendIconContainer>
       </BottomDiv>
     </Container>
