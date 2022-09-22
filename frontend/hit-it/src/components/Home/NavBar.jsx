@@ -70,7 +70,7 @@ const NavBar = () => {
             set_user_id(name.id);
         }
         get_id()
-        .catch((error)=>console.error(error));
+        .catch(()=>{});
     },[uname,user_id,get_user_by_username])
 
     useEffect(()=>{
@@ -131,7 +131,7 @@ const NavBar = () => {
                                 return(
                                     value && clicked_name.includes(value) &&
                                         <div key={value}>
-                                        <Message name={value}/>
+                                        <Message name={value} uid={user_id}/>
                                         <ScrollEnd/>
                                         </div>
                                 )

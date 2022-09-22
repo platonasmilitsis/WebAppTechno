@@ -1,10 +1,9 @@
-import React,{useState, useMemo, useContext} from 'react'
+import React,{useState, useMemo} from 'react'
 import styled from 'styled-components'
 import useCloseModal from '../../hooks/useCloseModal';
 import { useNavigate } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import MessagesList from '../Chat/MessagesList';
-import { StopPropagation } from '../Chat/StopPropagation';
 
 const Container=styled.div`
     display:flex;
@@ -98,8 +97,6 @@ const AccountModal = () => {
 
     const [user_clicked,set_user_clicked]=useState(false);
 
-    const {set_open}=useContext(StopPropagation);
-
     let ref=useCloseModal(()=>{
         set_user_clicked(false);
         set_messages(false);
@@ -107,7 +104,6 @@ const AccountModal = () => {
 
     const handle=()=>{
         set_user_clicked(!user_clicked);
-        // set_open(false);
         set_messages(false);
     }
 
