@@ -7,12 +7,8 @@ import SendIcon from '@mui/icons-material/Send';
 
 const Container=styled.div`
     background-color:#7f8c8d;
-    height:400px;
-    width:300px;
-    z-index:3;
-    position:fixed;
-    bottom:0;
-    right:100px;
+    min-height:400px;
+    min-width:300px;
     border-radius:5px;
     border-style:groove;
     display:flex;
@@ -33,16 +29,20 @@ const PersonIconContainer=styled.div`
 `;
 
 const Name=styled.p`
-  font-family: 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif;
     font-size:20px;
     font-weight:500;
     margin-left:10px;
+    width:200px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 `;
 
 const CloseIconContainer=styled.div`
   cursor:pointer;
   position:absolute;
-  right:5px;
+  margin-left:265px;
 `;
 
 const BottomDiv=styled.div`
@@ -62,14 +62,20 @@ const Input=styled.input`
 `;
 
 const SendIconContainer=styled.div`
-  right:8px;
-  bottom:0;
   position:absolute;
+  bottom:0;
+  margin-left:265px;
+  cursor:pointer;
 `;
 
-const Message = () => {
+const Message = (props) => {
 
-  const {set_open,clicked_name}=useContext(StopPropagation);
+  const {set_clicked_name}=useContext(StopPropagation);
+
+  const handle_click=()=>{
+    set_clicked_name((current)=>
+      current.filter((curr)=>curr!==props.name));
+  }
 
   return (
     <Container>
@@ -78,10 +84,10 @@ const Message = () => {
           <PersonIcon/>
         </PersonIconContainer>
         <Name>
-          {clicked_name}
+          {props.name}
         </Name>
         <CloseIconContainer>
-          <CloseIcon fontSize='medium' onClick={()=>set_open(false)}/>
+          <CloseIcon fontSize='medium' onClick={()=>handle_click()}/>
         </CloseIconContainer>
       </TopDiv>
       <BottomDiv>

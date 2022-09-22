@@ -1,8 +1,5 @@
 import React,{useState, useEffect, useContext} from 'react'
 import styled from 'styled-components'
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
-import useGetUserByID from '../../hooks/useGetUserByID';
-import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import PersonIcon from '@mui/icons-material/Person';
 import { StopPropagation } from './StopPropagation';
 
@@ -54,92 +51,28 @@ const Name=styled.p`
     @media (max-width: 1000px) {
         font-size:16px;
     }
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 `;
 
 const MessagesList = () => {
 
-    const axiosPrivate=useAxiosPrivate();
-    const [user_id,set_user_id]=useState(null);
-    const [contacts,set_contacts]=useState(null);
-    const uname=localStorage.getItem('username');
-    const [contacts_ids,set_contacts_ids]=useState([]);
-    const [contacts_names,set_contacts_names]=useState([]);
-
-    const get_user_by_id=useGetUserByID();
-    const get_user_by_username=useGetUserByUsername();
-
-    useEffect(()=>{
-        const get_name=async()=>{
-            const name=await get_user_by_username(uname);
-            set_user_id(name.id);
-            user_id && axiosPrivate.get(`messagesList/${user_id}`)
-            .then((response)=>{
-                set_contacts(response.data);
-            })
-            .catch((error)=>{
-                console.error(error);
-            })
-        }
-        get_name()
-        .catch((error)=>{
-            console.error(error);
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[axiosPrivate,uname,user_id])
-    useEffect(()=>{
-        contacts?.forEach((element)=>{
-            const contact_id=[...contacts_ids,element.seller_id];
-            set_contacts_ids(contact_id);
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[contacts])
-    useEffect(()=>{
-        contacts_ids?.forEach((element)=>{
-            const get_name=async()=>{
-                const name=await get_user_by_id(element);
-                const contact_name=[...contacts_names,name.username];
-                set_contacts_names(contact_name);
-            }
-            get_name()
-            .catch((error)=>{
-                console.error(error);
-            })
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[contacts_ids])
-
     const [open_chat,set_open_chat]=useState(false);
     const [contact,set_contact]=useState(null);
-
-    const {set_open,name,set_name,clicked_name,set_clicked_name}=useContext(StopPropagation);
-
+    const {clicked_name,set_clicked_name,contacts_names}=useContext(StopPropagation);
 
     const handle_click=async(str)=>{
         set_open_chat(!open_chat);
         set_contact(str);
-        set_open(false); // Close possibly other open chats
-        set_open(true); // Open new
     }
 
-
-
     useEffect(()=>{
-        if(!name.includes(contact)){ // Not losing values after closing modal
-            const cont=[...name,contact];
-            set_name(cont);
+        if(!clicked_name.includes(contact)){
+            const cont=[...clicked_name,contact];
+            set_clicked_name(cont);
         }
-    },[set_name,set_open,contact,name])
-
-    useEffect(()=>{
-        if(contact===null){
-            set_clicked_name(clicked_name)
-        }
-        else{
-            set_clicked_name(contact);
-        }
-    },[contact,clicked_name,set_clicked_name])
-
-    
+    },[contact,set_clicked_name,clicked_name])
     
     return(
         <div style={{position:"relative"}}>
@@ -167,8 +100,6 @@ const MessagesList = () => {
         
         </div>
     )
-
-  
 }
 
 export default MessagesList
