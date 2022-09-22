@@ -92,9 +92,18 @@ const NavBar = () => {
 
     useEffect(()=>{
         const get_contact=async(element)=>{
-            const name=await get_user_by_id(element.seller_id);
-            if(!contacts_names.includes(name.username)){
-                set_contacts_names([...contacts_names,name.username]);
+            // Find whether is buyer or seller, same chat for both, different contact name
+            if(element.seller_id!==user_id){
+                const name=await get_user_by_id(element.seller_id);
+                if(!contacts_names.includes(name.username)){
+                    set_contacts_names([...contacts_names,name.username]);
+                }
+            }
+            else{
+                const name=await get_user_by_id(element.buyer_id);
+                if(!contacts_names.includes(name.username)){
+                    set_contacts_names([...contacts_names,name.username]);
+                }
             }
         }
         contacts?.forEach((element)=>{
@@ -102,7 +111,7 @@ const NavBar = () => {
             .catch(()=>{})
         })
         sort_by_name();
-    },[contacts,get_user_by_id,contacts_names,set_contacts_names,sort_by_name])
+    },[contacts,get_user_by_id,contacts_names,set_contacts_names,sort_by_name,user_id])
 
     const ScrollEnd=()=> {
         const el=useRef();
