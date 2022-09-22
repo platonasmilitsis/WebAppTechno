@@ -47,8 +47,12 @@ public class ItemService {
         if(user.isPresent())
         {
             newItem.setUser(user.get());
+            
             newItem.setItem_start_biding_sold(0L);
-            return itemRepository.save(newItem);
+            Item myItem =  itemRepository.save(newItem);
+            if(!bidsService.isBidsPresent(myItem.getId()).isPresent())
+                bidsService.createBids(myItem.getId());
+            return myItem;
         }
         else throw new UserNotFoundException();
     }
@@ -67,6 +71,25 @@ public class ItemService {
                     this.checkSetImgPath(item, newItem.getImg_path());
                     return itemRepository.save(item);
                 }).orElseThrow(ItemNotFoundException:: new);
+
+
+    }
+
+
+    public Item startBid(Long id){
+        Optional<Item> item = itemRepository.findById(id);
+        if(item.isPresent()){
+            Item myItem = item.get();
+            
+            if(!bidsService.isBidsPresent(id).isPresent())
+                bidsService.createBids(id);
+            
+            myItem.setItem_start_biding_sold(1L);
+            
+            return itemRepository.save(myItem) ;
+        }
+
+        return null;
 
 
     }

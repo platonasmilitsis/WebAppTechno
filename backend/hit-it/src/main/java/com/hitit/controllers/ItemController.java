@@ -52,6 +52,12 @@ public class ItemController {
     }
 
 
+    @PutMapping("/items/start/{id}")
+    public Item startBid(@PathVariable Long id){
+        return itemService.startBid(id);
+    }
+
+
 
 
     @DeleteMapping("/items/{id}")

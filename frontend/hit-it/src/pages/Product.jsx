@@ -22,7 +22,12 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { Card } from '@mui/material';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
+import { axiosPrivate } from '../api/axios';
+import moment from 'moment';
+import PersonIcon from '@mui/icons-material/Person';
 
 
 const FootCont=styled.div`
@@ -52,7 +57,12 @@ const Product = () => {
     const [itemNotFound, setItemNotFound] = useState(false);
     const[callBidder,setCallBidder] = useState(false);
     const [currentBid, setCurrentBid] = useState();
+    const [soldToUsername, setSoldToUsername] = useState();
     const [categories,setCategory] = useState([]);
+
+    const [now, setNow] = useState();
+
+
      
 
     /* Async Functions */
@@ -76,11 +86,22 @@ const Product = () => {
             console.error(error);
         })
     }
+
     
+    const soldTo = async() => {
+        const res = await fetch(`http://localhost:8080/users/${maxBidder}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setSoldToUsername(data.username);
+            })
+        return res;
+    }
+
     const bids_function=()=>{
         fetch(`http://localhost:8080/items/${params.product_id}/all`)
             .then((response)=>response.json())
             .then((data)=>{
+                console.log("Simantiko:",data);
                 setCategory(data?.categories);
                 setItem(data?.item);
                 console.log(data?.item);
@@ -108,15 +129,60 @@ const Product = () => {
     }
 
 
+    const handleStart = async() => {
+        const res = await axiosPrivate.put(`/items/start/${item?.id}`)
+            .then((data) => {
+                setRefresh(true);
+            })
+    }
+
+
     //UseEffect
 
     useEffect(()=> {
+        var today = new Date();
+
+        const date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() + ' '
+            + today.getHours() + ":" + today.getMinutes() ; 
+
+        setNow(date); 
         setRefresh(false);
         user_function();
         bids_function();
     },[navigate,user,refresh])
 
+    {item?.item_start_biding_sold == 0 && soldTo()}
+    
 
+
+    const SoldComponent = () => {
+        return soldToUsername ? 
+                <Typography component={"span"} variant={"body1"}>
+                    <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Πουλήθηκε</span>: 
+                    <PersonIcon style={{marginLeft:"2rem"}}/> <span style={{fontWeight:"700"}}>   {soldToUsername} </span> : {maxValue}€</p>
+                </Typography>
+                : <Typography component={"span"} variant={"body1"}>
+                    <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Η Δημοπρασία έληξε</span> </p>
+                </Typography>
+    }
+
+    const NotStartedComponent = () => {
+        return <Typography component={"span"} variant={"body2"}>
+            <p> <MapIcon/> <span style={{color:"#e67e22"}}>Τοποθεσία</span>: {item?.location}, {item?.country}</p>
+            <p> <AccessTimeIcon/> <span style={{color:"#e67e22"}}>Έναρξη Δημοπρασίας</span>: {item?.start_time} </p>
+            <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Εναρκτήριο Ποσό</span>: {item?.first_bid}€</p>
+            <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
+        </Typography>
+    }
+
+    const StartedComponent = () => {
+        return <Typography component={"span"} variant={"body2"}>
+                    <p> <MapIcon/> <span style={{color:"#e67e22"}}>Τοποθεσία</span>: {item?.location}, {item?.country}</p>
+                    <p> <AccessTimeIcon/> <span style={{color:"#e67e22"}}>Λήξη Δημοπρασίας</span>: {item?.start_time} </p>
+                    <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Τρέχουσα Δημοπρασία</span>: {maxValue?maxValue:''}€</p>
+                    <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
+                </Typography>
+    }
 
     const MyMap = () => {
         return <BasicMap mylat = {JSON.parse(item.latitude)} mylong = {JSON.parse(item.longitude)} />
@@ -206,32 +272,40 @@ const Product = () => {
                     <br/>
                     <Typography component={"span"} variant={"body2"} dangerouslySetInnerHTML={{ __html: item?.description }}></Typography>
                     <br/>
-                    <Typography component={"span"} variant={"body2"}>
-                            <p> <MapIcon/> <span style={{color:"#e67e22"}}>Τοποθεσία</span>: {item?.location}, {item?.country}</p>
-                    </Typography>
-
                     {
-
-
-                        item?.item_start_biding_sold === 0 && 
-                        <Typography component={"span"} variant={"body2"}>
-                            <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Εναρκτήριο Ποσό</span>: {item?.first_bid}€</p>
-                            <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
-                        </Typography>
+                        new Date(item?.start_time) > new Date() && item?.item_start_biding_sold==0
+                        ? <NotStartedComponent/>
+                        : item?.item_start_biding_sold === 1 
+                            ? new Date(item?.end_time) > new Date()
+                                ? <StartedComponent/>
+                                : <SoldComponent/> 
+                            : <SoldComponent /> 
                     }
 
                 </Box>
                 {
                     seller &&
+                    <Box sx={{display:"flex", gap:".9rem",}}>
                     <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
-                    '&:hover': {
+                        '&:hover': {
+                            backgroundColor:"#000000"
+                        } }} className='edit-button-container'
+                        onClick={handleEditModal}
+                        style={{position:"absolute,marginRight:2%"}}
+                        >
+                        <EditIcon/>
+                    </Button>
+                    <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                        '&:hover': {
                         backgroundColor:"#000000"
-                    } }} className='edit-button-container'
-                    onClick={handleEditModal}
-                    style={{position:"absolute,marginRight:2%"}}
-                    >
-                    <EditIcon/>
-                </Button>
+                        } }} className='edit-button-container'
+                        onClick={handleStart}
+                        style={{position:"absolute,marginRight:2%"}}
+                        >
+                    <EuroIcon/>
+                    </Button>
+                    </Box>
+
                 }
                 
             </Box>
@@ -247,9 +321,13 @@ const Product = () => {
                 </Box>
                 <Box className='bids-form-container'>
                     <Box className='bids-container'>
-                        {bidsList?
-                            <BidsTable rows={bidsList} />
-                            :<></>
+                        {item?.item_start_biding_sold === 1?
+                                bidsList
+                                ? <BidsTable start_time={item?.start_time} end_time={item?.end_time}    rows={bidsList} />
+                                : <></>
+                            : new Date(item?.start_time) < new Date() 
+                                ? <BidsTable rows={bidsList} start_time={item?.start_time} end_time={item?.end_time}/>
+                                : <></>                            
                         }
                     </Box>
                     {

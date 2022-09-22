@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+
 
 @Service
 @Transactional
@@ -25,6 +28,13 @@ public class BidsService {
     }
 
 
+
+    public Bids createBids(Long Id) {
+        Bids bids = new Bids();
+        bids.setId(Id);
+
+        return bidsRepository.save(bids);
+    }
     public List<BidsBidList> getBids() {
 
 
@@ -61,6 +71,12 @@ public class BidsService {
 
     }
 
+
+    public Optional<Bids> isBidsPresent(Long id){
+        Optional<Bids> opt = bidsRepository.findById(id);
+
+        return opt;            
+    }
 
     public List<Bid> getBidListByBidsId(Long id){
         return bidRepository.findByBidsId(id);

@@ -158,8 +158,7 @@ const Category = () => {
                       <Title onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}>
                           {product.name}
                       </Title>
-                      <Description>
-                          {product.description}
+                      <Description dangerouslySetInnerHTML={{ __html: product?.description }}>
                       </Description>
                   </ProductContainer>
               )
