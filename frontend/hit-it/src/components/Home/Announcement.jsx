@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const Container=styled.div`
   background-color:#e67e22;
@@ -22,6 +23,7 @@ const Container=styled.div`
     margin-left:0;
     margin-right:0;
   }
+  cursor:pointer;
 `;
 
 const TextContainer=styled.div`
@@ -66,8 +68,11 @@ const Image=styled.img`
 `;
 
 const Announcement = () => {
+
+  let navigate=useNavigate();
+
   return (
-    <Container>
+    <Container onClick={()=>navigate("/home/products")}>
       <TextContainer>
         <Title>
         Ήρθαν τα hit-it Point

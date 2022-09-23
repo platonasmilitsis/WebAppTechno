@@ -12,6 +12,7 @@ import Error from "./pages/Error";
 import Category from "./pages/Category";
 import { Navigate } from "react-router-dom";
 import Categories from "./pages/Categories";
+import Products from "./pages/Products";
 
 const App = () => {
 
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/admin" element={<Admin/>}/>
           </Route>
 
+        <Route path="/home/products" element={<Products/>}/>
         <Route path="/home/categories" element={<Categories/>}/>
         <Route path="/home/categories/:id/:name" element={<Category/>}/>
         <Route path="/home/categories/:id/:name/:product_id" element={<Product/>}/>
