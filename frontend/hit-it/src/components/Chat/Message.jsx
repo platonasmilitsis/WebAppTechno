@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState, useRef} from 'react'
 import styled from 'styled-components'
 import { StopPropagation } from './StopPropagation';
 import PersonIcon from '@mui/icons-material/Person';
@@ -74,7 +74,7 @@ const MessagesContainter=styled.div`
   position:absolute;
   overflow-y:scroll;
   margin-top:40px;
-  height:330px;
+  height:326px;
   width:300px;
   
 `;
@@ -106,11 +106,11 @@ const Message = (props) => {
 
   const get_user_by_username=useGetUserByUsername();
 
-  // const ScrollEnd=()=> {
-  //   const el=useRef();
-  //   useEffect(()=>el.current.scrollIntoView());
-  //   return <div ref={el}/>;
-  // };
+  const ScrollEnd=()=> {
+    const el=useRef();
+    useEffect(()=>el.current.scrollIntoView());
+    return <div ref={el}/>;
+  };
 
 
   const handle_click=()=>{
@@ -164,7 +164,9 @@ const Message = (props) => {
       set_messages(data);
     })
     .catch(()=>{})
-  },[message_id,messages])
+  },[message_id,set_messages])
+
+  useEffect(()=>{},[messages])
 
   const [form_value,set_form_value]=useState('');
 
@@ -189,6 +191,9 @@ const Message = (props) => {
       time:get_date()
     };
     axiosPrivate.post(`messagesList/${message_id}`,message,{headers})
+    .then((response)=>{
+      set_messages(response.data);
+    })
     .catch((error)=>console.error(error));
     set_form_value('');
   }
@@ -219,7 +224,7 @@ const Message = (props) => {
               )
             })
           }
-      {/* <ScrollEnd/> */}
+      <ScrollEnd/>
       </MessagesContainter>
       <BottomDiv>
           <Form onSubmit={handle_submit}>
