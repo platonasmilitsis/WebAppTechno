@@ -13,6 +13,8 @@ import Category from "./pages/Category";
 import { Navigate } from "react-router-dom";
 import Categories from "./pages/Categories";
 import Products from "./pages/Products";
+import MyBids from "./pages/MyBids";
+import MyProducts from "./pages/MyProducts";
 
 const App = () => {
 
@@ -34,6 +36,14 @@ const App = () => {
           <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}> 
             <Route path="/admin" element={<Admin/>}/>
           </Route>
+
+          <Route element={<RequireAuth allowedRoles={["ACCEPTED"]}/>}> 
+            <Route path="/home/my_bids" element={<MyBids/>}/>
+          </Route>
+          <Route element={<RequireAuth allowedRoles={["ACCEPTED"]}/>}> 
+            <Route path="/home/my_products" element={<MyProducts/>}/>
+          </Route>
+
 
         <Route path="/home/products" element={<Products/>}/>
         <Route path="/home/categories" element={<Categories/>}/>

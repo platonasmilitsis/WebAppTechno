@@ -43,16 +43,17 @@ const UserInfoContainer=styled.div`
     display:flex;
     flex-direction:column;
     border-radius:5px;
-    height:${props=>props.admin?"100px":"70px"};
+    height:${props=>props.admin?"160px":"130px"};
     width:120px;
     text-align:center;
     background-color:#7f8c8d;
     @media (max-width: 1000px) {
         width:100px;
-        margin-top:${props=>props.admin?"123px":"93px"};
+        margin-top:${props=>props.admin?"143px":"123px"};
+        height:${props=>props.admin?"120px":"100px"};
     }
     position:absolute;
-    margin-top:${props=>props.admin?"129px":"98px"};
+    margin-top:${props=>props.admin?"189px":"159px"};
 
 `;
 
@@ -62,9 +63,13 @@ const UserInfo=styled.p`
     margin-top:10px;
     @media (max-width: 1000px) {
         font-size:14px;
-        margin-bottom:8px;
+        ${'' /* margin-bottom:8px; */}
+        margin-top:7px;
     }
     cursor:pointer;
+    &:hover{
+        text-decoration:underline;
+    }
 `;
 
 const MenuItem=styled.div`
@@ -131,6 +136,12 @@ const AccountModal = () => {
                             </UserInfo>}
                         <UserInfo onClick={()=>set_messages(!messages)}>
                             Συνομιλίες
+                        </UserInfo>
+                        <UserInfo onClick={()=>navigate("/home/my_bids")}>
+                            Δημοπρασίες
+                        </UserInfo>
+                        <UserInfo onClick={()=>navigate("/home/my_products")}>
+                            Προϊόντα
                         </UserInfo>
                         <UserInfo onClick={logout}>
                             Αποσύνδεση
