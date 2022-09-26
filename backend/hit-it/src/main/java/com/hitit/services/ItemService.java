@@ -50,7 +50,7 @@ public class ItemService {
             
             newItem.setItem_start_biding_sold(0L);
             Item myItem =  itemRepository.save(newItem);
-            if(!bidsService.isBidsPresent(myItem.getId()).isPresent())
+            if(bidsService.isBidsPresent(myItem.getId()).isEmpty())
                 bidsService.createBids(myItem.getId());
             return myItem;
         }
@@ -98,7 +98,7 @@ public class ItemService {
         if(description!=null) item.setDescription(description);
     }
 
-    private void checkSetFirstBid(Item item, Long firstBid) {
+    private void checkSetFirstBid(Item item, Double firstBid) {
         if(firstBid!=null) item.setFirst_bid(firstBid);
     }
 
@@ -122,7 +122,7 @@ public class ItemService {
         if(location!=null) item.setLocation(location);
     }
 
-    private void checkSetBuyPrice(Item item, Long buy_price) {
+    private void checkSetBuyPrice(Item item, Double buy_price) {
         if(buy_price!=null) item.setBuy_price(buy_price);
     }
 
@@ -178,5 +178,17 @@ public class ItemService {
         }
         return fullItem;
 
+    }
+
+    public Item endBid(Long id) {
+
+        Optional<Item> item = itemRepository.findById(id);
+        if(item.isPresent()){
+            Item myItem = item.get();
+            myItem.setItem_start_biding_sold(2L);
+            return itemRepository.save(myItem) ;
+        }
+
+        return null;
     }
 }

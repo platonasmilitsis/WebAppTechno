@@ -29,12 +29,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `telephone` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NOT NULL,
+  `email` TINYTEXT NOT NULL,
   `address` VARCHAR(100) NULL,
   `tin` VARCHAR(10) NOT NULL,
   `admin` TINYINT NOT NULL,
   `accepted` TINYINT NOT NULL,
-  `seller_rating` INT NOT NULL,
+  `seller_rating` INT,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -61,10 +61,10 @@ DROP TABLE IF EXISTS `mydb`.`item` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`item` (
   `id` INT NOT NULL auto_increment,
   `name` TINYTEXT NOT NULL,
-  `first_bid` INT NULL,
-  `buy_price` INT NOT NULL,
-  `location` VARCHAR(45) NOT NULL,
-  `country` VARCHAR(45) NOT NULL,
+  `first_bid` DOUBLE NULL,
+  `buy_price` DOUBLE NOT NULL,
+  `location` TINYTEXT NOT NULL,
+  `country` TINYTEXT NOT NULL,
   `latitude` VARCHAR(45),
   `longitude` VARCHAR(45),
   `users_id` INT NOT NULL,
@@ -199,8 +199,8 @@ DROP TABLE IF EXISTS `mydb`.`bidder` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`bidder` (
   `id` INT NOT NULL,
   `username` VARCHAR(45) NOT NULL,
-  `location` VARCHAR(45) NOT NULL,
-  `country` VARCHAR(45) NOT NULL,
+  `location` TINYTEXT NOT NULL,
+  `country` TINYTEXT NOT NULL,
   `rating` int NULL,
   INDEX `fk_bidder_users_idx` (`id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
@@ -228,7 +228,7 @@ DROP TABLE IF EXISTS `mydb`.`bid` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`bid` (
   `id` INT NOT NULL auto_increment,
   `time` timestamp NOT NULL,
-  `amount` INT NOT NULL,
+  `amount` DOUBLE NOT NULL,
   `bids_id` INT NOT NULL,
   `bidder_id` INT NOT NULL,
   PRIMARY KEY (`id`),

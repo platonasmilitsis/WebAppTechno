@@ -23,7 +23,7 @@ public class Bid {
     @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm")
     @Temporal(TemporalType.TIMESTAMP)
     private Date time;
-    private Long amount;
+    private Double amount;
 
     @JoinColumn(name = "bids_id",nullable = false)
     private Long bids_id;

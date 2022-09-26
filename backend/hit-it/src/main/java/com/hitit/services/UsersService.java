@@ -74,7 +74,11 @@ public class UsersService implements UserDetailsService {
         else
             throw new RuntimeException("Something went wrong!!!");
     }
-    
+
+    public Optional<Users> findUser(String username) {
+        return usersRepository.findByUsername(username);
+    }
+
     public List<Users> getUsers(){
         return usersRepository.findAll();
     }

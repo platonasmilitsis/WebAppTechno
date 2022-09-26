@@ -4,9 +4,11 @@ package com.hitit.controllers;
 import com.hitit.models.FullItem;
 import com.hitit.models.Item;
 import com.hitit.services.ItemService;
+import com.hitit.services.RecommendationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +18,13 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    private final RecommendationService recommendationService;
 
 
-    public ItemController(ItemService itemService) {
+
+    public ItemController(ItemService itemService, RecommendationService recommendationService) {
         this.itemService = itemService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/users/{id}/items")
@@ -58,6 +63,16 @@ public class ItemController {
     }
 
 
+    @PutMapping("/items/end/{id}")
+    public Item endBid(@PathVariable Long id){
+        return itemService.endBid(id);
+    }
+
+    @GetMapping("items/recommendation/{username}")
+    public List<Long> recommendItems(@PathVariable String username)
+    {
+        return recommendationService.ItemRecommender(username);
+    }
 
 
     @DeleteMapping("/items/{id}")

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,15 @@ public class BidService {
         this.bidRepository = bidRepository;
         this.bidderRepository = bidderRepository;
     }
+
+    public  Optional<Bid> findBid(Long bids_id, Long bidder_id, Double bid_amount, Date bid_time) {
+        return bidRepository.findThisBid(bids_id, bidder_id, bid_amount, bid_time);
+    }
+
+    public  Optional<Bid> findBid(Long bids_id, Long bidder_id) {
+        return bidRepository.findBids(bids_id, bidder_id);
+    }
+
 
     public List<Bid> getAllBid() {
         return bidRepository.findAll();

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
+    public Optional<Category> findByName(String name) { return categoryRepository.findByCategory(name);}
     public Category addCategory(@NotNull Category newCategory) {
         Optional<Category> cat = categoryRepository.findByCategory(newCategory.getCategory());
         return cat.orElseGet(() -> categoryRepository.save(newCategory));
@@ -47,5 +49,9 @@ public class CategoryService {
     public ResponseEntity<?> deleteCategory(String name) {
         categoryRepository.deleteByName(name);
         return ResponseEntity.ok("OK");
+    }
+
+    public Optional<Category> findCategory(String category_name) {
+        return categoryRepository.findByCategory(category_name);
     }
 }

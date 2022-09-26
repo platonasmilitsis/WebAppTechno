@@ -4,9 +4,9 @@ import com.hitit.models.Bid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +34,10 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
     void deleteBidsByBidsId(Long id);
 
 
+    @Query ("select b from Bid b where b.bids_id=:bids_id and b.bidder.id=:bidder_id and b.amount=:bid_amount and b.time=:bid_time")
+    Optional<Bid> findThisBid(Long bids_id, Long bidder_id, Double bid_amount, Date bid_time);
+
+
+    @Query("select b from Bid b where b.bids_id=:bids_id and b.bidder.id=:bidder_id")
+    Optional<Bid> findBids(Long bids_id, Long bidder_id);
 }

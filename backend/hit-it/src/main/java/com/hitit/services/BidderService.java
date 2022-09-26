@@ -43,10 +43,22 @@ public class BidderService {
 
     }
 
+
+    public Optional<Bidder> findBidder(String username){
+        return bidderRepository.findByUsername(username);
+    }
+
+
     public Bidder newBidder(Bidder bidder, Long id) {
         bidder.setId(id);
         bidder.setRating(0L);
         if(bidderRepository.findById(id).isPresent()) return bidderRepository.findById(id).get();
         return bidderRepository.save(bidder);
     }
+
+
+    public Bidder newBidder(Bidder bidder) {
+        return bidderRepository.save(bidder);
+    }
+
 }

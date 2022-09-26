@@ -28,7 +28,11 @@ public class Users {
     public Users() {
     }
 
-    public Users(String username, String password, String first_name, String last_name, String telephone, String email, String address, String TIN, Boolean admin, Boolean accepted) {
+    public Users(String username, String password,
+                 String first_name, String last_name,
+                 String telephone, String email,
+                 String address, String TIN,
+                 Boolean admin, Boolean accepted) {
         this.username = username;
         this.password = password;
         this.first_name = first_name;
@@ -126,6 +130,38 @@ public class Users {
 
     public void setAccepted() {this.accepted = true;}
 
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+
+
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setDummyUser(String username) {
+        this.username = username;
+        this.password = "1234";
+        this.admin = false;
+        this.accepted = true;
+        this.address = "Kapous";
+        this.first_name = "Dummy User";
+        this.last_name = username;
+        this.telephone = "2100200";
+        this.email = "dummy" + username + "@email.com";
+        this.tin = "1234";
+    }
 
     @Override
     public String toString() {
