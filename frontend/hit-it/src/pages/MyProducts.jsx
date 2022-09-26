@@ -1,12 +1,14 @@
 import React,{useEffect, useState, useMemo} from 'react'
-import styled from "styled-components"
+import styled from 'styled-components'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
 import CategoryName from '../components/Categories/CategoryName';
 import Footer from '../components/Global/Footer';
-import { useNavigate, useParams } from 'react-router-dom';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
+import { useNavigate } from 'react-router-dom';
+import useGetUserByUsername from '../hooks/useGetUserByUsername';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -67,7 +69,6 @@ const ImageContainer=styled.div`
 
 const Image=styled.img`
     object-fit:cover;
-    ${'' /* width:300px; */}
     width:50%;
     cursor:pointer;
 `;
@@ -101,43 +102,61 @@ const Description=styled.p`
     height:90px;
 `;
 
-const Category = () => {
+const MyProducts = () => {
 
-  let navigate=useNavigate();
-  const params=useParams();
+    let navigate=useNavigate();
 
-  const page_names=["Αρχική","Κατηγορίες"];
-  const page_links=["/home","/home/categories"];
+    const [user,set_user]=useState(null);
+    const floating_button=()=>{set_user(localStorage.getItem('username'));}
+    useMemo(()=>floating_button(),[]);
 
-  const [products,set_products]=useState([]);
+    const axiosPrivate=useAxiosPrivate();
+    const get_user_by_username=useGetUserByUsername();
 
-  const [user,set_user]=useState(null);
-  const floating_button=()=>{set_user(localStorage.getItem('username'));}
-  useMemo(()=>floating_button(),[]);
+    const page_names=["Αρχική"];
+    const page_links=["/home"];
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/categories/${params.id}/items`)
-      .then((response)=>response.json())
-      .then((data)=>{
-        var data_products=[];
-        data.forEach((element)=>{
-            data_products.push(element);
+    const [user_id,set_user_id]=useState(null);
+    const [products,set_products]=useState([]);
+
+    useEffect(()=>{
+        const get_user=async()=>{
+            const name=await get_user_by_username(user);
+            set_user_id(name.id);
+        }
+        get_user()
+        .catch((error)=>console.error(error));
+        
+    },[user_id,user,get_user_by_username])
+
+    useEffect(()=>{
+        user_id && axiosPrivate.get(`/users/${user_id}/items`)
+        .then((response)=>{
+            set_products(response.data);
         })
-        set_products(data_products);
-      })
-      .catch((error)=>{
-        console.error(error);
-        navigate("/error");
-      })
-  },[navigate,params.id])
+        .catch((error)=>console.error(error));
+    },[user_id,axiosPrivate])
+
+    useEffect(()=>{
+        products?.forEach((element)=>{
+            fetch(`http://localhost:8080/items/${element.id}/all`)
+            .then((response)=>response.json())
+            .then((data)=>{
+                // Set first category for breadcrumb
+                element['category']=data.categories[0];
+            })
+            .catch((error)=>console.error(error));
+        })
+    },[products])
+
 
   return (
     <Container>
-      <HelmetProvider>
+        <HelmetProvider>
         <Helmet>
           <meta charSet="utf-8" />
           <title>
-              {params.name}
+            Τα Προϊόντα μου
           </title>
         </Helmet>
       </HelmetProvider>
@@ -146,16 +165,16 @@ const Category = () => {
           {Breadcrumb(page_names,page_links)}
       </BreadcrumbContainer>
       <CategoryNameContainer>
-          {CategoryName(params.name)}
+          {CategoryName("Τα Προϊόντα μου")}
       </CategoryNameContainer>
       <GridContainer>
           {products.map((product)=>{
               return(
                   <ProductContainer key={product.name+"?"+product.id}>
                       <ImageContainer>
-                          <Image src={product.img_path?product.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}/>
+                      <Image src={product.img_path?product.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${product.category.id}/${product.category.category}/${product.id}`)}/>
                       </ImageContainer>
-                      <Title onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}>
+                      <Title onClick={()=>navigate(`/home/categories/${product.category.id}/${product.category.category}/${product.id}`)}>
                           {product.name}
                       </Title>
                       <Description dangerouslySetInnerHTML={{ __html: product?.description }}>
@@ -170,4 +189,4 @@ const Category = () => {
   )
 }
 
-export default Category
+export default MyProducts

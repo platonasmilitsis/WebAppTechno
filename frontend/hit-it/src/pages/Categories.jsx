@@ -1,12 +1,13 @@
 import React,{useEffect, useState, useMemo} from 'react'
-import styled from "styled-components"
+import styled from 'styled-components'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NavBar from '../components/Categories/NavBar';
 import Breadcrumb from '../components/Global/Breadcrumb';
 import CategoryName from '../components/Categories/CategoryName';
 import Footer from '../components/Global/Footer';
-import { useNavigate, useParams } from 'react-router-dom';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
+import { useNavigate } from 'react-router-dom';
+
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -40,9 +41,9 @@ const GridContainer=styled.div`
     margin-bottom:3%;
 `;
 
-const ProductContainer=styled.div`
+const CategoryContainer=styled.div`
     background-color:white;
-    height:500px;
+    height:400px;
     width:300px;
     border-radius:10px;
     display:flex;
@@ -67,11 +68,9 @@ const ImageContainer=styled.div`
 
 const Image=styled.img`
     object-fit:cover;
-    ${'' /* width:300px; */}
-    width:50%;
+    width:300px;
     cursor:pointer;
 `;
-
 
 const Title=styled.h1`
     font-size:18px;
@@ -89,55 +88,36 @@ const Title=styled.h1`
     height:60px;
 `;
 
-const Description=styled.p`
-    font-family: 'Arial', sans-serif;
-    font-size:15px;
-    margin-bottom:10px;
-    margin-left:20px;
-    width:90%;
-    color:black;
-    opacity:0.6;
-    overflow-y:scroll;
-    height:90px;
-`;
+const Categories = () => {
 
-const Category = () => {
+    let navigate=useNavigate();
 
-  let navigate=useNavigate();
-  const params=useParams();
+    const [user,set_user]=useState(null);
+    const floating_button=()=>{set_user(localStorage.getItem('username'));}
+    useMemo(()=>floating_button(),[]);
 
-  const page_names=["Αρχική","Κατηγορίες"];
-  const page_links=["/home","/home/categories"];
+    const page_names=["Αρχική"];
+    const page_links=["/home"];
 
-  const [products,set_products]=useState([]);
+    const [categories,set_categories]=useState(null);
 
-  const [user,set_user]=useState(null);
-  const floating_button=()=>{set_user(localStorage.getItem('username'));}
-  useMemo(()=>floating_button(),[]);
-
-  useEffect(() => {
-    fetch(`http://localhost:8080/categories/${params.id}/items`)
-      .then((response)=>response.json())
-      .then((data)=>{
-        var data_products=[];
-        data.forEach((element)=>{
-            data_products.push(element);
+    useEffect(()=>{
+        fetch(`http://localhost:8080/categories`)
+        .then((response)=>response.json())
+        .then((data)=>{
+            set_categories(data);
         })
-        set_products(data_products);
-      })
-      .catch((error)=>{
-        console.error(error);
-        navigate("/error");
-      })
-  },[navigate,params.id])
+        .catch((error)=>console.error(error));
+    },[])
 
+  
   return (
     <Container>
-      <HelmetProvider>
+        <HelmetProvider>
         <Helmet>
           <meta charSet="utf-8" />
           <title>
-              {params.name}
+            Κατηγορίες Προϊόντων
           </title>
         </Helmet>
       </HelmetProvider>
@@ -146,21 +126,20 @@ const Category = () => {
           {Breadcrumb(page_names,page_links)}
       </BreadcrumbContainer>
       <CategoryNameContainer>
-          {CategoryName(params.name)}
+        {CategoryName("Κατηγορίες")}
       </CategoryNameContainer>
       <GridContainer>
-          {products.map((product)=>{
+          {categories?.map((category)=>{
               return(
-                  <ProductContainer key={product.name+"?"+product.id}>
+                  <CategoryContainer key={category.category+"?"+category.id}>
                       <ImageContainer>
-                          <Image src={product.img_path?product.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}/>
+                          <Image src={require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${category.id}/${category.category}`)}/>
                       </ImageContainer>
-                      <Title onClick={()=>navigate(`/home/categories/${params.id}/${params.name}/${product.id}`)}>
-                          {product.name}
+                      <Title onClick={()=>navigate(`/home/categories/${category.id}/${category.category}`)}>
+                          {category.category}
                       </Title>
-                      <Description dangerouslySetInnerHTML={{ __html: product?.description }}>
-                      </Description>
-                  </ProductContainer>
+                      
+                  </CategoryContainer>
               )
           })}
       </GridContainer>
@@ -170,4 +149,4 @@ const Category = () => {
   )
 }
 
-export default Category
+export default Categories
