@@ -7,15 +7,18 @@ import com.hitit.models.Bid;
 import com.hitit.models.Bidder;
 import com.hitit.repository.BidRepository;
 import com.hitit.repository.BidderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @Transactional
 public class BidService {
 
@@ -31,7 +34,7 @@ public class BidService {
         return bidRepository.findThisBid(bids_id, bidder_id, bid_amount, bid_time);
     }
 
-    public  Optional<Bid> findBid(Long bids_id, Long bidder_id) {
+    public  List<Optional<Bid>> findBid(Long bids_id, Long bidder_id) {
         return bidRepository.findBids(bids_id, bidder_id);
     }
 
@@ -84,5 +87,34 @@ public class BidService {
             return bidRepository.save(bid.get());
         } else throw new BidNotFoundException();
 
+    }
+
+    public Long[] getAllBids(Long u) {
+
+        return bidRepository.getAllBids(u);
+    }
+
+    public int dotProduct(Long aLong, Long aLong1) {
+
+        return bidRepository.dotProduct(aLong, aLong1);
+    }
+
+    public int norm(Long aLong) {
+
+        return bidRepository.norm(aLong);
+    }
+
+    public HashMap<Long, List<Long>> createBidsNorm() {
+
+
+        List<Long> bidders_id = bidRepository.getBidders();
+
+        HashMap<Long, List<Long>> map =  new HashMap<>();
+        for(Long  bidder_id : bidders_id){
+            List<Long> bids_id = bidRepository.getBidsIds(bidder_id);
+            map.put(bidder_id, bids_id);
+        }
+        log.info("It's alive");
+        return map;
     }
 }

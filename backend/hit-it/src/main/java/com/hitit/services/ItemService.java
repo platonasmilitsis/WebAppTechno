@@ -35,7 +35,7 @@ public class ItemService {
         this.usersRepository = usersRepository;
     }
 
-
+    public Long[] getItemsIds() {return itemRepository.findAllItemsIds();}
     public List<Item> getItems() {return itemRepository.findAll();}
 
     public List<Item> getItems(Long id) { return itemRepository.findItemByUserId(id);}

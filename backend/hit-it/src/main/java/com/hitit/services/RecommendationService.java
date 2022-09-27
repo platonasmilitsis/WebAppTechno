@@ -6,6 +6,8 @@ import com.hitit.models.MatrixFactorization;
 import com.hitit.models.Users;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @Getter
 @Setter
 public class RecommendationService {
@@ -87,35 +90,90 @@ public class RecommendationService {
 
         int similar_users = 20;
         int recommend_items = 10;
+        log.info("0 Komple,{}", matrixFactorization.getInit());
 
-        while(matrixFactorization.getInit()){ continue;}
+        while(!matrixFactorization.getInit()){continue;}
 
         Optional<Users> optional_user = usersService.findUser(username);
 
         if(optional_user.isEmpty()) throw new UserNotFoundException();
         else{
+            log.info("1 Komple,{}", matrixFactorization.getInit());
+
             // Get user's id
             Long user_id = optional_user.get().getId();
-
+            
             // Get vector of similar users and copy
-            HashMap<Long, Double> user_similarities = new HashMap<> ( matrixFactorization.getUserSimilarities(user_id) ) ;
+            float[] user_similarities = matrixFactorization.getUserSimilarities(user_id).clone();
+            log.info("2 Komple");
 
             // obtain the indices of the top k most similar users
-            HashMap<Long, Double> n_user_similarities = ExtractNTopValues(user_similarities, similar_users);
+            int[] max_indexes = getMaxIndexes(user_similarities,similar_users);
+            log.info("3 Komple");
 
             // Obtain summary of all items if bid or not
-            HashMap<Long, Double> bid_summary_item = matrixFactorization.getSummaryBid(n_user_similarities);
+            int[] bid_summary_item = matrixFactorization.getSummaryBid(max_indexes);
+            log.info("4 Komple");
+
 
             //Remove already bid_items
             bid_summary_item = matrixFactorization.removeAlreadyBidItems(user_id, bid_summary_item);
+            log.info("5 Komple");
 
-            HashMap<Long, Double> recommend_items_map = ExtractNTopValues(bid_summary_item, recommend_items);
 
-            return new ArrayList<>(recommend_items_map.keySet());
+            int[] max_item_indexes = getMaxIndexes(bid_summary_item, recommend_items);
+            log.info("6 Komple");
+
+            return new ArrayList<>(List.of(matrixFactorization.getMaxItemsIds(max_item_indexes)));
 
         }
 
     }
+
+    private int[] getMaxIndexes(float[] user_similarities, int similar_users) {
+
+        int[] max_indexes = new int[similar_users];
+
+        for (int i = 0; i < similar_users; i++) {
+            int max_index = 0;
+            double max_value = user_similarities[0];
+            for (int j = 0; j < user_similarities.length; j++) {
+                if (user_similarities[j] > max_value) {
+                    max_value = user_similarities[j];
+                    max_index = j;
+                }
+            }
+
+            user_similarities[max_index] = -100;
+            max_indexes[i] = max_index;
+
+        }
+        return max_indexes;
+
+    }
+
+        private int[] getMaxIndexes(int[] user_similarities, int similar_users) {
+
+            int[] max_indexes = new int[similar_users];
+
+            for(int i=0;i<similar_users;i++){
+                int max_index = 0;
+                double max_value = user_similarities[0];
+                for(int j=0;j<user_similarities.length;j++) {
+                    if(user_similarities[j]>max_value){
+                        max_value = user_similarities[j];
+                        max_index = j;
+                    }
+                }
+
+                user_similarities[max_index] = -100;
+                max_indexes[i] = max_index;
+
+            }
+            return max_indexes;
+
+
+        }
 
 
     public void Init() {

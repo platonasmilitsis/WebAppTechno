@@ -50,6 +50,10 @@ public class UsersService implements UserDetailsService {
         return user;
     }
 
+    public Long[] getUsersIds(){
+        return usersRepository.findAllUserIds();
+    }
+
     public Collection<SimpleGrantedAuthority> getAuthorities(Users user){
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

@@ -21,4 +21,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Modifying
     @Query("delete from Item i where i.user.id =:id")
     void deleteByUserId(Long id);
+
+
+    @Query("select i.id from Item i")
+    Long[] findAllItemsIds();
 }

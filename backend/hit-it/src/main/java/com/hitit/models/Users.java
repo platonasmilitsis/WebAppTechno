@@ -146,9 +146,6 @@ public class Users {
 
 
 
-    public String getTin() {
-        return tin;
-    }
 
     public void setDummyUser(String username) {
         this.username = username;

@@ -214,7 +214,7 @@ ENGINE = InnoDB;
 INSERT INTO bidder
 values
     (2,'Lst','Chalandri','Greece',220),
-    (3,'Dberos97','Nea Smirni','Greece',180),
+    (3,'dberos','Nea Smirni','Greece',180),
     (4,'Ourt','Karditsa','Greece',100),
     (5,'PlasPlas','Loutsa','Greece',1000),
     (6,'Felarxos','Agia Paraskevi','Greece',250);

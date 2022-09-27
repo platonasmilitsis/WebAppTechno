@@ -4,23 +4,26 @@ import com.hitit.services.BidService;
 import com.hitit.services.ItemService;
 import com.hitit.services.UsersService;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.*;
+
+@Slf4j
 public class MatrixFactorization {
 
     private final BidService bidService;
-    private HashMap <Long, HashMap<Long, Double>> matrix;
+
+    private Long[] matrix_user_id;
+    private Long[] matrix_item_id;
+    private int[][] matrix;
+//    private HashMap <Long, HashMap<Long, Double>> matrix;
     private final UsersService usersService;
     private final ItemService itemService;
 
 
-    private Boolean is_Init;
-    private HashMap<Long, HashMap<Long, Double>> similarity_matrix_users;
 
-    private HashMap<Long, HashMap<Long, Double>> similarity_matrix_items;
+    private Boolean is_Init;
+    private float[][] similarity_matrix_users;
 
 
     public MatrixFactorization(UsersService usersService, ItemService itemService, BidService bidService) {
@@ -37,125 +40,161 @@ public class MatrixFactorization {
 
     public void Init(){
 
-        matrix = new HashMap<>();
+        matrix_item_id = itemService.getItemsIds();
+        matrix_user_id = usersService.getUsersIds();
+        log.info("Initialising Recommendations {}", matrix_user_id.length);
 
 
-        List<Item> items = itemService.getItems();
-        List<Users> users = usersService.getUsers();
-        for(Users u : users){
-            HashMap<Long, Double> user_has_bid = new HashMap<>();
-            for(Item i : items){
-                user_has_bid.put(i.getId(),
-                    bidService.findBid(i.getId(), u.getId()).isEmpty() ? 0.0 : 1.0 );
+        matrix = new int[matrix_user_id.length][matrix_item_id.length];
+
+
+
+        for(int i=0; i<matrix_user_id.length; i++) {
+
+            Long[] bid_items = bidService.getAllBids(matrix_user_id[i]);
+
+
+            for (int j = 0; j < matrix_item_id.length; j++) {
+                if (bid_items.length != 0) {
+                    if (Arrays.asList(bid_items).contains(matrix_item_id[j]))
+                        matrix[i][j] = 1;
+                    else
+                        matrix[i][j] = 0;
+                } else
+                    matrix[i][j] = 0;
             }
-            matrix.put(u.getId(),user_has_bid);
+            //            matrix.put(u, user_has_bid);
+            if (i % 1000 == 0)
+                log.info("Initialised user {}", i);
         }
+
+        log.info("Creating Similarity Matrix Recommendations {}", matrix_user_id.length);
 
 
         similarity_matrix_users = create_similarity_matrix(matrix);
-        HashMap<Long, HashMap<Long, Double>> item_matrix = flip(matrix);
-        similarity_matrix_items = create_similarity_matrix(item_matrix);
-
         this.is_Init=true;
 
+        log.info("Matrix Factorization Completed!!");
+
     }
 
 
 
-    private static HashMap<Long, HashMap<Long, Double>> create_similarity_matrix(HashMap<Long, HashMap<Long, Double>> matrix){
+    private float[][] create_similarity_matrix(int[][] matrix){
 
-        HashMap<Long, HashMap<Long, Double>> similarity_matrix = new HashMap<>();
+        float[][] similarity_matrix = new float[matrix_user_id.length][matrix_user_id.length];
 
-        for(Long user_id : matrix.keySet() ){
 
-            Collection<Double> collection_A = matrix.get(user_id).values();
 
-            Double[] Double_vector_A = collection_A.toArray(new Double[collection_A.size()]);
-            double[] vector_a = new double[Double_vector_A.length];
-            Arrays.setAll(vector_a,i -> Double_vector_A[i]);
+        HashMap<Long, List<Long>> bidsNorm = bidService.createBidsNorm();
+        log.info("Is it really {}?",bidsNorm.get(3L));
 
-            HashMap<Long, Double> temp_similarity_matrix = new HashMap<>();
-            for(Long user_id2 : matrix.keySet()){
-
-                Collection<Double> collection_B = matrix.get(user_id2).values();
-
-                Double[] Double_vector_B = collection_B.toArray(new Double[collection_B.size()]);
-                double[] vector_b = new double[Double_vector_B.length];
-                Arrays.setAll(vector_b,i -> Double_vector_B[i]);
-
-                double similarity_value = cosineSimilarity(vector_a,vector_b);
-                temp_similarity_matrix.put(user_id2, similarity_value);
+//        for(int i=0;i<matrix_user_id.length;i++){
+//            for(int j=0;j<matrix_user_id.length;j++){
+//                similarity_matrix[i][j]=-100.0F;
+//            }
+//        }
+        for(int i=0; i<matrix_user_id.length;i++){
+            for(int j=i; j<matrix_user_id.length; j++) {
+                float similarity_value = cosineSimilarity(bidsNorm,i,j);
+                similarity_matrix[i][j] = similarity_value;
+                similarity_matrix[j][i] = similarity_value;
             }
 
-            similarity_matrix.put(user_id,temp_similarity_matrix);
-        }
+            if (i % 1000 == 0)
+                log.info("Similarity Matrix created for {} users", i);
 
+        }
         return similarity_matrix;
     }
-    private static HashMap <Long, HashMap<Long, Double>> flip(HashMap<Long, HashMap<Long, Double>> map){
-        HashMap <Long, HashMap<Long, Double>> result = new HashMap<>();
-        for (Long key : map.keySet()){
-            for (Long key2 : map.get(key).keySet()){
-                if (!result.containsKey(key2)){
-                    result.put(key2, new HashMap<Long, Double>());
-                }
 
-                result.get(key2).put(key, map.get(key).get(key2));
-            }
+
+
+
+    private  float cosineSimilarity(HashMap<Long, List<Long>> bidsNorm, int index_a, int index_b) {
+
+
+        float dotProduct = (float) 0.0F;
+
+        if(bidsNorm.get(matrix_user_id[index_a]) == null)
+            return 0.0F;
+        if(bidsNorm.get(matrix_user_id[index_b]) == null)
+            return 0.0F;
+
+
+        for(Long i : bidsNorm.get(matrix_user_id[index_a])){
+            if(bidsNorm.get(matrix_user_id[index_b]).contains(i))
+                dotProduct++;
         }
 
-
-        return result;
-    }
-
-
-    private static double cosineSimilarity(double[] vectorA, double[] vectorB) {
-        double dotProduct = 0.0;
-        double normA = 0.0;
-        double normB = 0.0;
-        for (int i = 0; i < vectorA.length; i++) {
-            dotProduct += vectorA[i] * vectorB[i];
-            normA += Math.pow(vectorA[i], 2);
-            normB += Math.pow(vectorB[i], 2);
-        }
-        return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        float normA = (float) bidsNorm.get(matrix_user_id[index_a]).size();
+        float normB = (float) bidsNorm.get(matrix_user_id[index_b]).size();
+        return (float) (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
     public boolean getInit() {
         return this.is_Init;
     }
 
-    public HashMap<Long, Double> getUserSimilarities(Long user_id) {
-        return similarity_matrix_users.get(user_id);
+    public float[] getUserSimilarities(Long user_id) {
+        int index = 0;
+        for(Long u : matrix_user_id) {
+            if(Objects.equals(u, user_id))
+                return similarity_matrix_users[index];
+            index++;
+        }
+        return null;
     }
 
-    public HashMap<Long, Double> getSummaryBid(HashMap<Long, Double> n_user_similarities) {
-        HashMap<Long, Double> mean_map = new HashMap<>();
+    public int[] getSummaryBid(int[] max_indexes) {
+        int[] summary_array = new int[matrix_item_id.length];
 
-        for(Long user_id : n_user_similarities.keySet()){
-            for(Long item_id : matrix.get(user_id).keySet())
-                if(mean_map.containsKey(item_id)){
-                    Double increase = mean_map.get(item_id);
-                    increase = increase + matrix.get(user_id).get(item_id);
-                    mean_map.put(item_id, increase);
-                }
-                else{
-                    mean_map.put(item_id,matrix.get(user_id).get(item_id));
-                }
-
+        for(int j=0; j<matrix_item_id.length;j++){
+            summary_array[j] = 0;
         }
 
-        return mean_map;
+        for(int i : max_indexes){
+            for(int j=0; j<matrix_item_id.length;j++){
+                summary_array[j] += matrix[i][j];
+            }
+        }
+
+        return summary_array;
 
     }
 
-    public HashMap<Long, Double> removeAlreadyBidItems(Long user_id, HashMap<Long, Double> bid_summary_item) {
-        HashMap<Long, Double> items = matrix.get(user_id);
-        for(Long item : items.keySet()){
-            if(items.get(item).equals(1.0))
-                bid_summary_item.remove(item);
+    public int[] removeAlreadyBidItems(Long user_id, int[] bid_summary_item) {
+
+
+        int index = 0;
+        for(Long u: matrix_user_id){
+            if(Objects.equals(u, user_id))
+                break;
+            index++;
+        }
+
+
+        int[] items = matrix[index];
+
+
+        for(int i=0;i<items.length;i++) {
+            if (items[i] == 1)
+                bid_summary_item[i] = -1;
         }
 
         return bid_summary_item;
+    }
+
+    public Long[] getMaxItemsIds(int[] max_item_indexes) {
+        Long[] matrix_items = new Long[max_item_indexes.length];
+
+        int index = 0;
+        for(int i: max_item_indexes){
+            matrix_items[index] = matrix_item_id[i];
+            index++;
+        }
+
+        return matrix_items;
+
     }
 }
