@@ -117,7 +117,9 @@ const MyRecommendations = () => {
     const page_links=["/home"];
 
     const [user_id,set_user_id]=useState(null);
-    const [items,set_items]=useState([]);
+    const [user_name,set_user_name]=useState(null);
+    const [items,set_items]=useState(null);
+    const [items_obj,set_items_obj]=useState([]);
     const [products,set_products] = useState([]);
 
     
@@ -125,46 +127,47 @@ const MyRecommendations = () => {
         const get_user=async()=>{
             const name=await get_user_by_username(user);
             set_user_id(name.id);
+            set_user_name(name.username);
         }
         get_user()
         .catch((error)=>console.error(error));
         
-    },[user_id,user,get_user_by_username])
+    },[user_id,user_name,user,get_user_by_username])
 
     useEffect(()=>{
-        user_id && axiosPrivate.get(`/items/recommendation/${localStorage.getItem('username')}`)
-        .then((response)=>{
-            set_items(response.data);
-            console.log(response.data);
-        })
-        .catch((error)=>console.error(error));
-    },[user_id,axiosPrivate])
+      user_name && axiosPrivate.get(`/items/recommendation/${user_name}`)
+      .then((response)=>{
+        set_items(response.data);
+      })
+      .catch((error)=>console.error(error));
+    },[user_name,axiosPrivate])
+    
 
     useEffect(()=>{
-        items?.forEach((element)=>{
-            console.log(element);
-            fetch(`http://localhost:8080/items/${element}/all`)
-            .then((response)=>response.json())
-            .then((data)=>{
-                  
-                const new_element = {
-                    "id":element,
-                    "product" : data.item,
-                    "category" : data.categories[0],
-                };
-                
+      var arr=[];
+      items?.forEach((element)=>{
+        var obj=JSON.parse(`{ "id":${element}}`);
+        arr.push(obj);
+      })
+      set_items_obj(arr);
+    },[items])
 
-                if(!products.includes(new_element)){
-                    
-                    set_products([...products,new_element]);
-                }
-                
+    useEffect(()=>{
+      items_obj?.forEach((element)=>{
+        fetch(`http://localhost:8080/items/${element.id}/all`)
+        .then((response)=>response.json())
+        .then((data)=>{
+          if(data.item){
+            element['product']=data.item;
+            element['category']=data.categories[0];
+            if(!products.includes(element)){
+                set_products([...products,element]);
             }
-            )
-            .catch((error)=>console.error(error));
+          }
         })
-    },[items,products])
-
+        .catch((error)=>console.error(error))
+      })
+    },[items_obj,products])
 
 
     return (
@@ -173,7 +176,7 @@ const MyRecommendations = () => {
             <Helmet>
               <meta charSet="utf-8" />
               <title>
-                Οι Δημοπρασίες μου
+                Προτάσεις
               </title>
             </Helmet>
           </HelmetProvider>
@@ -182,7 +185,7 @@ const MyRecommendations = () => {
               {Breadcrumb(page_names,page_links)}
           </BreadcrumbContainer>
           <CategoryNameContainer>
-            {CategoryName("Οι Δημοπρασίες μου")}
+            {CategoryName("Προτάσεις")}
           </CategoryNameContainer>
           <GridContainer>
             {
