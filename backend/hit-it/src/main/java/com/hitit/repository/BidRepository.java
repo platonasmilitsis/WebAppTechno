@@ -59,6 +59,8 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
     @Query("select b.bidder.id, b.bids_id from Bid b group by b.bidder.id, b.bids_id")
     HashMap<Long,List<Long>> BidsNorm();
 
+    @Query("select b.bids_id from Bid b group by b.bids_id order by count(b.id) DESC")
+    List<Long> getMostFamousItems();
 
     @Query("select distinct b.bidder.id from Bid b")
     List<Long> getBidders();

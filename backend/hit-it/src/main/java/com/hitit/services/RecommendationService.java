@@ -23,10 +23,12 @@ public class RecommendationService {
 
     private final MatrixFactorization matrixFactorization;
     private final UsersService usersService;
+    private final BidService bidService;
 
     public RecommendationService(UsersService usersService, ItemService itemService, BidService bidService) {
         this.matrixFactorization = new MatrixFactorization( usersService, itemService, bidService) ;
         this.usersService = usersService;
+        this.bidService = bidService;
     }
 
 
@@ -85,26 +87,66 @@ public class RecommendationService {
 
 
 
+    public List<Long> ItemRecommender(Long id, List<Long> visited){
 
-    public List<Long> ItemRecommender(String username) {
+        while(!matrixFactorization.getInit()){continue;}
+        log.info("0 Komple,{}", matrixFactorization.getInit());
+
+
+
+        int num_of_bids = bidService.getNumbOfBids(id);
+
+        if(num_of_bids != 0) return ItemRecommender(id);
+        else if(visited==null  || visited.isEmpty()){
+            return mostFamousItems();
+        }
+        else{
+
+            // Get vector of similar users and copy
+            float[] user_similarities = matrixFactorization.getSimilarityVector(id,visited);
+            log.info("2 Komple");
+
+
+            int similar_users = 20;
+            int[] max_indexes = getMaxIndexes(user_similarities,similar_users);
+
+
+
+            // Obtain summary of all items if visited or not
+            int[] bid_summary_item = matrixFactorization.getSummaryBid(max_indexes);
+            log.info("4 Komple");
+
+
+            int recommend_items = 10;
+            int[] max_item_indexes = getMaxIndexes(bid_summary_item, recommend_items);
+            log.info("6 Komple");
+
+            return new ArrayList<>(List.of(matrixFactorization.getMaxItemsIds(max_item_indexes)));
+
+        }
+    }
+
+    private List<Long> mostFamousItems() {
+        return bidService.getMostFamousItems();
+    }
+
+
+    public List<Long> ItemRecommender(Long id) {
 
         int similar_users = 20;
         int recommend_items = 10;
-        log.info("0 Komple,{}", matrixFactorization.getInit());
 
-        while(!matrixFactorization.getInit()){continue;}
 
-        Optional<Users> optional_user = usersService.findUser(username);
+        Optional<Users> optional_user = usersService.findUser(id);
 
         if(optional_user.isEmpty()) throw new UserNotFoundException();
         else{
             log.info("1 Komple,{}", matrixFactorization.getInit());
 
-            // Get user's id
-            Long user_id = optional_user.get().getId();
+
             
             // Get vector of similar users and copy
-            float[] user_similarities = matrixFactorization.getUserSimilarities(user_id).clone();
+            float[] user_similarities = matrixFactorization.getUserSimilarities(id).clone();
             log.info("2 Komple");
 
             // obtain the indices of the top k most similar users
@@ -117,7 +159,7 @@ public class RecommendationService {
 
 
             //Remove already bid_items
-            bid_summary_item = matrixFactorization.removeAlreadyBidItems(user_id, bid_summary_item);
+            bid_summary_item = matrixFactorization.removeAlreadyBidItems(id, bid_summary_item);
             log.info("5 Komple");
 
 
@@ -131,6 +173,9 @@ public class RecommendationService {
     }
 
     private int[] getMaxIndexes(float[] user_similarities, int similar_users) {
+
+        if(similar_users > user_similarities.length)
+            similar_users = user_similarities.length;
 
         int[] max_indexes = new int[similar_users];
 

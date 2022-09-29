@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -34,9 +31,6 @@ public class BidService {
         return bidRepository.findThisBid(bids_id, bidder_id, bid_amount, bid_time);
     }
 
-    public  List<Optional<Bid>> findBid(Long bids_id, Long bidder_id) {
-        return bidRepository.findBids(bids_id, bidder_id);
-    }
 
 
     public List<Bid> getAllBid() {
@@ -94,10 +88,7 @@ public class BidService {
         return bidRepository.getAllBids(u);
     }
 
-    public int dotProduct(Long aLong, Long aLong1) {
 
-        return bidRepository.dotProduct(aLong, aLong1);
-    }
 
     public int norm(Long aLong) {
 
@@ -116,5 +107,23 @@ public class BidService {
         }
         log.info("It's alive");
         return map;
+    }
+
+    public int getNumbOfBids(Long id) {
+        return bidRepository.findByBidderId(id).size();
+
+    }
+
+    public List<Long> getMostFamousItems() {
+        List<Long> return_this = new ArrayList<>();
+        List<Long> temp = bidRepository.getMostFamousItems();
+        int cnt = 0;
+        for(Long i: temp){
+            if(!(cnt<10))
+                break;
+            return_this.add(i);
+            cnt++;
+        }
+        return return_this;
     }
 }

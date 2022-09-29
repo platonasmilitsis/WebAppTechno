@@ -6,6 +6,8 @@ import com.hitit.models.Item;
 import com.hitit.services.ItemService;
 import com.hitit.services.RecommendationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,6 +46,30 @@ public class ItemController {
         return itemService.getFullItem(id);
     }
 
+    @GetMapping("/items/all")
+    public List<FullItem> getFullItemList(@RequestParam List<Long> items_ids){
+
+        List<FullItem> fullItems = new ArrayList<>();
+
+        for(Long item_id : items_ids){
+            fullItems.add(itemService.getFullItem(item_id));
+        }
+
+        return fullItems;
+    }
+
+
+
+    @GetMapping("items/recommendation/{id}")
+    public List<FullItem> getRecommendations(@PathVariable Long id, @RequestBody @Nullable List<Long> visited){
+        List<Long> items_ids = recommendationService.ItemRecommender(id,visited);
+        List<FullItem> fullItems = new ArrayList<>();
+        for(Long item_id : items_ids){
+            fullItems.add(itemService.getFullItem(item_id));
+        }
+        return fullItems;
+    }
+
 
     @GetMapping("/items/{id}")
     public Optional<Item> getItem(@PathVariable Long id){return itemService.getItem(id);}
@@ -68,11 +94,7 @@ public class ItemController {
         return itemService.endBid(id);
     }
 
-    @GetMapping("items/recommendation/{username}")
-    public List<Long> recommendItems(@PathVariable String username)
-    {
-        return recommendationService.ItemRecommender(username);
-    }
+
 
 
     @DeleteMapping("/items/{id}")

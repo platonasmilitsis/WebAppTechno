@@ -5,6 +5,7 @@ import com.hitit.services.ItemService;
 import com.hitit.services.UsersService;
 
 import lombok.extern.slf4j.Slf4j;
+import mikera.randomz.Hash;
 
 import java.util.*;
 
@@ -106,6 +107,27 @@ public class MatrixFactorization {
 
         }
         return similarity_matrix;
+    }
+
+    public float[] getSimilarityVector(Long user_id, List<Long> visited){
+        float[] similarity_vector = new float[matrix_user_id.length];
+        HashMap<Long, List<Long>> bidsNorm = bidService.createBidsNorm();
+        bidsNorm.replace(user_id,visited);
+
+
+        int index_user = 0;
+
+        for(Long u : matrix_user_id)
+            if(Objects.equals(u, user_id))
+                index_user = u.intValue();
+
+        for(int i=0; i<matrix_user_id.length; i++){
+            float similarity_value = cosineSimilarity(bidsNorm,index_user, i);
+            similarity_vector[i] = similarity_value;
+        }
+
+        return similarity_vector;
+
     }
 
 
