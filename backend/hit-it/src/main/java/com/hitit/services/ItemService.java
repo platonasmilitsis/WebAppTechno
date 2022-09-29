@@ -2,15 +2,26 @@ package com.hitit.services;
 
 import com.hitit.exceptions.ItemNotFoundException;
 import com.hitit.exceptions.UserNotFoundException;
-import com.hitit.models.BidsBidList;
-import com.hitit.models.FullItem;
-import com.hitit.models.Item;
-import com.hitit.models.Users;
+import com.hitit.models.*;
 import com.hitit.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.transaction.Transactional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -190,5 +201,143 @@ public class ItemService {
         }
 
         return null;
+    }
+
+    public byte[] fullItemToXml(Long item_id) {
+        FullItem fullItem = getFullItem(item_id);
+        try {
+
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            // root elements
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("Item");
+            rootElement.setAttribute("ItemID",fullItem.getItem().getId().toString());
+            doc.appendChild(rootElement);
+
+            Element name = doc.createElement("Name");
+            name.appendChild(doc.createTextNode(fullItem.getItem().getName()));
+            rootElement.appendChild(name);
+
+
+            List<Category> categories =  fullItem.getCategories();
+
+            for(Category category : categories) {
+                Element cat = doc.createElement("Category");
+                cat.appendChild(doc.createTextNode(category.getCategory()));
+                rootElement.appendChild(cat);
+            }
+
+            String currently = "$";
+            double max=0.0;
+            for(Bid b : fullItem.getBids().getBids()){
+                if(b.getAmount()>max)
+                    max = b.getAmount();
+            }
+
+            currently = currently + max;
+            Element current = doc.createElement("Currently");
+            current.appendChild(doc.createTextNode(currently));
+            rootElement.appendChild(current);
+
+            Element first_bid = doc.createElement("First_Bid");
+            first_bid.appendChild(doc.createTextNode("$" + fullItem.getItem().getFirst_bid().toString()));
+            rootElement.appendChild(first_bid);
+
+            Element num_of_bids = doc.createElement("Number_of_Bids");
+            if(fullItem.getBids()==null)
+                num_of_bids.appendChild(doc.createTextNode("0"));
+            num_of_bids.appendChild(doc.createTextNode(String.valueOf(fullItem.getBids().getBids().size())));
+            rootElement.appendChild(num_of_bids);
+
+            Element bids = doc.createElement("Bids");
+
+            DateFormat dateFormat = new SimpleDateFormat("MMM-dd-yy hh:mm:ss");
+
+            if(fullItem.getBids()!=null){
+                for(Bid b : fullItem.getBids().getBids()){
+                    Element bid = doc.createElement("Bid");
+
+                    Element bidder = doc.createElement("Bidder");
+                    Bidder bidder1 = b.getBidder();
+                    bidder.setAttribute("Rating", bidder1.getRating().toString());
+                    bidder.setAttribute("UserID", bidder1.getId().toString());
+
+                    Element location = doc.createElement("Location");
+                    location.appendChild(doc.createTextNode(bidder1.getLocation()));
+                    bidder.appendChild(location);
+
+
+                    Element country = doc.createElement("Country");
+                    country.appendChild(doc.createTextNode(bidder1.getCountry()));
+                    bidder.appendChild(country);
+
+                    bid.appendChild(bidder);
+
+                    Element amount = doc.createElement("Amount");
+                    amount.appendChild(doc.createTextNode("$" + b.getAmount()));
+                    bid.appendChild(amount);
+
+                    Element time = doc.createElement("Time");
+                    String strDate = dateFormat.format(b.getTime());
+                    time.appendChild(doc.createTextNode(strDate));
+                    bid.appendChild(time);
+
+                    bids.appendChild(bid);
+                }
+            }
+
+            Element location = doc.createElement("Location");
+            if(fullItem.getItem().getLatitude()!=null)
+                location.setAttribute("Latitude", fullItem.getItem().getLatitude());
+
+            if(fullItem.getItem().getLongitude()!=null)
+                location.setAttribute("Longitude", fullItem.getItem().getLongitude());
+
+            location.appendChild(doc.createTextNode(fullItem.getItem().getLocation()));
+            rootElement.appendChild(location);
+
+            Element country = doc.createElement("Country");
+            country.appendChild(doc.createTextNode(fullItem.getItem().getCountry()));
+            rootElement.appendChild(country);
+
+            Element started = doc.createElement("Started");
+            String strStart = dateFormat.format(fullItem.getItem().getStart_time());
+            started.appendChild(doc.createTextNode(strStart));
+            rootElement.appendChild(started);
+
+            Element ends = doc.createElement("Ends");
+            String strEnds = dateFormat.format(fullItem.getItem().getEnd_time());
+            ends.appendChild(doc.createTextNode(strEnds));
+            rootElement.appendChild(ends);
+
+            Element seller = doc.createElement("Seller");
+            seller.setAttribute("UserID", fullItem.getItem().getUser().getId().toString());
+            rootElement.appendChild(seller);
+
+            Element description = doc.createElement("Description");
+            description.appendChild(doc.createTextNode(fullItem.getItem().getDescription()));
+            rootElement.appendChild(description);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+            DOMSource source = new DOMSource(doc);
+
+
+
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            StreamResult result = new StreamResult(bos);
+
+            transformer.transform(source,result);
+
+            return bos.toByteArray();
+
+        } catch (ParserConfigurationException | TransformerException pce) {
+            pce.printStackTrace();
+        }
+        return new byte[0];
     }
 }

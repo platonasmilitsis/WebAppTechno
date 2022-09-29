@@ -5,9 +5,14 @@ import com.hitit.models.FullItem;
 import com.hitit.models.Item;
 import com.hitit.services.ItemService;
 import com.hitit.services.RecommendationService;
+import lombok.extern.slf4j.Slf4j;
+import org.json.HTTP;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@Slf4j
 public class ItemController {
 
     private final ItemService itemService;
@@ -58,6 +64,23 @@ public class ItemController {
         return fullItems;
     }
 
+
+
+    @GetMapping("/download/{item_id}")
+    public ResponseEntity<byte[]> downloadXmlItem(@PathVariable Long item_id){
+        byte[] xml = itemService.fullItemToXml(item_id);
+        log.info(item_id.toString());
+        String name = "item_" + item_id + ".xml";
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
+        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION,ContentDisposition.attachment()
+                        .filename(name).build().toString());
+        return ResponseEntity.ok().headers(httpHeaders).body(xml);
+
+
+
+    }
 
 
     @GetMapping("items/recommendation/{id}")
