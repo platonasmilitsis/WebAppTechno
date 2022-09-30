@@ -90,14 +90,16 @@ const RightContainer=styled.div`
     margin-top:30px;
     @media (max-width: 1077px) {
         order:2;
+        margin-right:20px;
+        margin-top:10px;
     }
     margin-left:60px;
 `;
 
 const AccountModalContainer=styled.div`
-    position:absolute;
-    margin-left:-100px;
-    margin-top:-50px;
+    position:${props=>props.is_logged && "absolute"};
+    margin-left:${props=>props.is_logged && "-100px"};
+    margin-top:${props=>props.is_logged && "-50px"};
 `;
 
 const MessengerContainer=styled.div`
@@ -138,7 +140,7 @@ const NavBar = () => {
             const name=await get_user_by_username(uname);
             set_user_id(name.id);
         }
-        get_id()
+        uname && get_id()
         .catch(()=>{});
     },[uname,user_id,get_user_by_username])
 
@@ -200,7 +202,7 @@ const NavBar = () => {
         </SearchContainter>
         <StopPropagation.Provider value={{clicked_name,set_clicked_name,contacts_names}}>
         <RightContainer>
-            <AccountModalContainer>
+            <AccountModalContainer is_logged={user_id}>
                 <AccountModal/>
             </AccountModalContainer>
         </RightContainer>

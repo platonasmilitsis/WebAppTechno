@@ -69,7 +69,7 @@ const NavBar = () => {
             const name=await get_user_by_username(uname);
             set_user_id(name.id);
         }
-        get_id()
+        uname && get_id()
         .catch(()=>{});
     },[uname,user_id,get_user_by_username])
 
