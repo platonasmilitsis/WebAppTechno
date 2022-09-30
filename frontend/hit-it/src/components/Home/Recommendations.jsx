@@ -5,7 +5,7 @@ import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Container=styled.div`
-    margin-top:150px;
+    margin-top:100px;
     margin-bottom:50px;
     border-radius:10px;
     display:flex;
@@ -111,26 +111,46 @@ const Recommendations = () => {
     const get_user_by_username=useGetUserByUsername();
   
     const [user_id,set_user_id]=useState(null);
-    const [products,set_products] = useState(null);
-  
-    
+    const [products,set_products] = useState([]);
+        
     useEffect(()=>{
         const get_user=async()=>{
-            const name=await get_user_by_username(user);
-            set_user_id(name.id);
+            if(user){
+                const name=await get_user_by_username(user);
+                set_user_id(name.id);
+            }
+            else{
+                set_user_id(-1);
+            }
         }
-        user && get_user()
-        .catch((error)=>console.error(error));
-        
-    },[user_id,user,get_user_by_username])
+        get_user()
+        .catch(()=>{});        
+    },[user,get_user_by_username])
   
     useEffect(()=>{
-      user_id && axiosPrivate.get(`/items/recommendation/${user_id}`)
-      .then((response)=>{
-        set_products(response.data);
-      })
-      .catch((error)=>console.error(error));
+    if(user_id===-1){
+        user_id && fetch(`http://localhost:8080/items/recommendation/${user_id}`)
+        .then((response)=>response.json())
+        .then((data)=>{
+            set_products(data);
+        })
+        .catch((error)=>{console.error(error)});
+    }
+    else{
+        const headers={
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        const visited=JSON.parse(localStorage.getItem("visited") || "[]");
+        user_id && axiosPrivate.get(`/items/recommendation/${user_id}`,visited,{headers})
+        .then((response)=>{
+            set_products(response.data);
+        })
+        .catch((error)=>console.error(error));
+    }
+    // Will run again with no visited dependency after user is back at home page
     },[user_id,axiosPrivate])
+    
   
       return (
           <Container>

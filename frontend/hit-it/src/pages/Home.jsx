@@ -44,7 +44,7 @@ const Titles=styled.p`
 `;
 
 const FootCont=styled.div`
-    margin-top:100px;
+    margin-top:80px;
     width:100%;
 `;
 
@@ -75,7 +75,7 @@ const Home = () => {
       </Titles>
       </TitlesContainer>
       <Categories/>
-      <TitlesContainer>
+      <TitlesContainer style={{marginTop:"-10px"}}>
       <Titles style={{'cursor':"default"}}>
         Προτεινόμενα Προϊόντα
       </Titles>

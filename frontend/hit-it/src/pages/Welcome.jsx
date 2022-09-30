@@ -82,6 +82,13 @@ const Welcome = () => {
 
     let navigate=useNavigate();
 
+    const handle_click=()=>{
+        localStorage.clear();
+        var visited=[];
+        localStorage.setItem("visited",visited);
+        navigate("/home");
+    }
+
 
   return (
     <Container>
@@ -100,7 +107,7 @@ const Welcome = () => {
             <Description>
             Ότι θες θα το βρεις στο hit-it
             </Description>
-            <Button onClick={()=>navigate("/home")}>
+            <Button onClick={handle_click}>
                 Συνέχεια σαν επισκέπτης
             </Button>
         </TextContainer>
