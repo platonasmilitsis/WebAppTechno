@@ -89,11 +89,15 @@ const Product = () => {
 
     
     const soldTo = async() => {
-        const res = await fetch(`http://localhost:8080/users/${maxBidder}`)
+        maxBidder? 
+            { const res = await fetch(`http://localhost:8080/users/${maxBidder}`)
             .then((response) => response.json())
             .then((data) => {
                 setSoldToUsername(data.username);
             })
+            }
+            : <></>
+
         return res;
     }
 
@@ -178,8 +182,8 @@ const Product = () => {
     const StartedComponent = () => {
         return <Typography component={"span"} variant={"body2"}>
                     <p> <MapIcon/> <span style={{color:"#e67e22"}}>Τοποθεσία</span>: {item?.location}, {item?.country}</p>
-                    <p> <AccessTimeIcon/> <span style={{color:"#e67e22"}}>Λήξη Δημοπρασίας</span>: {item?.start_time} </p>
-                    <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Τρέχουσα Δημοπρασία</span>: {maxValue?maxValue:''}€</p>
+                    <p> <AccessTimeIcon/> <span style={{color:"#e67e22"}}>Λήξη Δημοπρασίας</span>: {item?.end_time} </p>
+                    <p> <EuroIcon/> <span style={{color:"#e67e22"}}>Τρέχουσα Δημοπρασία</span>: {maxValue?maxValue + '€':'-'}</p>
                     <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Ποσό Πώλησης</span>: {item?.buy_price}€</p>
                 </Typography>
     }
@@ -273,13 +277,17 @@ const Product = () => {
                     <Typography component={"span"} variant={"body2"} dangerouslySetInnerHTML={{ __html: item?.description }}></Typography>
                     <br/>
                     {
-                        new Date(item?.start_time) > new Date() && item?.item_start_biding_sold==0
+                        new Date(item?.start_time) > new Date() && item?.item_start_biding_sold===0
                         ? <NotStartedComponent/>
                         : item?.item_start_biding_sold === 1 
                             ? new Date(item?.end_time) > new Date()
                                 ? <StartedComponent/>
                                 : <SoldComponent/> 
-                            : <SoldComponent /> 
+                            : new Date(item?.end_time) > new Date()
+                                ? item?.item_start_biding_sold === 2
+                                    ? <SoldComponent/>
+                                    : <StartedComponent/>
+                                : <SoldComponent /> 
                     }
 
                 </Box>
