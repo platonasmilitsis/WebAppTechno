@@ -45,12 +45,19 @@ const Arrow=styled.div`
     margin-right:13%;
     margin-left:13%;
     cursor:pointer;
-    opacity:0.6;
+    opacity:0.8;
     z-index:2;
     transform:scale(0.9);
     margin-top:110px;
     @media only screen and (max-width: 1250px) {
         display:none;
+    }
+    @media only screen and (max-width: 1250px) {
+        display:none;
+    }
+    @media (max-width: 1880px) and (min-width:1800px){
+        margin-right:12%;
+        margin-left:12%;
     }
 `;
 
@@ -146,6 +153,7 @@ const Categories = () => {
     const [next_arrow,set_next_arrow]=useState(true);
     const [slide_index,set_slide_index]=useState(0)
 
+    // Hardcode
     const find_overflows=()=> {
         const documentWidth = document.documentElement.offsetWidth;
         var slides=[]
