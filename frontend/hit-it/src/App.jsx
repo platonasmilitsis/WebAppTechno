@@ -15,7 +15,6 @@ import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import MyBids from "./pages/MyBids";
 import MyProducts from "./pages/MyProducts";
-import MyRecommendations from "./pages/MyRecommendations";
 
 const App = () => {
 
@@ -44,10 +43,6 @@ const App = () => {
           <Route element={<RequireAuth allowedRoles={["ACCEPTED"]}/>}> 
             <Route path="/home/my_products" element={<MyProducts/>}/>
           </Route>
-          <Route element={<RequireAuth allowedRoles={["ACCEPTED"]}/>}> 
-            <Route path="/home/recommendations" element={<MyRecommendations/>}/>
-          </Route>
-
 
         <Route path="/home/products" element={<Products/>}/>
         <Route path="/home/categories" element={<Categories/>}/>

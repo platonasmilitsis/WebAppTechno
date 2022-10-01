@@ -63,7 +63,6 @@ const UserInfo=styled.p`
     margin-top:10px;
     @media (max-width: 1000px) {
         font-size:14px;
-        ${'' /* margin-bottom:8px; */}
         margin-top:7px;
     }
     cursor:pointer;
@@ -72,15 +71,29 @@ const UserInfo=styled.p`
     }
 `;
 
-const MenuItem=styled.div`
+const MenuContainer=styled.div`
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    margin-top:10px;
+    @media (max-width: 1000px) {
+        justify-content:flex-start;
+    }
+`;
+
+const MenuItem=styled.p`
     cursor:pointer;
     @media (max-width: 1000px) {
         margin:0 auto;
+        padding-right:10px;
     }
     font-size:16px;
     font-weight:normal;
-    position:absolute;
-
+    font-family: 'Arial', sans-serif;
+    margin-right:10px;
+    margin-left:10px;
+    
 `;
 
 const AccountModal = () => {
@@ -150,14 +163,14 @@ const AccountModal = () => {
                     <></>
                 }
             </Container>:
-            <>
+            <MenuContainer>
             <MenuItem onClick={()=>navigate("/register")}>
-                Register
+                Εγγραφή
             </MenuItem>
             <MenuItem onClick={()=>navigate("/")}>
-                Sign In
+                Σύνδεση
             </MenuItem>
-        </>
+        </MenuContainer>
     )
 }
 

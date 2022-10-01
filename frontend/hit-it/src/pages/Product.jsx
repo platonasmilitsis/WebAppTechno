@@ -62,7 +62,14 @@ const Product = () => {
 
     const [now, setNow] = useState();
 
-
+    useEffect(()=>{
+        const visited=JSON.parse(localStorage.getItem("visited") || "[]");
+        const int_id=parseInt(params.product_id);
+        if(!visited.includes(int_id)){
+            visited.push(int_id);
+        }
+        localStorage.setItem("visited",JSON.stringify(visited));
+    },[])
      
 
     /* Async Functions */

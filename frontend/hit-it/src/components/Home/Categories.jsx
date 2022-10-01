@@ -76,8 +76,6 @@ const Slide=styled.div`
     min-height:233px;
     display:inline-block;
     align-items:center;
-    ${'' /* font-size:14px;
-    line-height: 18px; */}
     box-sizing:border-box;
     position:relative;
     border-radius:10px;
@@ -91,7 +89,6 @@ const Title=styled.h1`
     font-family: 'Arial', sans-serif;
     color:white;
     cursor:pointer;
-    ${'' /* position:absolute; */}
     margin-bottom:20px;
     margin-top:30px;
     &:hover{
@@ -105,7 +102,6 @@ const Description=styled.p`
     margin-bottom:10px;
     margin-left:20px;
     margin-right:20px;
-    ${'' /* position:absolute; */}
     color:white;
     cursor:pointer;
     width: 160px;

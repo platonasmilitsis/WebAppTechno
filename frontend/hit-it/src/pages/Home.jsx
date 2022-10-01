@@ -8,6 +8,7 @@ import Footer from '../components/Global/Footer'
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd'
 import {Helmet, HelmetProvider} from "react-helmet-async";
 import { useNavigate } from 'react-router-dom'
+import Recommendations from '../components/Home/Recommendations'
 
 const Container=styled.div`
   background-color:#eaeded; 
@@ -15,7 +16,7 @@ const Container=styled.div`
   width:100%;
 `;
 
-const AllCategoriesContainer=styled.div`
+const TitlesContainer=styled.div`
   margin-left:15%;
   margin-right:15%;
   width:70%;
@@ -35,11 +36,16 @@ const AllCategoriesContainer=styled.div`
   }
 `;
 
-const AllCategories=styled.p`
+const Titles=styled.p`
   font-family: 'Arial', sans-serif;
   font-size:20px;
   font-weight:500;
   cursor:pointer;
+`;
+
+const FootCont=styled.div`
+    margin-top:80px;
+    width:100%;
 `;
 
 const Home = () => {
@@ -63,13 +69,21 @@ const Home = () => {
       <Main/>
       <Announcement/>
       {user && <FloatingButtonAdd/>}
-      <AllCategoriesContainer>
-      <AllCategories onClick={()=>navigate("/home/categories")}>
+      <TitlesContainer>
+      <Titles onClick={()=>navigate("/home/categories")}>
         Κατηγορίες Προϊόντων
-      </AllCategories>
-      </AllCategoriesContainer>
+      </Titles>
+      </TitlesContainer>
       <Categories/>
-      <Footer/>
+      <TitlesContainer style={{marginTop:"-10px"}}>
+      <Titles style={{'cursor':"default"}}>
+        Προτεινόμενα Προϊόντα
+      </Titles>
+      </TitlesContainer>
+      <Recommendations/>
+      <FootCont>
+        <Footer/>
+      </FootCont>
     </Container>
 
 )

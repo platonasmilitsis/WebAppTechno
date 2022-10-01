@@ -167,6 +167,8 @@ const Login = () => {
         localStorage.setItem("access_token",access_token);
         localStorage.setItem("refresh_token",refresh_token);
         localStorage.setItem("roles",JSON.stringify(roles));
+        var visited=[];
+        localStorage.setItem("visited",visited);
 
         return(
           roles.includes("ACCEPTED")?
