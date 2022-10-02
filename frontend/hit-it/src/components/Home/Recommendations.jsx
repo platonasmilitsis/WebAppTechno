@@ -3,9 +3,6 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import axios from 'axios';
 
 const Container=styled.div`
     margin-top:100px;
@@ -32,46 +29,12 @@ const Container=styled.div`
   overflow:hidden;
 `;
 
-const Arrow=styled.div`
-    width:50px;
-    height:50px;
-    background-color:#fff7f7;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:absolute;
-    left:${props=>props.direction==="left" && "10px"};
-    right:${props=>props.direction==="right" && "10px"};
-    margin-right:13%;
-    margin-left:13%;
-    cursor:pointer;
-    opacity:0.8;
-    z-index:2;
-    transform:scale(0.9);
-    margin-top:130px;
-    @media only screen and (max-width: 1250px) {
-        display:none;
-    }
-    @media (max-width: 1880px) and (min-width:1800px){
-        margin-right:12%;
-        margin-left:12%;
-    }
-`;
-
 const GridContainer=styled.div`
     display:flex;
     overflow-y:hidden;
     overflow-x:scroll;
     scroll-behavior:smooth;
     width:1360px;
-    @media only screen and (min-width: 1250px) {
-        -webkit-scrollbar {
-            display: none;
-        }
-        -ms-overflow-style: none;
-        scrollbar-width: none;  
-    }
 `;
 
 const ProductContainer=styled.div`
@@ -199,73 +162,10 @@ const Recommendations = () => {
     }
     // Will run again with no visited dependency after user is back at home page
     },[user_id,axiosPrivate])
-
-    const [next_arrow,set_next_arrow]=useState(true);
-    const [slide_index,set_slide_index]=useState(0)
-
-    // Hardcode
-    const find_overflows=()=> {
-        const documentWidth = document.documentElement.offsetWidth;
-        var slides=[]
-        document.querySelectorAll('*').forEach(element => {
-            const box = element.getBoundingClientRect();
-    
-            if (box.left < 0 || box.right > documentWidth) {
-                if(element.id!==""){
-                    slides.push(element);
-                }
-            }
-        })
-        if(slides.length===1){
-            if(parseInt(slides[0].id)===8 && slide_index>=1){
-                set_next_arrow(false);
-            }
-            else{
-                set_next_arrow(true);
-            }
-        }
-        else if(slides.length===2){
-            if(parseInt(slides[0].id)===7  && parseInt(slides[1].id)===8 && slide_index>=2){
-                set_next_arrow(false);
-            }
-        }
-        else if(slides.length===3){
-            if(parseInt(slides[0].id)===6  && parseInt(slides[1].id)===7 &&
-            parseInt(slides[2].id)===8 && slide_index>=2){
-                set_next_arrow(false);
-            }
-        }
-        else if(slides.length===4){
-            if(parseInt(slides[0].id)===5 && parseInt(slides[1].id)===6  &&
-            parseInt(slides[2].id)===7 && parseInt(slides[3].id)===8 && slide_index>=2){
-                set_next_arrow(false);
-            }
-        }
-    }
-
-
-    const click_prev=()=>{
-        document.getElementById('grid-container').scrollLeft-=456;
-        set_next_arrow(true);
-        set_slide_index(slide_index-1);
-    }
-
-    const click_next=()=>{
-        document.getElementById('grid-container').scrollLeft+=456;
-        find_overflows();
-        set_slide_index(slide_index+1);
-    }
-    
   
       return (
           <Container>
             <GridContainer id='grid-container'>
-            {
-                slide_index!==0 &&
-                    <Arrow direction="left" onClick={click_prev}>
-                        <KeyboardArrowLeftIcon fontSize="large"/>
-                    </Arrow>
-            }
               {
                   products && products.map((value)=>{
                       return(
@@ -285,12 +185,6 @@ const Recommendations = () => {
                       )
                   })
               }
-                {
-                next_arrow &&
-                    <Arrow direction="right" onClick={click_next}>
-                        <KeyboardArrowRightIcon fontSize="large"/>
-                    </Arrow>
-                }
             </GridContainer>
           </Container>
         )

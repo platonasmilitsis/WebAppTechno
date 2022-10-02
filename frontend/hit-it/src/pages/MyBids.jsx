@@ -117,7 +117,6 @@ const MyBids = () => {
     const get_user_by_username=useGetUserByUsername();
 
     const [user_id,set_user_id]=useState(null);
-    const [bids,set_bids]=useState(null);
     const [products,set_products]=useState([]);
 
     useEffect(()=>{
@@ -133,28 +132,30 @@ const MyBids = () => {
     useEffect(()=>{
         user_id && axiosPrivate.get(`/bidder/${user_id}/bid`)
         .then((response)=>{
-            set_bids(response.data);
+            const bids_ids=response.data.map((value)=>value.bids_id);
+            const unique_ids=[];
+            bids_ids.map((item) => {
+              var find_item=unique_ids.find((x)=>x===item);
+              if (!find_item){
+                unique_ids.push(item);
+              }
+              return item;
+            });
+            return unique_ids;
+        })
+        .then((data)=>{
+          const str=data.toString()
+          str.slice(0,str.length - 1);
+          fetch(`http://localhost:8080/items/all?items_ids=${str}`)
+          .then((response)=>{
+            return response.json();
+          })
+          .then((data)=>{
+            set_products(data);
+          })
         })
         .catch((error)=>console.error(error));
     },[user_id,axiosPrivate])
-
-    useEffect(()=>{
-        bids?.forEach((element)=>{
-            fetch(`http://localhost:8080/items/${element.id}/all`)
-            .then((response)=>response.json())
-            .then((data)=>{
-                // Some non exist from default items from database
-                if(data.item){
-                    element['product']=data.item;
-                    element['category']=data.categories[0];
-                    if(!products.includes(element)){
-                        set_products([...products,element]);
-                    }
-                }
-            })
-            .catch((error)=>console.error(error));
-        })
-    },[bids,products])
 
 
   return (
@@ -178,14 +179,14 @@ const MyBids = () => {
         {
             products && products.map((value)=>{
                 return(
-                    <ProductContainer key={value.product.name+"?"+value.product.id}>
+                    <ProductContainer key={value.item.name+"?"+value.item.id}>
                       <ImageContainer>
-                      <Image src={value.product.img_path?value.product.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${value.category.category.id}/${value.category.category}/${value.product.id}`)}/>
+                      <Image src={value.item.img_path?value.item.img_path:require("../assets/logoreact.png")} onClick={()=>navigate(`/home/categories/${value.categories[0].id}/${value.categories[0].category}/${value.item.id}`)}/>
                       </ImageContainer>
-                      <Title onClick={()=>navigate(`/home/categories/${value.category.category.id}/${value.category.category}/${value.product.id}`)}>
-                          {value.product.name}
+                      <Title onClick={()=>navigate(`/home/categories/${value.categories[0].id}/${value.categories[0].category}/${value.item.id}`)}>
+                          {value.item.name}
                       </Title>
-                      <Description dangerouslySetInnerHTML={{ __html: value.product?.description }}>
+                      <Description dangerouslySetInnerHTML={{ __html: value.item?.description }}>
                       </Description>
                   </ProductContainer>
                 )
