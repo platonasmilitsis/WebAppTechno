@@ -117,9 +117,13 @@ public class MatrixFactorization {
 
         int index_user = 0;
 
-        for(Long u : matrix_user_id)
-            if(Objects.equals(u, user_id))
-                index_user = u.intValue();
+        for(Long u : matrix_user_id){
+            if(Objects.equals(u, user_id)){
+                // index_user = u.intValue();
+                break;
+            }
+            index_user++;
+        }
 
         for(int i=0; i<matrix_user_id.length; i++){
             float similarity_value = cosineSimilarity(bidsNorm,index_user, i);
@@ -131,14 +135,20 @@ public class MatrixFactorization {
     }
 
     public float[] getSimilarityVector(List<Long> visited){
+        
+        Long[] temp=new Long[matrix_user_id.length+1];
+        for(int i=0;i<matrix_user_id.length;i++){
+            temp[i]=matrix_user_id[i];
+        }
         float[] similarity_vector = new float[matrix_user_id.length + 1];
         HashMap<Long, List<Long>> bidsNorm = bidService.createBidsNorm();
         bidsNorm.put(-1L, visited);
 
         int index_user = similarity_vector.length-1;
+        temp[index_user]=-1L;
 
         for(int i=0; i<matrix_user_id.length; i++){
-            float similarity_value = cosineSimilarity(bidsNorm,-1, i);
+            float similarity_value = cosineSimilarity(bidsNorm,index_user, i,temp);
             similarity_vector[i] = similarity_value;
         }
 
@@ -172,6 +182,27 @@ public class MatrixFactorization {
         return (float) (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
+    private  float cosineSimilarity(HashMap<Long, List<Long>> bidsNorm, int index_a, int index_b,Long[] temp ) {
+
+
+        float dotProduct = (float) 0.0F;
+
+        if(bidsNorm.get(temp[index_a]) == null)
+            return 0.0F;
+        if(bidsNorm.get(temp[index_b]) == null)
+            return 0.0F;
+
+
+        for(Long i : bidsNorm.get(temp[index_a])){
+            if(bidsNorm.get(temp[index_b]).contains(i))
+                dotProduct++;
+        }
+
+        float normA = (float) bidsNorm.get(temp[index_a]).size();
+        float normB = (float) bidsNorm.get(temp[index_b]).size();
+        return (float) (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
+    }
+
     public boolean getInit() {
         return this.is_Init;
     }
@@ -195,7 +226,9 @@ public class MatrixFactorization {
 
         for(int i : max_indexes){
             for(int j=0; j<matrix_item_id.length;j++){
-                summary_array[j] += matrix[i][j];
+                if(i<matrix_user_id.length){
+                    summary_array[j] += matrix[i][j];
+                }
             }
         }
 

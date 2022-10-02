@@ -86,9 +86,15 @@ public class ItemController {
     }
 
 
-    @GetMapping("items/recommendation/{id}")
+    @PostMapping("items/recommendation/{id}")
     public List<FullItem> getRecommendations(@PathVariable Long id, @RequestBody @Nullable Visited visited){
-        List<Long> visits = visited.getVisited();
+        List<Long> visits;
+        if(visited!=null){
+            visits = visited.getVisited();
+        }
+        else{
+            visits=null;
+        }
         List<Long> items_ids = recommendationService.ItemRecommender(id,visits);
         List<FullItem> fullItems = new ArrayList<>();
         for(Long item_id : items_ids){
@@ -97,9 +103,16 @@ public class ItemController {
         return fullItems;
     }
 
-    @GetMapping("items/recommendation")
-    public List<FullItem> getRecommendations(@RequestBody @Nullable List<Long> visited){
-        List<Long> items_ids = recommendationService.ItemRecommender(visited);
+    @PostMapping("items/recommendation")
+    public List<FullItem> getRecommendations(@RequestBody @Nullable Visited visited){
+        List<Long> visits;
+        if(visited!=null){
+            visits = visited.getVisited();
+        }
+        else{
+            visits=null;
+        }
+        List<Long> items_ids = recommendationService.ItemRecommender(visits);
         List<FullItem> fullItems = new ArrayList<>();
         for(Long item_id : items_ids){
             fullItems.add(itemService.getFullItem(item_id));
