@@ -126,6 +126,8 @@ const Recommendations = () => {
         get_user()
         .catch(()=>{});        
     },[user,get_user_by_username])
+
+    const [refresh,set_refresh]=useState(false);
   
     useEffect(()=>{
         const my_visited=JSON.parse(localStorage.getItem("visited") || "[]");
@@ -154,7 +156,16 @@ const Recommendations = () => {
             },
             body:JSON.stringify(visit),
             })
-        .then((response)=>response.json())
+        .then((response)=>{
+            if(response.ok){
+                return response.json();
+            }
+            return(
+                new Promise((reject)=>{
+                    reject(set_refresh(true));
+                })
+            )
+        })
         .then((data)=>{
             set_products(data);
         })
@@ -162,6 +173,27 @@ const Recommendations = () => {
     }
     // Will run again with no visited dependency after user is back at home page
     },[user_id,axiosPrivate])
+
+    useEffect(()=>{
+        const my_visited=JSON.parse(localStorage.getItem("visited") || "[]");
+        const visit={
+            "visited":my_visited,
+        }
+        refresh && fetch(`http://localhost:8080/items/recommendation`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify(visit),
+            })
+        .then((response)=>response.json())
+        .then((data)=>{
+            set_products(data);
+            console.log("Back End needs refresh, new User");
+        })
+        .catch((error)=>console.error(error));
+        set_refresh(false);
+    },[refresh])
   
       return (
           <Container>
