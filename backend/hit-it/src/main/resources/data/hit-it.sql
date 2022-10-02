@@ -40,14 +40,14 @@ ENGINE = InnoDB;
 
 INSERT INTO users
 values
-    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1,250),
-    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1,124),
-    (3,'dberos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitris','Beros','2106262613','dberos@hit-it.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1,200),
-    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1,300),
-    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1,210),
-    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1,224),
-    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Ελβετίας 21, Αγία Παρασκευή','443',0,0,0),
-    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Λεωφόρος Εθνικής Αντιστάσεως 172, Καισαριανή','442',0,0,0);
+    (1,'admin','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Themistoklis','Rambossa','2106991232','themakos@gmail.com','Τοσίτσας 18,Αθήνα','010101',1,1),
+    (2,'Lst','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Lefteris','Stetsikas','2106007393','lst3@gmail.com','Θεοδοσίου 18, Χαλάνδρι','0010101',0,1),
+    (3,'dberos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Dimitris','Beros','2106262613','dberos@hit-it.com','Ανδρέα Μεταξά 12, Αθήνα','000045',0,1),
+    (4,'Ourt','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Platonas','Militsis','2441068681','platonasOMilitsios@gmail.com','Βάλβη 27, Καρδίτσα','431000',0,1),
+    (5,'PlasPlas','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Konstantinos','Plas','2105555555','kost++@gmail.com','Αλέξη Παυλή 44, Αθήνα','431120',0,1),
+    (6,'Felarxos','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Haris','Korovesis','231000000','fel@gmail.com','Αγίου Ιωάννου 23, Αγία Παρασκευή','44442',0,1),
+    (7,'User 7','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Userios','User','231200000','feld@gmail.com','Ελβετίας 21, Αγία Παρασκευή','443',0,0),
+    (8,'User 8','$2a$10$vxTQrYwJmne7y8uonQgrKOQQayK67OEQkn/M9xzc6cALR7votIXQO','Useria','Useriou','231300000','feldc@gmail.com','Λεωφόρος Εθνικής Αντιστάσεως 172, Καισαριανή','442',0,0);
 
 
 

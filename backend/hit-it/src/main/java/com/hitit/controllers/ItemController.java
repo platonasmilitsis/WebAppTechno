@@ -3,6 +3,7 @@ package com.hitit.controllers;
 
 import com.hitit.models.FullItem;
 import com.hitit.models.Item;
+import com.hitit.models.Visited;
 import com.hitit.services.ItemService;
 import com.hitit.services.RecommendationService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+
 
 @RestController
 @CrossOrigin
@@ -84,8 +87,9 @@ public class ItemController {
 
 
     @GetMapping("items/recommendation/{id}")
-    public List<FullItem> getRecommendations(@PathVariable Long id, @RequestBody @Nullable List<Long> visited){
-        List<Long> items_ids = recommendationService.ItemRecommender(id,visited);
+    public List<FullItem> getRecommendations(@PathVariable Long id, @RequestBody @Nullable Visited visited){
+        List<Long> visits = visited.getVisited();
+        List<Long> items_ids = recommendationService.ItemRecommender(id,visits);
         List<FullItem> fullItems = new ArrayList<>();
         for(Long item_id : items_ids){
             fullItems.add(itemService.getFullItem(item_id));
