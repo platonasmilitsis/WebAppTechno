@@ -96,16 +96,12 @@ const Product = () => {
 
     
     const soldTo = async() => {
-        maxBidder? 
-            { const res = await fetch(`http://localhost:8080/users/${maxBidder}`)
+        maxBidder && fetch(`http://localhost:8080/users/${maxBidder}`)
             .then((response) => response.json())
             .then((data) => {
                 setSoldToUsername(data.username);
             })
-            }
-            : <></>
 
-        return res;
     }
 
     const bids_function=()=>{

@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `tin` VARCHAR(10) NOT NULL,
   `admin` TINYINT NOT NULL,
   `accepted` TINYINT NOT NULL,
-  `seller_rating` INT,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

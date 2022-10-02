@@ -112,13 +112,7 @@ public class Users {
         this.address = address;
     }
 
-    public String getTIN() {
-        return tin;
-    }
 
-    public void setTIN(String TIN) {
-        this.tin = TIN;
-    }
 
     public Boolean getAdmin() {
         return admin;
@@ -135,6 +129,7 @@ public class Users {
         this.tin = tin;
     }
 
+    public String getTin() {return this.tin;}
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }

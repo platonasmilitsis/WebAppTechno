@@ -126,9 +126,49 @@ public class RecommendationService {
         }
     }
 
+
+    public List<Long> ItemRecommender(List<Long> visited){
+
+        while(!matrixFactorization.getInit()){continue;}
+        log.info("0 Komple,{}", matrixFactorization.getInit());
+
+
+
+
+        if(visited==null  || visited.isEmpty()){
+            return mostFamousItems();
+        }
+        else{
+
+            // Get vector of similar users and copy
+            float[] user_similarities = matrixFactorization.getSimilarityVector(visited);
+            log.info("2 Komple");
+
+
+            int similar_users = 20;
+            int[] max_indexes = getMaxIndexes(user_similarities,similar_users);
+
+
+
+            // Obtain summary of all items if visited or not
+            int[] bid_summary_item = matrixFactorization.getSummaryBid(max_indexes);
+            log.info("4 Komple");
+
+
+            int recommend_items = 10;
+            int[] max_item_indexes = getMaxIndexes(bid_summary_item, recommend_items);
+            log.info("6 Komple");
+
+            return new ArrayList<>(List.of(matrixFactorization.getMaxItemsIds(max_item_indexes)));
+
+        }
+    }
+
     private List<Long> mostFamousItems() {
         return bidService.getMostFamousItems();
     }
+
+
 
 
     public List<Long> ItemRecommender(Long id) {

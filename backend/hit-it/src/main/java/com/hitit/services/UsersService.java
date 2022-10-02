@@ -143,7 +143,7 @@ public class UsersService implements UserDetailsService {
                     this.checkSetTelephone(user, newUser.getTelephone());
                     this.checkSetEmail(user, newUser.getEmail());
                     this.checkSetAddress(user, newUser.getAddress());
-                    this.checkSetTin(user, newUser.getTIN());
+                    this.checkSetTin(user, newUser.getTin());
                     return usersRepository.save(user);
                 }).orElseGet(() -> {
                     newUser.setId(id);
@@ -152,7 +152,7 @@ public class UsersService implements UserDetailsService {
     }
 
     private void checkSetTin(Users user, String tin) {
-        if(tin!=null) user.setTIN(tin);
+        if(tin!=null) user.setTin(tin);
     }
 
     private void checkSetAddress(Users user, String address) {

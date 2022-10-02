@@ -93,6 +93,17 @@ public class ItemController {
         return fullItems;
     }
 
+    @GetMapping("items/recommendation")
+    public List<FullItem> getRecommendations(@RequestBody @Nullable List<Long> visited){
+        List<Long> items_ids = recommendationService.ItemRecommender(visited);
+        List<FullItem> fullItems = new ArrayList<>();
+        for(Long item_id : items_ids){
+            fullItems.add(itemService.getFullItem(item_id));
+        }
+        return fullItems;
+    }
+
+
 
     @GetMapping("/items/{id}")
     public Optional<Item> getItem(@PathVariable Long id){return itemService.getItem(id);}

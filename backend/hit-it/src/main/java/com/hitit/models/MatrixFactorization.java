@@ -130,6 +130,24 @@ public class MatrixFactorization {
 
     }
 
+    public float[] getSimilarityVector(List<Long> visited){
+        float[] similarity_vector = new float[matrix_user_id.length + 1];
+        HashMap<Long, List<Long>> bidsNorm = bidService.createBidsNorm();
+        bidsNorm.put(-1L, visited);
+
+        int index_user = similarity_vector.length-1;
+
+        for(int i=0; i<matrix_user_id.length; i++){
+            float similarity_value = cosineSimilarity(bidsNorm,-1, i);
+            similarity_vector[i] = similarity_value;
+        }
+
+        similarity_vector[index_user] = 1.0F;
+
+        return similarity_vector;
+
+    }
+
 
 
 
