@@ -5,6 +5,7 @@ import useGetUserByUsername from '../../hooks/useGetUserByUsername';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import axios from 'axios';
 
 const Container=styled.div`
     margin-top:100px;
@@ -164,25 +165,37 @@ const Recommendations = () => {
     },[user,get_user_by_username])
   
     useEffect(()=>{
+        const my_visited=JSON.parse(localStorage.getItem("visited") || "[]");
+        const visit={
+            "visited":my_visited,
+        }
     if(user_id===-1){
-        user_id && fetch(`http://localhost:8080/items/recommendation/${user_id}`)
+        user_id && fetch(`http://localhost:8080/items/recommendation`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify(visit),
+            })
         .then((response)=>response.json())
         .then((data)=>{
             set_products(data);
         })
-        .catch((error)=>{console.error(error)});
+          .catch((error)=>console.error(error));
     }
     else{
-        const headers={
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-        const visited=JSON.parse(localStorage.getItem("visited") || "[]");
-        user_id && axiosPrivate.get(`/items/recommendation/${user_id}`,visited,{headers})
-        .then((response)=>{
-            set_products(response.data);
+        user_id && fetch(`http://localhost:8080/items/recommendation/${user_id}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify(visit),
+            })
+        .then((response)=>response.json())
+        .then((data)=>{
+            set_products(data);
         })
-        .catch((error)=>console.error(error));
+          .catch((error)=>console.error(error));
     }
     // Will run again with no visited dependency after user is back at home page
     },[user_id,axiosPrivate])
