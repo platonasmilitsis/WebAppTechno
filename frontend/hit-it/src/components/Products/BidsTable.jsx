@@ -19,6 +19,7 @@ const BidsTable = ( {rows} ) => {
                 <StyledTableHead >
                     <TableRow >
                         <TableCell>Όνομα Χρήστη</TableCell>
+                        <TableCell align="right">Πόντοι Δημοτικότητας</TableCell>
                         <TableCell align="right">Χτυπητέο Ποσό</TableCell>
                         <TableCell align="right">Ώρα Κρούσης</TableCell>
 
@@ -30,6 +31,7 @@ const BidsTable = ( {rows} ) => {
                             sx={{   '&:last-child td, &:last-child th': {border:0}}}
                         >
                             <TableCell component="th" scope="row">{row.bidder.username}</TableCell>
+                            <TableCell align='right'>{row.bidder.rating}</TableCell> 
                             <TableCell align='right'>{row.amount}€</TableCell>
                             <TableCell align='right'>{row.time}</TableCell>
 
