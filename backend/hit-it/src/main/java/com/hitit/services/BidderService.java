@@ -43,6 +43,16 @@ public class BidderService {
 
     }
 
+    public Bidder rateBidder(Long id){
+        Optional<Bidder> bidder = bidderRepository.findById(id);
+        if(bidder.isPresent()){
+            Bidder tmp = bidder.get();
+            tmp.setRating(tmp.getRating()+10);
+            return bidderRepository.save(tmp);
+        }
+        return null;
+    }
+
 
     public Optional<Bidder> findBidder(String username){
         return bidderRepository.findByUsername(username);

@@ -45,7 +45,7 @@ public class SecurityConfig
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/refresh","/login").permitAll();
         http.authorizeRequests().antMatchers("/items/recommendation/*","/items/recommendation").permitAll();
-        http.authorizeRequests().antMatchers("/download/*").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/download/*").permitAll();
         http.authorizeRequests().antMatchers(GET).permitAll();
         http.authorizeRequests().antMatchers(POST,"/users").permitAll();
         http.authorizeRequests().antMatchers(PUT,"/users/accept").hasAnyAuthority("ADMIN");

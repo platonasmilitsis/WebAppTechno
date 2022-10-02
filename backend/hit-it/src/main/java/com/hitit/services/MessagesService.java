@@ -35,6 +35,19 @@ public class MessagesService {
     }
 
     public Messages addMessages(Messages newMessages) {
+        List<Messages> messages = getByUserId(newMessages.getSeller_id());
+        for(Messages message : messages){
+            if(message.getSeller_id() == newMessages.getSeller_id()){
+                if(message.getBuyer_id() == newMessages.getBuyer_id())
+                    return message;
+            }
+            
+            if(message.getBuyer_id() == newMessages.getSeller_id()){
+                if(message.getSeller_id() == newMessages.getBuyer_id())
+                    return message;
+            }
+             
+        }
         return messagesRepo.save(newMessages);
     }
 

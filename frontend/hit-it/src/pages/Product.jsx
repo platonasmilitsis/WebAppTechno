@@ -23,11 +23,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { Card } from '@mui/material';
 import FloatingButtonAdd from '../components/Home/FloatingButtonAdd';
 import { axiosPrivate } from '../api/axios';
-import moment from 'moment';
 import PersonIcon from '@mui/icons-material/Person';
+import DownloadIcon from '@mui/icons-material/Download';
+import MessageIcon from '@mui/icons-material/Message';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 const FootCont=styled.div`
@@ -59,6 +60,7 @@ const Product = () => {
     const [currentBid, setCurrentBid] = useState();
     const [soldToUsername, setSoldToUsername] = useState();
     const [categories,setCategory] = useState([]);
+    const [admin, setAdmin] = useState(false);
 
     const [now, setNow] = useState();
 
@@ -80,13 +82,13 @@ const Product = () => {
         .then((response)=>response.json())
         .then((data)=>{
             setMyUser(data);
+            data?.admin?setAdmin(true):setAdmin(false)
             fetch(`http://localhost:8080/bidders/${data.id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     data 
                         ?setBidder(data)
                         : <></>
-
                 })
         })
         .catch((error)=>{
@@ -117,6 +119,7 @@ const Product = () => {
                 setMaxValue(data?.bids?.bids[0]?.amount);
                 data.item?setLoadImage(true):setItemNotFound(true);
                 data?.item?.user?.username===user?set_seller(true):set_seller(false);
+                
             })
             .catch((error)=>{
                 console.error(error);
@@ -136,11 +139,30 @@ const Product = () => {
     }
 
 
+    const handleRating = async() => {
+        const id = maxBidder === myUser.id ? item.user.id : maxBidder;
+        const res = await axiosPrivate.put(`/bidders/rating/${id}`)
+        
+    }
+
     const handleStart = async() => {
         const res = await axiosPrivate.put(`/items/start/${item?.id}`)
             .then((data) => {
                 setRefresh(true);
             })
+    }
+
+    const handleDownload = () => {
+        window.open(`http://localhost:8080/download/${item?.id}`, '_blank', 'noopener,noreferrer');  
+    }
+
+    const handleMessage = async() => {
+        const res = await axiosPrivate.post(`messagesList`,
+            {
+                "seller_id" : item.user.id, 
+                "buyer_id" : maxBidder
+            }
+        ).then((data)=>{console.log(data.data)})
     }
 
 
@@ -160,14 +182,52 @@ const Product = () => {
 
     {item?.item_start_biding_sold == 0 && soldTo()}
     
+    const isSellerOrBidder = () => {
+        return seller
+            ? true
+            : (maxBidder === myUser.id)
+            ? true : false 
 
+    } 
+
+    const ButtonComponent = () => {
+
+        useEffect(() => {},[seller,maxBidder])
+        return isSellerOrBidder() && 
+            <Box sx={{display:"flex", gap:".9rem",}}>
+                 <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                        '&:hover': {
+                        backgroundColor:"#000000"
+                        } }} className='edit-button-container'
+                        onClick={handleMessage}
+                        style={{position:"absolute,marginRight:2%"}}
+                        >
+                    <MessageIcon/>
+                    </Button>
+                    <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                        '&:hover': {
+                        backgroundColor:"#000000"
+                        } }} className='edit-button-container'
+                        onClick={handleRating}
+                        style={{position:"absolute,marginRight:2%"}}
+                        >
+                    <FavoriteIcon/>
+                    </Button>
+        </Box>
+    }
 
     const SoldComponent = () => {
         return soldToUsername ? 
-                <Typography component={"span"} variant={"body1"}>
-                    <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Πουλήθηκε</span>: 
-                    <PersonIcon style={{marginLeft:"2rem"}}/> <span style={{fontWeight:"700"}}>   {soldToUsername} </span> : {maxValue}€</p>
-                </Typography>
+                <Box>
+                    <Typography component={"span"} variant={"body1"}>
+                        <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Πουλήθηκε</span>: 
+                        <PersonIcon style={{marginLeft:"2rem"}}/> <span style={{fontWeight:"700"}}>   {soldToUsername} </span> : {maxValue}€</p>
+                    </Typography>
+
+
+                    <ButtonComponent/>
+                    
+                </Box>
                 : <Typography component={"span"} variant={"body1"}>
                     <p> <GavelIcon/> <span style={{color:"#e67e22"}}>Η Δημοπρασία έληξε</span> </p>
                 </Typography>
@@ -318,7 +378,21 @@ const Product = () => {
                     </Box>
 
                 }
+                {   admin && 
+                    <Box sx={{display:"flex", gap:".9rem",}}>
+                    <Button variant="contained" sx={{ marginTop:"2%", backgroundColor:"#e67e22",
+                        '&:hover': {
+                        backgroundColor:"#000000"
+                        } }} className='edit-button-container'
+                        onClick={handleDownload}
+                        style={{position:"absolute,marginRight:2%"}}
+                        >
+                    <DownloadIcon/>
+                    </Button>
                 
+                    </Box>
+                
+                }
             </Box>
           
             <Box className='bids-map-container'>

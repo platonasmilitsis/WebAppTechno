@@ -3,6 +3,8 @@ package com.hitit.controllers;
 
 import com.hitit.models.Bidder;
 import com.hitit.services.BidderService;
+import com.hitit.services.BidsService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +38,11 @@ public class BidderController {
     @PostMapping("/bidders/{id}")
     public Bidder newBidder(@RequestBody Bidder bidder, @PathVariable Long id){
         return bidderService.newBidder(bidder,id);
+    }
+
+    @PutMapping("/bidders/rating/{id}")
+    public Bidder rateBidder(@PathVariable Long id){
+        return bidderService.rateBidder(id);
     }
 
 
