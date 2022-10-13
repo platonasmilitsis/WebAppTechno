@@ -27,8 +27,12 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+
+
+
+
+
 
 @Service
 @Slf4j
@@ -46,37 +50,40 @@ public class DatasetLoad {
     private CategoryService categoryService;
     private ItemCategoryService itemCategoryService;
 
-    private void createUserOrNothing(String username){
-        if(usersService.findUser(username).isEmpty()){
+
+
+
+    private void createUserOrNothing(List<Users> userList,List<String> usernames, String username){
+
+
+        if(usersService.findUser(username).isEmpty() && !usernames.contains(username)){
 
             Users new_user = new Users();
             new_user.setDummyUser(username);
 
-            usersService.addUsers(new_user);
+            usernames.add(username);
+            userList.add(new_user);
         }
+
     }
 
-    private Long createBidderOrNothing(String bidder_username, Long bidder_rating, String bidder_location, String bidder_country){
+    private void createBidderOrNothing(List<Bidder> bidderList, List<String> bidder_usernames, String bidder_username, Long bidder_rating, String bidder_location, String bidder_country){
         Optional<Bidder> my_bidder = bidderService.findBidder(bidder_username);
-        if (my_bidder.isEmpty()) {
+        if (my_bidder.isEmpty() && !bidder_usernames.contains(bidder_username)) {
             Bidder bidder = new Bidder();
-            Users bidder_user = usersService.getUser(bidder_username);
-            bidder.setId(bidder_user.getId());
             bidder.setRating(bidder_rating);
             bidder.setCountry(bidder_country);
             bidder.setLocation(bidder_location);
             bidder.setUsername(bidder_username);
 
-            bidderService.newBidder(bidder);
+            bidder_usernames.add(bidder_username);
+            bidderList.add(bidder);
 
-
-            return bidder_user.getId();
         }
 
-        return my_bidder.get().getId();
     }
 
-    private void createItemOrNothing(String username, String item_id, String item_name, Double item_first_bid,
+    private void createItemOrNothing(List<Item> itemList, String item_id, String item_name, Double item_first_bid,
                                      String item_location, String item_country,
                                      String item_string_started, String item_string_ended,
                                      String item_description)
@@ -90,7 +97,6 @@ public class DatasetLoad {
             Date item_start = format1.parse(item_string_started);
             Date item_end = format1.parse(item_string_ended);
 
-            Users user = usersService.getUser(username);
             Item item = new Item();
 
             item.setName(item_name);
@@ -103,15 +109,14 @@ public class DatasetLoad {
             item.setDescription(item_description);
             item.setBuy_price(1000D);
 
-
-            itemService.addItem(item, user.getId());
+            itemList.add(item);
         }
 
 
     }
 
 
-    private Integer createCategoryOrNothing(String category_name, Long item_id) {
+    private Integer createCategoryOrNothing(List<String> categoryList, String category_name, Long item_id) {
         Optional<Category> category  = categoryService.findCategory(category_name);
         Category new_category = category.isEmpty() ? categoryService.addCategory(category_name) : category.get();
         return new_category.getId().intValue();
@@ -119,7 +124,7 @@ public class DatasetLoad {
     }
 
 
-    private void ParseFile(Path file, DocumentBuilderFactory dbf) throws ParserConfigurationException, IOException, SAXException, ParseException {
+    private void ParseFile(Path file, DocumentBuilderFactory dbf, List<Users> usersList, List<String> usernames, List<String> seller_usernames, List<String> bidder_usernames, List<Item> itemList, List<Bidder> bidderList, List<BidForLoadingData> bidList, HashMap<Long, List<String>> itemCategoriesMap, List<String> allCategories) throws ParserConfigurationException, IOException, SAXException, ParseException {
 
         // parse XML file
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -129,6 +134,9 @@ public class DatasetLoad {
 
         // get <Items>
         NodeList list = doc.getElementsByTagName("Item");
+
+
+
 
         for (int temp = 0; temp < list.getLength(); temp++) {
             Node node = list.item(temp);
@@ -155,14 +163,17 @@ public class DatasetLoad {
 
                 String seller_username = item_seller.getAttribute("UserID");
 
-                createUserOrNothing(seller_username);
-                createItemOrNothing(seller_username,item_id, item_name,
+                createUserOrNothing(usersList,usernames, seller_username);
+
+                seller_usernames.add(seller_username);
+                createItemOrNothing(itemList, item_id, item_name,
                         item_first_bid, item_location, item_country, item_string_started,
                         item_string_ended, item_description );
 
 
                 NodeList bids = element.getElementsByTagName("Bid");
                 for(int temp1 = 0; temp1 < bids.getLength(); temp1++){
+
                     Node node1 = bids.item(temp1);
                     if(node1.getNodeType() == Node.ELEMENT_NODE){
                         Element bid = (Element) node1;
@@ -181,8 +192,8 @@ public class DatasetLoad {
                         String bidder_country = bidder.getElementsByTagName("Country").getLength() == 0 ?
                                 "Country" : bidder.getElementsByTagName("Country").item(0).getTextContent();
 
-                        createUserOrNothing(bidder_username);
-                        Long bidder_id = createBidderOrNothing(bidder_username, bidder_rating, bidder_location, bidder_country);
+                        createUserOrNothing(usersList, usernames, bidder_username);
+                        createBidderOrNothing(bidderList, bidder_usernames, bidder_username, bidder_rating, bidder_location, bidder_country);
 
                         //Create Bid
                         Long bids_id = Long.valueOf(item_id);
@@ -193,7 +204,7 @@ public class DatasetLoad {
                         string_bid_amount = string_bid_amount.replace(",","");
                         Double bid_amount = Double.valueOf(string_bid_amount);
 
-                        createBidOrNothing(bids_id,bidder_id,bid_amount,bid_time);
+                        createBidOrNothing(bids_id,bidder_username,bidList, bid_amount,bid_time);
 
 
                     }
@@ -201,24 +212,32 @@ public class DatasetLoad {
 
 
                 NodeList categories = element.getElementsByTagName("Category");
-                Integer[] categories_id = new Integer[categories.getLength()];
+                List<String> categories_names = new ArrayList<>();
                 for(int temp2 = 0; temp2 < categories.getLength(); temp2++) {
                     Node node2 = categories.item(temp2);
                     if(node2.getNodeType() == Node.ELEMENT_NODE) {
                         Element category = (Element) node2;
                         //Create category
+
                         String category_name = category.getTextContent();
-                        categories_id[temp2] = createCategoryOrNothing(category_name, Long.valueOf(item_id));
+                        categories_names.add(category_name);
+                        if(!allCategories.contains(category_name))
+                            allCategories.add(category_name);
                     }
                 }
-                if (categories_id.length != 0) {
-                    itemCategoryService.addCategoriesToItem(categories_id, Long.valueOf(item_id));
-                }
+
+                if(!categories_names.isEmpty())
+                    itemCategoriesMap.put(Long.valueOf(item_id), categories_names);
+
+
 
             }
 
 
         }
+
+
+
         log.info("Loaded {}...",file);
 
 
@@ -226,17 +245,38 @@ public class DatasetLoad {
 
 
     }
-    private void createBidOrNothing(Long bids_id, Long bidder_id, Double bid_amount, String bid_time) throws ParseException {
+
+    private void toMemory(List<Users> usersList, List<Item> itemList, List<String> seller_usernames, List<Bidder> bidderList, List<BidForLoadingData> bidList, List<String> allCategories, HashMap<Long, List<String>> itemCategoriesMap) {
+
+        HashMap<String, Users> map =  usersService.saveAllUsers(usersList);
+        log.info("{} Users Loaded", usersList.size());
+        itemService.saveAllItems(itemList, map, seller_usernames);
+        log.info("{} Items Loaded", itemList.size());
+
+        bidsService.saveAllBids(itemList);
+        log.info("{} Bids Loaded", itemList.size());
+
+        HashMap<String, Bidder> map_bidders =  bidderService.saveAllBidder(bidderList, map);
+        log.info("{} Bidders Loaded", bidderList.size());
+
+        bidService.saveAllBid(bidList, map_bidders);
+        log.info("{} Bid(s) Loaded", bidList.size());
+
+        HashMap<String, Long> map_cat = categoryService.saveAllCategories(allCategories);
+        log.info("{} Categories Loaded", allCategories.size());
+
+        itemCategoryService.saveAllItemCategories(itemCategoriesMap, map_cat);
+        log.info("{} Item Categories Loaded", itemCategoriesMap.size());
+
+
+    }
+
+    private void createBidOrNothing(Long bids_id, String bidder_username, List<BidForLoadingData> bidList, Double bid_amount, String bid_time) throws ParseException {
         SimpleDateFormat format1 = new SimpleDateFormat("MMM-dd-yy HH:mm");
         Date bid_date = format1.parse(bid_time);
 
-        Optional<Bid> bid =  bidService.findBid(bids_id, bidder_id, bid_amount, bid_date);
-        if(bid.isEmpty()){
-            Bid bid1 = new Bid();
-            bid1.setAmount(bid_amount);
-            bid1.setTime(bid_date);
-            bidService.addBid(bidder_id, bids_id, bid1);
-        }
+        BidForLoadingData bid1 = new BidForLoadingData(bidder_username,bids_id,bid_amount,bid_date);
+        bidList.add(bid1);
 
     }
 
@@ -263,6 +303,18 @@ public class DatasetLoad {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
+        List<Users> usersList = new ArrayList<>();
+        List<String> usernames = new ArrayList<>();
+        List<String> seller_usernames = new ArrayList<>();
+        List<String> bidder_usernames = new ArrayList<>();
+
+        List<Item> itemList = new ArrayList<>();
+        List<Bidder> bidderList = new ArrayList<>();
+        List<BidForLoadingData> bidList = new ArrayList<>();
+
+
+        HashMap<Long, List<String>> itemCategoriesMap = new HashMap<>();
+        List<String> allCategories = new ArrayList<>();
          Files.walkFileTree(file.toPath(), new SimpleFileVisitor<>() {
              @Override
              public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -270,7 +322,9 @@ public class DatasetLoad {
                  if(file.toString().endsWith(".xml")) {
                      log.info("Loading {}...",file.toString());
                      try {
-                         ParseFile(file,dbf);
+                         ParseFile(file,dbf, usersList, usernames, seller_usernames,
+                                 bidder_usernames, itemList, bidderList, bidList, itemCategoriesMap, allCategories);
+
                      }
                      catch (ParseException | ParserConfigurationException | SAXException | IOException e) {
                          e.printStackTrace();
@@ -281,8 +335,12 @@ public class DatasetLoad {
              }
          });
 
+        log.info("To memory...");
+        toMemory(usersList, itemList, seller_usernames, bidderList, bidList, allCategories,itemCategoriesMap);
 
         log.info("Loading files ended");
+
+
         recommendationService.Init();
 
     }

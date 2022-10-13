@@ -4,6 +4,7 @@ package com.hitit.services;
 import com.hitit.exceptions.BidNotFoundException;
 import com.hitit.exceptions.UserNotFoundException;
 import com.hitit.models.Bid;
+import com.hitit.models.BidForLoadingData;
 import com.hitit.models.Bidder;
 import com.hitit.repository.BidRepository;
 import com.hitit.repository.BidderRepository;
@@ -125,5 +126,23 @@ public class BidService {
             cnt++;
         }
         return return_this;
+    }
+
+    public void saveAllBid(List<BidForLoadingData> bidList, HashMap<String, Bidder> map_bidders) {
+        List<Bid> bids = new ArrayList<>();
+        for(BidForLoadingData bidForLoadingDat : bidList){
+            Bid bid = new Bid();
+            bid.setTime(bidForLoadingDat.getTime());
+            bid.setAmount(bidForLoadingDat.getAmount());
+            bid.setBids_id(bidForLoadingDat.getBids_id());
+
+            bid.setBidder(map_bidders.get(bidForLoadingDat.getBidder_username()));
+
+            bids.add(bid);
+
+        }
+
+        bidRepository.saveAll(bids);
+
     }
 }

@@ -4,6 +4,7 @@ import com.hitit.exceptions.NoBidsException;
 import com.hitit.models.Bid;
 import com.hitit.models.Bids;
 import com.hitit.models.BidsBidList;
+import com.hitit.models.Item;
 import com.hitit.repository.BidRepository;
 import com.hitit.repository.BidsRepository;
 import org.springframework.stereotype.Service;
@@ -80,5 +81,17 @@ public class BidsService {
 
     public List<Bid> getBidListByBidsId(Long id){
         return bidRepository.findByBidsId(id);
+    }
+
+    public void saveAllBids(List<Item> itemList) {
+        List<Bids> bids = new ArrayList<>();
+        for(Item item : itemList){
+            Bids new_bids = new Bids();
+            new_bids.setId(item.getId());
+            bids.add(new_bids);
+        }
+
+        bidsRepository.saveAll(bids);
+
     }
 }

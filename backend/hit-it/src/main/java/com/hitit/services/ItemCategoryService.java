@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,5 +105,21 @@ public class ItemCategoryService {
         return categories;
 
 
+    }
+
+    public void saveAllItemCategories(HashMap<Long, List<String>> itemCategoriesMap, HashMap<String, Long> map_cat) {
+
+        List<ItemCategory> itemCategoryList = new ArrayList<>();
+        for (Long key : itemCategoriesMap.keySet()) {
+            for(String category : itemCategoriesMap.get(key)){
+                ItemCategory ic = new ItemCategory();
+                ic.setCategory_id(map_cat.get(category));
+                ic.setItem_id(key);
+                itemCategoryList.add(ic);
+            }
+
+        }
+
+        itemCategoryRepository.saveAll(itemCategoryList);
     }
 }

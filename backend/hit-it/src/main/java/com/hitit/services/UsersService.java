@@ -18,10 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -209,4 +206,16 @@ public class UsersService implements UserDetailsService {
         return ResponseEntity.ok("OK");
     }
 
+    public HashMap<String, Users> saveAllUsers(List<Users> usersList) {
+        List<Users> users = usersRepository.saveAll(usersList);
+        HashMap<String, Users> ret = new HashMap<>();
+        for(Users u : users)
+            ret.put(u.getUsername(), u);
+
+        return ret;
+
+
+
+
+    }
 }

@@ -4,6 +4,7 @@ import com.hitit.exceptions.ItemNotFoundException;
 import com.hitit.exceptions.UserNotFoundException;
 import com.hitit.models.*;
 import com.hitit.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -22,12 +23,14 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
 @Transactional
+@Slf4j
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -339,5 +342,18 @@ public class ItemService {
             pce.printStackTrace();
         }
         return new byte[0];
+    }
+
+    public void saveAllItems(List<Item> itemList, HashMap<String, Users> map, List<String> seller_usernames) {
+
+
+        for(int i=0;i<itemList.size();i++){
+            itemList.get(i).setUser(map.get(seller_usernames.get(i)));
+            if(i%1000==0)
+                log.info("{} Items loaded...", i);
+        }
+
+        itemRepository.saveAll(itemList);
+
     }
 }

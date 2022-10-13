@@ -2,13 +2,13 @@ package com.hitit.services;
 
 import com.hitit.models.Category;
 import com.hitit.repository.CategoryRepository;
-import com.hitit.repository.ItemCategoryRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +53,41 @@ public class CategoryService {
 
     public Optional<Category> findCategory(String category_name) {
         return categoryRepository.findByCategory(category_name);
+    }
+
+    public HashMap<String,Long> saveAllCategories(List<String> allCategories) {
+        List<Category> categories = new ArrayList<>();
+        for(String category: allCategories){
+            if(findCategory(category).isEmpty())
+                categories.add(new Category(category));
+        }
+
+        List<Category> cat = categoryRepository.saveAll(categories);
+
+        HashMap<String, Long> ret = new HashMap<>();
+
+        for(Category c : cat){
+            ret.put(c.getCategory(), c.getId());
+        }
+
+        return  ret;
+
+
+    }
+
+    public Integer[] getCategoriesIds(List<String> strings) {
+
+        Integer[] array = new Integer[strings.size()];
+
+        int index = 0;
+        for(String category : strings){
+            Optional<Category> cat = categoryRepository.findByCategory(category);
+            if(cat.isPresent()) {
+                array[index] = Math.toIntExact(cat.get().getId());
+                index++;
+            }
+        }
+
+        return array;
     }
 }

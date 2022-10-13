@@ -1,12 +1,14 @@
 package com.hitit.services;
 
 import com.hitit.models.Bidder;
+import com.hitit.models.Users;
 import com.hitit.repository.BidderRepository;
-import org.jetbrains.annotations.NotNull;
+import com.hitit.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +17,10 @@ import java.util.Optional;
 public class BidderService {
 
     private final BidderRepository bidderRepository;
-
-    public BidderService(BidderRepository bidderRepository) {
+    private final UsersRepository usersRepository;
+    public BidderService(BidderRepository bidderRepository, UsersRepository usersRepository) {
         this.bidderRepository = bidderRepository;
+        this.usersRepository = usersRepository;
     }
 
     public List<Bidder> getAllBidders() {
@@ -71,4 +74,14 @@ public class BidderService {
         return bidderRepository.save(bidder);
     }
 
+    public HashMap<String, Bidder> saveAllBidder(List<Bidder> bidderList, HashMap<String, Users> map) {
+
+        HashMap<String, Bidder> ret = new HashMap<>();
+        for(Bidder b : bidderList){
+            b.setId(map.get(b.getUsername()).getId());
+            ret.put(b.getUsername(),b);
+        }
+        bidderRepository.saveAll(bidderList);
+        return ret;
+    }
 }
